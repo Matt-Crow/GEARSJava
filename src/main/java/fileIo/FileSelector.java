@@ -1,7 +1,10 @@
 package fileIo;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -17,7 +20,9 @@ public class FileSelector {
     public FileSelector(String msg, FileType type, Consumer<File> onSelect){
         chooser = new JFileChooser();
         chooser.setFileSelectionMode((FileType.DIR.equals(type)) ? JFileChooser.DIRECTORIES_ONLY : JFileChooser.FILES_ONLY);
-        chooser.setFileFilter(new FileNameExtensionFilter(type.getName(), type.getExtensions()));
+        if(!FileType.DIR.equals(type)){
+            chooser.setFileFilter(new FileNameExtensionFilter(type.getName(), type.getExtensions()));
+        }
         chooser.setDialogTitle(msg);
         action = onSelect;
     }
@@ -32,12 +37,18 @@ public class FileSelector {
         }
     }
     
-    public static void createNewFile(String directory, String name, Consumer<File> andThen){
-        andThen.accept(new File(directory + File.separator + name));
+    public static void createNewFile(String directory, String name, Consumer<File> andThen) throws IOException{
+        File f = new File(directory + File.separator + name);
+        f.createNewFile();
+        andThen.accept(f);
     }
     public static void createNewFile(String name, Consumer<File> andThen){
         new FileSelector("Choose a directory to save " + name + " to.", FileType.DIR, (File f)->{
-            createNewFile(f.getAbsolutePath(), name, andThen);
+            try {
+                createNewFile(f.getAbsolutePath(), name, andThen);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }).chooseFile();
     }
     public static void createNewFile(Consumer<File> andThen){
