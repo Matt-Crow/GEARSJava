@@ -34,7 +34,7 @@ public class ImageEditorPane extends JPanel{
         
         add(createMenuBar(), BorderLayout.PAGE_START);
         
-        setBackground(Color.RED);
+        setBackground(Color.WHITE);
     }
     
     private JMenuBar createMenuBar(){
@@ -51,6 +51,19 @@ public class ImageEditorPane extends JPanel{
         JMenuItem newImg = new JMenuItem("Create a new image");
         newImg.addActionListener((e)->{
             // create a blank image, then set it as this' image
+            BufferedImage newBuff = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+            int r;
+            int g;
+            int b;
+            for(int x = 0; x < 100; x++){
+                for(int y = 0; y < 100; y++){
+                    r = x;
+                    g = y;
+                    b = x + y;
+                    newBuff.setRGB(x, y, new Color(r, g, b).getRGB());
+                }
+            }
+            setImage(newBuff);
         });
         menuBar.add(newImg);
         
@@ -58,7 +71,7 @@ public class ImageEditorPane extends JPanel{
         save.addActionListener((e)->{
             FileSelector.createNewFile((File f)->{
                 try {
-                    ImageIO.write(buff, "png", f);
+                    ImageIO.write(buff, "PNG", f);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -69,10 +82,13 @@ public class ImageEditorPane extends JPanel{
         return menuBar;
     }
     
+    private void setImage(BufferedImage bi){
+        buff = bi;
+        imgLabel.setIcon(new ImageIcon(bi));
+    }
     private void setImage(InputStream in){
         try {
-            buff = ImageIO.read(in);
-            imgLabel.setIcon(new ImageIcon(buff));
+            setImage(ImageIO.read(in));
         } catch (IOException ex) {
             ex.printStackTrace();
         }

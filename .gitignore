@@ -1,3 +1,4 @@
 .gradle
 .nb-gradle/private
 *.class
+.nb-gradle/profiles/private/aux-config
