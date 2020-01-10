@@ -7,12 +7,6 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -22,15 +16,18 @@ import javax.swing.JPanel;
  * @author Matt Crow
  */
 public class ImageEditorPane extends JPanel{
-    private JLabel imgLabel;
-    private BufferedImage buff;
+    private final EditableImage img;
+    
     public ImageEditorPane(){
         super();
         setLayout(new BorderLayout());
-        imgLabel = new JLabel();
-        setImage(ImageEditorPane.class.getResourceAsStream("/images/test.png"));
-        
-        add(imgLabel, BorderLayout.CENTER);
+        img = new EditableImage();
+        try {
+            img.setImage(ImageEditorPane.class.getResourceAsStream("/images/test.png"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        add(img, BorderLayout.CENTER);
         
         add(createMenuBar(), BorderLayout.PAGE_START);
         
@@ -43,7 +40,11 @@ public class ImageEditorPane extends JPanel{
         JMenuItem load = new JMenuItem("Load an image");
         load.addActionListener((e)->{
             new FileSelector("Choose an image to load", FileType.IMAGE, (File f)->{
-                setImage(f);
+                try {
+                    img.setImage(f);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }).chooseFile();
         });
         menuBar.add(load);
@@ -63,41 +64,24 @@ public class ImageEditorPane extends JPanel{
                     newBuff.setRGB(x, y, new Color(r, g, b).getRGB());
                 }
             }
-            setImage(newBuff);
+            img.setImage(newBuff);
         });
         menuBar.add(newImg);
         
         JMenuItem save = new JMenuItem("Save this image");
         save.addActionListener((e)->{
-            FileSelector.createNewFile((File f)->{
-                try {
-                    ImageIO.write(buff, "PNG", f);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            });
+            if(img.getImage() != null){
+                FileSelector.createNewFile((File f)->{
+                    try {
+                        img.saveImage(f);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+            }
         });
         menuBar.add(save);
         
         return menuBar;
-    }
-    
-    private void setImage(BufferedImage bi){
-        buff = bi;
-        imgLabel.setIcon(new ImageIcon(bi));
-    }
-    private void setImage(InputStream in){
-        try {
-            setImage(ImageIO.read(in));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-    private void setImage(File f){
-        try {
-            setImage(new FileInputStream(f));
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        }
     }
 }
