@@ -5,6 +5,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,6 +29,10 @@ public class EditableImage extends JComponent{
     private int panY;
     private double zoom;
     private BufferedImage image;
+    private Color currentColor;
+    private ImageEditorMode mode;
+    
+    private boolean mouseIsDown;
     
     private static final int PAN_SPEED = 5;
     private static final double ZOOM_SPEED = 0.1;
@@ -36,6 +43,7 @@ public class EditableImage extends JComponent{
         panY = 0;
         zoom = 1.0;
         image = null;
+        currentColor = Color.RED;
         registerKey(KeyEvent.VK_UP, true, ()->panUp());
         registerKey(KeyEvent.VK_DOWN, true, ()->panDown());
         registerKey(KeyEvent.VK_LEFT, true, ()->panLeft());
@@ -43,6 +51,30 @@ public class EditableImage extends JComponent{
         registerKey(KeyEvent.VK_EQUALS, true, ()->zoomIn()); //VK_PLUS doesn't work
         registerKey(KeyEvent.VK_MINUS, true, ()->zoomOut());
         setBackground(Color.BLACK);
+        addMouseListener(new MouseAdapter(){
+            public void mousePressed(MouseEvent e){
+                mouseIsDown = true;
+                click(e.getX(), e.getY());
+            }
+            public void mouseReleased(MouseEvent e){
+                mouseIsDown = false;
+            }
+        });
+        addMouseMotionListener(new MouseMotionListener(){
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if(mouseIsDown){
+                    click(e.getX(), e.getY());
+                }
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                
+            }
+        });
+        mode = ImageEditorMode.FILL;
+        mouseIsDown = false;
     }
     public EditableImage(BufferedImage buff){
         this();
@@ -61,6 +93,12 @@ public class EditableImage extends JComponent{
     }
     public void setImage(File f) throws FileNotFoundException, IOException{
         setImage(new FileInputStream(f));
+    }
+    
+    public void setColor(Color c){
+        currentColor = c;
+        setBackground(c);
+        repaint();
     }
     
     public BufferedImage getImage(){
@@ -104,10 +142,25 @@ public class EditableImage extends JComponent{
     }
     public void zoomOut(){
         zoom -= ZOOM_SPEED;
-        if(zoom < 0.0){
-            zoom = 0.0;
+        if(zoom < 0.1){
+            zoom = 0.1;
         }
         repaint();
+    }
+    
+    public void click(int x, int y){
+        int trueX = (int) ((x + panX) / zoom);
+        int trueY = (int) ((y + panY) / zoom);
+        if(image != null){
+            if(trueX >= 0 && trueX < image.getWidth() && trueY >= 0 && trueY < image.getHeight()){
+                if(ImageEditorMode.FILL.equals(mode)){
+                    image.setRGB(trueX, trueY, currentColor.getRGB());
+                    repaint();
+                } else if(ImageEditorMode.PICK_COLOR.equals(mode)){
+                    currentColor = new Color(image.getRGB(trueX, trueY));
+                }
+            }
+        }
     }
     
     public void registerKey(int key, boolean pressed, Runnable r){
@@ -129,10 +182,13 @@ public class EditableImage extends JComponent{
     
     @Override
     public void paintComponent(Graphics g){
+        g.setColor(currentColor);
+        g.fillRect(0, 0, getWidth(), getHeight());
         if(image != null){
             Graphics2D g2d = (Graphics2D)g;
+            g2d.translate(-panX, -panY);
             g2d.scale(zoom, zoom);
-            g2d.drawImage(image, -panX, -panY, this);
+            g2d.drawImage(image, 0, 0, this);
         }
     }
 }

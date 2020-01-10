@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.File;
+import javax.swing.JColorChooser;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -31,6 +32,12 @@ public class ImageEditorPane extends JPanel{
         
         add(createMenuBar(), BorderLayout.PAGE_START);
         
+        
+        JColorChooser color = new JColorChooser(Color.RED);
+        color.getSelectionModel().addChangeListener((e)->{
+            img.setColor(color.getColor());
+        });
+        add(color, BorderLayout.PAGE_END);
         setBackground(Color.WHITE);
     }
     
