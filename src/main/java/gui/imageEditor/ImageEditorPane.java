@@ -10,10 +10,12 @@ import java.io.File;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JColorChooser;
+import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSlider;
 
 /**
  *
@@ -39,25 +41,7 @@ public class ImageEditorPane extends JPanel{
         }
         center.add(img, BorderLayout.CENTER);
         
-        JPanel tools = new JPanel();
-        tools.setLayout(new BoxLayout(tools, BoxLayout.Y_AXIS));
-        tools.setBackground(Color.GRAY);
-        JPanel modeSelect = new JPanel();
-        ButtonGroup modes = new ButtonGroup();
-        JRadioButton edit = new JRadioButton("Edit");
-        edit.addActionListener((e)->{
-            img.setMode(ImageEditorMode.FILL);
-        });
-        modeSelect.add(edit);
-        modes.add(edit);
-        JRadioButton pick = new JRadioButton("Pick color");
-        pick.addActionListener((e)->{
-            img.setMode(ImageEditorMode.PICK_COLOR);
-        });
-        modeSelect.add(pick);
-        modes.add(pick);
-        tools.add(modeSelect);
-        center.add(tools, BorderLayout.LINE_START);
+        center.add(createTools(), BorderLayout.LINE_START);
         
         add(center, BorderLayout.CENTER);
         
@@ -121,5 +105,36 @@ public class ImageEditorPane extends JPanel{
         menuBar.add(save);
         
         return menuBar;
+    }
+
+    private JPanel createTools(){
+        JPanel tools = new JPanel();
+        tools.setLayout(new BoxLayout(tools, BoxLayout.Y_AXIS));
+        tools.setBackground(Color.GRAY);
+        
+        JPanel modeSelect = new JPanel();
+        ButtonGroup modes = new ButtonGroup();
+        JRadioButton edit = new JRadioButton("Edit");
+        edit.addActionListener((e)->{
+            img.setMode(ImageEditorMode.FILL);
+        });
+        modeSelect.add(edit);
+        modes.add(edit);
+        JRadioButton pick = new JRadioButton("Pick color");
+        pick.addActionListener((e)->{
+            img.setMode(ImageEditorMode.PICK_COLOR);
+        });
+        modeSelect.add(pick);
+        modes.add(pick);
+        tools.add(modeSelect);
+        
+        tools.add(new JLabel("Brush size"));
+        JSlider brushSize = new JSlider(1, 8, 1);
+        brushSize.addChangeListener((e)->{
+            img.setBrushSize(brushSize.getValue());
+        });
+        tools.add(brushSize);
+        
+        return tools;
     }
 }

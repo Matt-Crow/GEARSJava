@@ -32,6 +32,7 @@ public class EditableImage extends JComponent{
     private BufferedImage image;
     private Color currentColor;
     private ImageEditorMode mode;
+    private int brushSize;
     
     private boolean mouseIsDown;
     
@@ -45,6 +46,7 @@ public class EditableImage extends JComponent{
         zoom = 1.0;
         image = null;
         currentColor = Color.RED;
+        brushSize = 1;
         registerKey(KeyEvent.VK_UP, true, ()->panUp());
         registerKey(KeyEvent.VK_DOWN, true, ()->panDown());
         registerKey(KeyEvent.VK_LEFT, true, ()->panLeft());
@@ -110,6 +112,13 @@ public class EditableImage extends JComponent{
         mode = m;
     }
     
+    public void setBrushSize(int i){
+        if(i <= 0){
+            throw new IllegalArgumentException("Brush size must be a positive integer");
+        }
+        brushSize = i;
+    }
+    
     public void panUp(){
         panY += PAN_SPEED;
         if(image != null && panY > image.getHeight()){
@@ -160,7 +169,11 @@ public class EditableImage extends JComponent{
         if(image != null){
             if(trueX >= 0 && trueX < image.getWidth() && trueY >= 0 && trueY < image.getHeight()){
                 if(ImageEditorMode.FILL.equals(mode)){
-                    image.setRGB(trueX, trueY, currentColor.getRGB());
+                    for(int fx = 0; fx < brushSize && fx + trueX < image.getWidth(); fx++){
+                        for(int fy = 0; fy < brushSize && fy + trueY < image.getHeight(); fy++){
+                            image.setRGB(trueX + fx, trueY + fy, currentColor.getRGB());
+                        }
+                    }
                     repaint();
                 } else if(ImageEditorMode.PICK_COLOR.equals(mode)){
                     setColor(new Color(image.getRGB(trueX, trueY)));
