@@ -7,10 +7,13 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.File;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JColorChooser;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 /**
  *
@@ -22,13 +25,41 @@ public class ImageEditorPane extends JPanel{
     public ImageEditorPane(){
         super();
         setLayout(new BorderLayout());
+        
+        JPanel center = new JPanel();
+        center.setLayout(new BorderLayout());
+        
+        
+        
         img = new EditableImage();
         try {
             img.setImage(ImageEditorPane.class.getResourceAsStream("/images/test.png"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        add(img, BorderLayout.CENTER);
+        center.add(img, BorderLayout.CENTER);
+        
+        JPanel tools = new JPanel();
+        tools.setLayout(new BoxLayout(tools, BoxLayout.Y_AXIS));
+        tools.setBackground(Color.GRAY);
+        JPanel modeSelect = new JPanel();
+        ButtonGroup modes = new ButtonGroup();
+        JRadioButton edit = new JRadioButton("Edit");
+        edit.addActionListener((e)->{
+            img.setMode(ImageEditorMode.FILL);
+        });
+        modeSelect.add(edit);
+        modes.add(edit);
+        JRadioButton pick = new JRadioButton("Pick color");
+        pick.addActionListener((e)->{
+            img.setMode(ImageEditorMode.PICK_COLOR);
+        });
+        modeSelect.add(pick);
+        modes.add(pick);
+        tools.add(modeSelect);
+        center.add(tools, BorderLayout.LINE_START);
+        
+        add(center, BorderLayout.CENTER);
         
         add(createMenuBar(), BorderLayout.PAGE_START);
         

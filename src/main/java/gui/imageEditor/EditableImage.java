@@ -1,6 +1,7 @@
 package gui.imageEditor;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -105,34 +106,39 @@ public class EditableImage extends JComponent{
         return image;
     }
     
-    public void panLeft(){
-        panX -= PAN_SPEED;
-        if(panX < 0){
-            panX = 0;
-        }
-        repaint();
+    public void setMode(ImageEditorMode m){
+        mode = m;
     }
-    public void panRight(){
-        panX += PAN_SPEED;
-        if(image != null && panX > image.getWidth()){
-            panX = image.getWidth();
-        }
-        repaint();
-    }
+    
     public void panUp(){
-        panY -= PAN_SPEED;
-        if(panY < 0){
-            panY = 0;
-        }
-        repaint();
-    }
-    public void panDown(){
         panY += PAN_SPEED;
         if(image != null && panY > image.getHeight()){
             panY = image.getHeight();
         }
         repaint();
     }
+    public void panDown(){
+        panY -= PAN_SPEED;
+        if(panY < -getHeight()){
+            panY = -getHeight();
+        }
+        repaint();
+    }
+    public void panLeft(){
+        panX += PAN_SPEED;
+        if(image != null && panX > image.getWidth()){
+            panX = image.getWidth();
+        }
+        repaint();
+    }
+    public void panRight(){
+        panX -= PAN_SPEED;
+        if(panX < -getWidth()){
+            panX = -getWidth();
+        }
+        repaint();
+    }
+    
     public void zoomIn(){
         zoom += ZOOM_SPEED;
         if(zoom > 5.0){
@@ -157,7 +163,7 @@ public class EditableImage extends JComponent{
                     image.setRGB(trueX, trueY, currentColor.getRGB());
                     repaint();
                 } else if(ImageEditorMode.PICK_COLOR.equals(mode)){
-                    currentColor = new Color(image.getRGB(trueX, trueY));
+                    setColor(new Color(image.getRGB(trueX, trueY)));
                 }
             }
         }
