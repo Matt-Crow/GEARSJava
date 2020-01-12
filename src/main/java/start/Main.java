@@ -1,6 +1,6 @@
 package start;
 
-import gui.imageEditor.ImageEditorFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -8,6 +8,6 @@ import gui.imageEditor.ImageEditorFrame;
  */
 public class Main {
     public static void main(String[] args){
-        new ImageEditorFrame();
+        JOptionPane.showMessageDialog(null, "This currently does nothing");
     }
 }

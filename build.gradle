@@ -11,7 +11,7 @@ sourceCompatibility = '1.8'
 // prefer. In this case NetBeans will not add these tasks but you may rely on
 // your own implementation.
 if (!hasProperty('mainClass')) {
-    ext.mainClass = 'start.Main'
+    ext.mainClass = 'start.ImageEditorMain'
 }
 
 repositories {
@@ -19,6 +19,37 @@ repositories {
     // You may define additional repositories, or even remove "mavenCentral()".
     // Read more about repositories here:
     //   http://www.gradle.org/docs/current/userguide/dependency_management.html#sec:repositories
+}
+
+/**
+ * Create the JAR file for the actual game
+**/
+jar {
+    //need to manually set main class, otherwise, it just compiles the JAR as a library
+    manifest {
+        attributes 'Main-Class': 'start.Main'
+    }
+    
+    //include dependencies in JAR file
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+/**
+ * Create the JAR file for the image editor
+**/
+task imageEditorJar(type: Jar) {
+    baseName "ImageEditor"
+    from(sourceSets.main.output) {
+        include "**" //this means "include all"
+    }
+    manifest {
+        attributes 'Main-Class': 'start.ImageEditorMain'
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
 dependencies {
