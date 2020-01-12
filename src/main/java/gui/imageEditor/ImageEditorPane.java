@@ -16,6 +16,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -34,11 +35,13 @@ public class ImageEditorPane extends JPanel{
         
         
         img = new EditableImage();
-        try {
-            img.setImage(ImageEditorPane.class.getResourceAsStream("/images/test.png"));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        SwingUtilities.invokeLater(()->{
+            try {
+                img.setImage(ImageEditorPane.class.getResourceAsStream("/images/test.png"));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
         center.add(img, BorderLayout.CENTER);
         
         center.add(createTools(), BorderLayout.LINE_START);
@@ -127,6 +130,7 @@ public class ImageEditorPane extends JPanel{
         modeSelect.add(pick);
         modes.add(pick);
         tools.add(modeSelect);
+        edit.setSelected(true);
         
         tools.add(new JLabel("Brush size"));
         JSlider brushSize = new JSlider(1, 8, 1);

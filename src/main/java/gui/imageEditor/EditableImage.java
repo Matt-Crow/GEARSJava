@@ -1,7 +1,6 @@
 package gui.imageEditor;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -26,7 +25,7 @@ import javax.swing.KeyStroke;
  * @author Matt Crow
  */
 public class EditableImage extends JComponent{
-    private int panX;
+    private int panX; //the X coordinate of the upper-left corner of the image, relative to this' upper-left
     private int panY;
     private double zoom;
     private BufferedImage image;
@@ -47,10 +46,10 @@ public class EditableImage extends JComponent{
         image = null;
         currentColor = Color.RED;
         brushSize = 1;
-        registerKey(KeyEvent.VK_UP, true, ()->panUp());
-        registerKey(KeyEvent.VK_DOWN, true, ()->panDown());
-        registerKey(KeyEvent.VK_LEFT, true, ()->panLeft());
-        registerKey(KeyEvent.VK_RIGHT, true, ()->panRight());
+        registerKey(KeyEvent.VK_UP, true, ()->pan(0, -PAN_SPEED));
+        registerKey(KeyEvent.VK_DOWN, true, ()->pan(0, PAN_SPEED));
+        registerKey(KeyEvent.VK_LEFT, true, ()->pan(-PAN_SPEED, 0));
+        registerKey(KeyEvent.VK_RIGHT, true, ()->pan(PAN_SPEED, 0));
         registerKey(KeyEvent.VK_EQUALS, true, ()->zoomIn()); //VK_PLUS doesn't work
         registerKey(KeyEvent.VK_MINUS, true, ()->zoomOut());
         setBackground(Color.BLACK);
@@ -86,8 +85,8 @@ public class EditableImage extends JComponent{
     
     public void setImage(BufferedImage newImg){
         image = newImg;
-        panX = 0;
-        panY = 0;
+        panX = getWidth() / 2 - newImg.getWidth() / 2;
+        panY = getHeight() / 2 - newImg.getHeight() / 2;
         zoom = 1.0;
         repaint();
     }
@@ -119,33 +118,25 @@ public class EditableImage extends JComponent{
         brushSize = i;
     }
     
-    public void panUp(){
-        panY += PAN_SPEED;
-        if(image != null && panY > image.getHeight()){
-            panY = image.getHeight();
-        }
+    public void pan(int x, int y){
+        panX += x;
+        panY += y;
+        checkBounds();
         repaint();
     }
-    public void panDown(){
-        panY -= PAN_SPEED;
-        if(panY < -getHeight()){
-            panY = -getHeight();
+    private void checkBounds(){
+        if(image != null && panX + image.getWidth() < 0){
+            panX = -image.getWidth();
         }
-        repaint();
-    }
-    public void panLeft(){
-        panX += PAN_SPEED;
-        if(image != null && panX > image.getWidth()){
-            panX = image.getWidth();
+        if(panX > getWidth()){
+            panX = getWidth();
         }
-        repaint();
-    }
-    public void panRight(){
-        panX -= PAN_SPEED;
-        if(panX < -getWidth()){
-            panX = -getWidth();
+        if(image != null && panY + image.getHeight() < 0){
+            panY = -image.getHeight();
         }
-        repaint();
+        if(panY > getHeight()){
+            panY = getHeight();
+        }        
     }
     
     public void zoomIn(){
@@ -164,8 +155,8 @@ public class EditableImage extends JComponent{
     }
     
     public void click(int x, int y){
-        int trueX = (int) ((x + panX) / zoom);
-        int trueY = (int) ((y + panY) / zoom);
+        int trueX = (int) ((x - panX) / zoom);
+        int trueY = (int) ((y - panY) / zoom);
         if(image != null){
             if(trueX >= 0 && trueX < image.getWidth() && trueY >= 0 && trueY < image.getHeight()){
                 if(ImageEditorMode.FILL.equals(mode)){
@@ -205,7 +196,7 @@ public class EditableImage extends JComponent{
         g.fillRect(0, 0, getWidth(), getHeight());
         if(image != null){
             Graphics2D g2d = (Graphics2D)g;
-            g2d.translate(-panX, -panY);
+            g2d.translate(panX, panY);
             g2d.scale(zoom, zoom);
             g2d.drawImage(image, 0, 0, this);
         }
