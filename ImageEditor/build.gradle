@@ -27,26 +27,10 @@ repositories {
 jar {
     //need to manually set main class, otherwise, it just compiles the JAR as a library
     manifest {
-        attributes 'Main-Class': 'start.Main'
+        attributes 'Main-Class': 'start.ImageEditorMain'
     }
     
     //include dependencies in JAR file
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-}
-
-/**
- * Create the JAR file for the image editor
-**/
-task imageEditorJar(type: Jar) {
-    baseName "ImageEditor"
-    from(sourceSets.main.output) {
-        include "**" //this means "include all"
-    }
-    manifest {
-        attributes 'Main-Class': 'start.ImageEditorMain'
-    }
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
