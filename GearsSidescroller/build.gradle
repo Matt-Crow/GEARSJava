@@ -17,6 +17,10 @@ jar {
     manifest{
         attributes 'Main-Class': 'start.GameMain'
     }
+    
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
 dependencies {

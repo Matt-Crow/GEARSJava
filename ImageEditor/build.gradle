@@ -1,7 +1,6 @@
-apply plugin: 'java'
-
-sourceCompatibility = '1.8'
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+// Note: "common.gradle" in the root project contains additional initialization
+//   for this project. This initialization is applied in the "build.gradle"
+//   of the root project.
 
 // NetBeans will automatically add "run" and "debug" tasks relying on the
 // "mainClass" property. You may however define the property prior executing
@@ -14,16 +13,6 @@ if (!hasProperty('mainClass')) {
     ext.mainClass = 'start.ImageEditorMain'
 }
 
-repositories {
-    mavenCentral()
-    // You may define additional repositories, or even remove "mavenCentral()".
-    // Read more about repositories here:
-    //   http://www.gradle.org/docs/current/userguide/dependency_management.html#sec:repositories
-}
-
-/**
- * Create the JAR file for the actual game
-**/
 jar {
     //need to manually set main class, otherwise, it just compiles the JAR as a library
     manifest {
@@ -37,8 +26,11 @@ jar {
 }
 
 dependencies {
-    // TODO: Add dependencies here ...
+    // TODO: Add dependencies here
+    //   but note that JUnit should have already been added in parent.gradle.
+    //   By default, only the Maven Central Repository is specified in
+    //   parent.gradle.
+    //
     // You can read more about how to add dependency here:
     //   http://www.gradle.org/docs/current/userguide/dependency_management.html#sec:how_to_declare_your_dependencies
-    testCompile group: 'junit', name: 'junit', version: '4.10'
 }
