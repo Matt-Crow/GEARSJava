@@ -23,6 +23,11 @@ public class TileMap {
     
     private static final int NOT_SET = 0;
     
+    /**
+     * 
+     * @param w the width of this TileMap, measured in tiles
+     * @param h the height of this TileMap, measured in tiles
+     */
     public TileMap(int w, int h){
         tileSet = new HashMap<>();
         builtMap = new ArrayList<>();

@@ -15,12 +15,14 @@ public class GamePane extends JPanel{
     public static final String PLAY = "Play";
     
     private final JPanel body;
-    private final HashMap<String, Page> pages; 
+    private final HashMap<String, Page> pages;
+    private Page currentPage;
     
     public GamePane(){
         super();
         setLayout(new GridLayout(1, 1)); //content should fill the screen
         pages = new HashMap<>();
+        currentPage = null;
         
         CardLayout l = new CardLayout();
         body = new JPanel();
@@ -43,10 +45,15 @@ public class GamePane extends JPanel{
     public final GamePane switchToPage(String pageName){
         if(pages.containsKey(pageName)){
             ((CardLayout)body.getLayout()).show(body, pageName);
-            pages.get(pageName).refresh();
+            currentPage = pages.get(pageName);
+            currentPage.refresh();
         } else {
             throw new IllegalArgumentException(String.format("Page with name of '%s' does not exist.", pageName));
         }
         return this;
+    }
+    
+    public final Page getCurrentPage(){
+        return currentPage;
     }
 }

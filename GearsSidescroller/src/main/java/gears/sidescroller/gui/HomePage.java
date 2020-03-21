@@ -1,8 +1,14 @@
 package gears.sidescroller.gui;
 
+import gears.sidescroller.world.TileMap;
+import gears.sidescroller.world.tiles.BasicColorTile;
+import gears.sidescroller.world.tiles.ImageTile;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -36,11 +42,40 @@ public class HomePage extends Page{
         play.addActionListener((e)->{
             //change this to direct to a level selector
             getParentGamePane().switchToPage(GamePane.PLAY);
+            Page p = getParentGamePane().getCurrentPage();
+            if(p instanceof LevelPage){
+                ((LevelPage)p).setCurrentLevel(getDefaultWorld());
+            }
         });
         bottom.add(play);
         JButton button3 = new JButton("Button 3");
         bottom.add(button3);
         add(bottom, BorderLayout.PAGE_END);
     }
-
+    
+    /**
+     * This method is temporary until
+     * I implement the level creator so
+     * I can use real levels
+     * @return 
+     */
+    private TileMap getDefaultWorld(){
+        TileMap map = new TileMap(20, 5);
+        
+        try {
+            BufferedImage stonks = ImageIO.read(HomePage.class.getResourceAsStream("/images/stonks.jpg"));
+            map.addToTileSet(1, new ImageTile(0, 0, stonks));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            map.addToTileSet(1, new BasicColorTile(0, 0, Color.black, Color.red));
+        }
+        
+        for(int i = 0; i < 20; i++){
+            map.setTile(i, 4, 1);
+        }
+        
+        map.buildMap();
+        
+        return map;
+    }
 }

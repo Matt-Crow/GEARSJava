@@ -17,18 +17,21 @@ public class ImageTile extends AbstractTile{
         super(xIndex, yIndex);
         
         //create a new, transparent image to guarantee the image is the correct size
+        //and copy the image over it
         image = new BufferedImage(TILE_SIZE, TILE_SIZE, img.getType());
         int transparent = new Color(0, 0, 0, 0).getRGB();
+        int pixelColor = 0;
         for(int i = 0; i < TILE_SIZE; i++){
             for(int j = 0; j < TILE_SIZE; j++){
-                image.setRGB(i, j, transparent);
+                if(img.getWidth() <= i || img.getHeight() <= j){
+                    // out of bounds, so just transparent
+                    pixelColor = transparent;
+                } else {
+                    pixelColor = img.getRGB(i, j);
+                }
+                image.setRGB(i, j, pixelColor);
             }
         }
-        
-        //copy the img argument over the new image
-        BufferedImage subImage = img.getSubimage(0, 0, (img.getWidth() < TILE_SIZE) ? img.getWidth() : TILE_SIZE, (img.getHeight() < TILE_SIZE) ? img.getHeight() : TILE_SIZE);
-        //https://stackoverflow.com/questions/10408994/how-to-add-one-image-onto-another-in-java
-        image.getGraphics().drawImage(subImage, 0, 0, null);
     }
 
     @Override
