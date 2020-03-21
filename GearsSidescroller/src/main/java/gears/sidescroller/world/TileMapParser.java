@@ -1,14 +1,27 @@
 package gears.sidescroller.world;
 
 import gears.io.StreamReaderUtil;
+import gears.io.StreamWriterUtil;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  *
  * @author Matt
  */
 public class TileMapParser {
+    /**
+     * Writes the tile map of the given TileMap to a csv file. Note that this does not
+     * include the TileMap's tile set.
+     * 
+     * @param csvFile
+     * @param tileMap
+     * @throws IOException 
+     */
+    public static void writeTileMapCsv(OutputStream csvFile, TileMap tileMap) throws IOException{
+        StreamWriterUtil.writeStream(csvFile, tileMap.getTileMapCsv());
+    }
     
     /**
      * Reads an input stream from a CSV file, and converts it to a TileMap.
@@ -18,7 +31,7 @@ public class TileMapParser {
      * @return the TileMap encoded in the given CSV file, without its tile set.
      * @throws IOException if any errors occur when reading the given stream.
      */
-    public static TileMap loadTileMap(InputStream csvFile) throws IOException{
+    public static TileMap readTileMapCsv(InputStream csvFile) throws IOException{
         String csvContent = StreamReaderUtil.readStream(csvFile);
         String[] rows = csvContent.split(StreamReaderUtil.NEWLINE);
         

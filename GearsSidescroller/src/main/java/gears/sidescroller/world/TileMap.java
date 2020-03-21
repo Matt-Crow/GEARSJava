@@ -1,8 +1,10 @@
 package gears.sidescroller.world;
 
+import gears.io.StreamWriterUtil;
 import gears.sidescroller.world.tiles.AbstractTile;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -78,6 +80,9 @@ public class TileMap {
         if(!builtMap.isEmpty()){
             throw new RuntimeException("Cannot edit the tile map while this is alread built: call clearBuiltMap, setTile, then buildMap");
         }
+        
+        map[yIndex][xIndex] = key;
+        
         return this;
     }
     
@@ -114,6 +119,26 @@ public class TileMap {
     public final TileMap clearBuiltMap(){
         builtMap.clear();
         return this;
+    }
+    
+    /**
+     * Gets this' tile map as CSV. Note that this does not include
+     * this' tile set.
+     * 
+     * @return this' tile map in CSV format, ready to write to a file. 
+     */
+    public final String getTileMapCsv(){
+        StringBuilder b = new StringBuilder();
+        String[] row;
+        for(int y = 0; y < height; y++){
+            row = Arrays.stream(map[y]).mapToObj((int cell)->{
+                return Integer.toString(cell);
+            }).toArray((int size)->{
+                return new String[size];
+            });
+            b.append(String.join(", ", row)).append(StreamWriterUtil.NEWLINE);
+        }
+        return b.toString();
     }
     
     /**
