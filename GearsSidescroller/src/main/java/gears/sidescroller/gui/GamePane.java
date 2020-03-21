@@ -12,6 +12,7 @@ import javax.swing.JPanel;
  */
 public class GamePane extends JPanel{
     public static final String HOME = "Home";
+    public static final String PLAY = "Play";
     
     private final JPanel body;
     private final HashMap<String, Page> pages; 
@@ -29,6 +30,7 @@ public class GamePane extends JPanel{
         
         //create pages
         addPage(HOME, new HomePage(this));
+        addPage(PLAY, new LevelPage(this));
         
         switchToPage(HOME);
     }

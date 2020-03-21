@@ -32,8 +32,12 @@ public class HomePage extends Page{
         bottom.setLayout(new FlowLayout(FlowLayout.CENTER));
         JButton button1 = new JButton("Button 1");
         bottom.add(button1);
-        JButton button2 = new JButton("Button 2");
-        bottom.add(button2);
+        JButton play = new JButton("Play a level");
+        play.addActionListener((e)->{
+            //change this to direct to a level selector
+            getParentGamePane().switchToPage(GamePane.PLAY);
+        });
+        bottom.add(play);
         JButton button3 = new JButton("Button 3");
         bottom.add(button3);
         add(bottom, BorderLayout.PAGE_END);
