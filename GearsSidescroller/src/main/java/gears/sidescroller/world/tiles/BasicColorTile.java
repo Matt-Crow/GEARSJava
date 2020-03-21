@@ -1,4 +1,4 @@
-package gears.sidescroller.world;
+package gears.sidescroller.world.tiles;
 
 import java.awt.Color;
 import java.awt.Graphics;
