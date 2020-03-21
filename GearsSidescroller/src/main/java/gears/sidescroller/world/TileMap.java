@@ -1,6 +1,7 @@
 package gears.sidescroller.world;
 
 import gears.sidescroller.world.tiles.AbstractTile;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -115,6 +116,18 @@ public class TileMap {
      */
     public final TileMap clearBuiltMap(){
         builtMap.clear();
+        return this;
+    }
+    
+    /**
+     * Renders each tile in this' builtMap
+     * on the given graphics.
+     * 
+     * @param g the Graphics to render tiles on.
+     * @return this, for chaining purposes
+     */
+    public final TileMap draw(Graphics g){
+        builtMap.forEach((tile)->tile.draw(g));
         return this;
     }
 }
