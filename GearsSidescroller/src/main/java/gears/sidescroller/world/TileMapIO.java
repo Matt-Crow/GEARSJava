@@ -10,7 +10,7 @@ import java.io.OutputStream;
  *
  * @author Matt
  */
-public class TileMapParser {
+public class TileMapIO {
     /**
      * Writes the tile map of the given TileMap to a csv file. Note that this does not
      * include the TileMap's tile set.
