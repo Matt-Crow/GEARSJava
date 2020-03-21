@@ -75,9 +75,6 @@ public class TileMap {
         if(yIndex < 0 || yIndex >= height){
             throw new IndexOutOfBoundsException(String.format("yIndex parameter must be withing the range 0 <= yIndex < %d, so %d is out of bounds", height, yIndex));
         }
-        if(!tileSet.containsKey(key)){
-            throw new IllegalArgumentException(String.format("Tile not set for key '%d'", key));
-        }
         if(!builtMap.isEmpty()){
             throw new RuntimeException("Cannot edit the tile map while this is alread built: call clearBuiltMap, setTile, then buildMap");
         }
