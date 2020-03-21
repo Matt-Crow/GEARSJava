@@ -63,8 +63,8 @@ public class HomePage extends Page{
         TileMap map = new TileMap(20, 5);
         
         try {
-            BufferedImage stonks = ImageIO.read(HomePage.class.getResourceAsStream("/images/stonks.jpg"));
-            map.addToTileSet(1, new ImageTile(0, 0, stonks));
+            BufferedImage img = ImageIO.read(HomePage.class.getResourceAsStream("/images/jarLogo.png"));
+            map.addToTileSet(1, new ImageTile(0, 0, img));
         } catch (IOException ex) {
             ex.printStackTrace();
             map.addToTileSet(1, new BasicColorTile(0, 0, Color.black, Color.red));
