@@ -1,23 +1,26 @@
 package gears.sidescroller.entities;
 
+import gears.sidescroller.util.Direction;
+import gears.sidescroller.util.PhysicsConstants;
+import java.awt.Graphics;
+
 /**
  *
- * @author Matt
+ * @author Matt Crow
  */
 public abstract class AbstractEntity {
     private int x;
     private int y;
+    private int speed;
+    private Direction facing;
+    private boolean moving;
     
     public AbstractEntity(){
         x = 0;
         y = 0;
-    }
-    
-    public final int getX(){
-        return x;
-    }
-    public final int getY(){
-        return y;
+        speed = 0;
+        facing = Direction.RIGHT;
+        moving = false;
     }
     
     public final AbstractEntity setX(int newX){
@@ -28,5 +31,49 @@ public abstract class AbstractEntity {
         y = newY;
         return this;
     }
+    public final AbstractEntity setSpeed(int s){
+        speed = s;
+        return this;
+    }
+    public final AbstractEntity setFacing(Direction newDir){
+        facing = newDir;
+        return this;
+    }
+    public final AbstractEntity setMoving(boolean isMoving){
+        moving = isMoving;
+        return this;
+    }
     
+    public final int getX(){
+        return x;
+    }
+    public final int getY(){
+        return y;
+    }
+    public final int getSpeed(){
+        return speed;
+    }
+    public final Direction getFacing(){
+        return facing;
+    }
+    public final boolean isMoving(){
+        return moving;
+    }
+    
+    //Player will have to override this for jumping
+    public AbstractEntity updateMovement(){
+        if(moving){
+            x += speed * facing.getXMod();
+            y += PhysicsConstants.GRAVITY * Direction.DOWN.getYMod();
+        }
+        return this;
+    }
+    public final AbstractEntity update(){
+        doUpdate();
+        updateMovement();
+        return this;
+    } 
+    
+    public abstract AbstractEntity doUpdate();
+    public abstract void draw(Graphics g);
 }
