@@ -1,5 +1,6 @@
 package gears.sidescroller.gui;
 
+import gears.sidescroller.entities.Player;
 import gears.sidescroller.world.Area;
 import gears.sidescroller.world.Level;
 import gears.sidescroller.world.TileMap;
@@ -82,6 +83,8 @@ public class HomePage extends Page{
         
         Area a = new Area(map);
         Level l = new Level(new Area[]{a}, 0);
+        l.loadPlayer(new Player());
+        
         return l;
     }
 }

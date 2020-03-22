@@ -20,6 +20,16 @@ public class Level {
         player = null;
     }
     
+    public Level loadPlayer(Player p){
+        player = p;
+        areas[currentArea].addEntity(p); //don't forget to remove the player when changing areas
+        return this;
+    }
+    
+    public Level update(){
+        areas[currentArea].update();
+        return this;
+    }
     public Level draw(Graphics g){
         areas[currentArea].draw(g);
         if(player != null){
