@@ -11,6 +11,7 @@ import java.awt.Graphics;
 public abstract class AbstractTile {
     private final int x;
     private final int y;
+    private final boolean isTangible;
     
     public static final int TILE_SIZE = 100;
     
@@ -20,10 +21,13 @@ public abstract class AbstractTile {
      * map array.
      * @param yIndex the y-index of this tile in the level
      * map array.
+     * @param tangible whether or not this should be considered
+     * when checking for collisions
      */
-    public AbstractTile(int xIndex, int yIndex){
+    public AbstractTile(int xIndex, int yIndex, boolean tangible){
         x = xIndex * TILE_SIZE;
         y = yIndex * TILE_SIZE;
+        isTangible = tangible;
     }
     
     /**
@@ -60,6 +64,16 @@ public abstract class AbstractTile {
      */
     public final int getYIndex(){
         return y / TILE_SIZE;
+    }
+    
+    /**
+     * 
+     * @return whether or not this tile
+     * should be considered when checking
+     * for collisions.
+     */
+    public final boolean getIsTangible(){
+        return isTangible;
     }
     
     /**

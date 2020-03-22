@@ -2,6 +2,7 @@ package gears.sidescroller.entities;
 
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.util.PhysicsConstants;
+import gears.sidescroller.world.tiles.AbstractTile;
 import java.awt.Graphics;
 
 /**
@@ -12,6 +13,8 @@ public abstract class AbstractEntity {
     private int x;
     private int y;
     private int speed;
+    private int width;
+    private int height;
     private Direction facing;
     private boolean moving;
     
@@ -19,6 +22,8 @@ public abstract class AbstractEntity {
         x = 0;
         y = 0;
         speed = 0;
+        width = AbstractTile.TILE_SIZE;
+        height = AbstractTile.TILE_SIZE;
         facing = Direction.RIGHT;
         moving = false;
     }
@@ -33,6 +38,14 @@ public abstract class AbstractEntity {
     }
     public final AbstractEntity setSpeed(int s){
         speed = s;
+        return this;
+    }
+    public final AbstractEntity setWidth(int w){
+        width = w;
+        return this;
+    }
+    public final AbstractEntity setHeight(int h){
+        height = h;
         return this;
     }
     public final AbstractEntity setFacing(Direction newDir){
@@ -52,6 +65,12 @@ public abstract class AbstractEntity {
     }
     public final int getSpeed(){
         return speed;
+    }
+    public final int getWidth(){
+        return width;
+    }
+    public final int getHeight(){
+        return height;
     }
     public final Direction getFacing(){
         return facing;

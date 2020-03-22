@@ -13,8 +13,8 @@ import java.awt.image.BufferedImage;
 public class ImageTile extends AbstractTile{
     private final BufferedImage image;
     
-    public ImageTile(int xIndex, int yIndex, BufferedImage img) {
-        super(xIndex, yIndex);
+    public ImageTile(int xIndex, int yIndex, boolean tangible, BufferedImage img) {
+        super(xIndex, yIndex, tangible);
         
         //create a new, transparent image to guarantee the image is the correct size
         //and copy the image over it
@@ -42,6 +42,6 @@ public class ImageTile extends AbstractTile{
 
     @Override
     public AbstractTile copyTo(int xIndex, int yIndex) {
-        return new ImageTile(xIndex, yIndex, image);
+        return new ImageTile(xIndex, yIndex, getIsTangible(), image);
     }
 }

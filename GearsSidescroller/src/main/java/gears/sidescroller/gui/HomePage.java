@@ -1,5 +1,7 @@
 package gears.sidescroller.gui;
 
+import gears.sidescroller.world.Area;
+import gears.sidescroller.world.Level;
 import gears.sidescroller.world.TileMap;
 import gears.sidescroller.world.tiles.BasicColorTile;
 import gears.sidescroller.world.tiles.ImageTile;
@@ -59,15 +61,15 @@ public class HomePage extends Page{
      * I can use real levels
      * @return 
      */
-    private TileMap getDefaultWorld(){
+    private Level getDefaultWorld(){
         TileMap map = new TileMap(20, 5);
         
         try {
             BufferedImage img = ImageIO.read(HomePage.class.getResourceAsStream("/images/jarLogo.png"));
-            map.addToTileSet(1, new ImageTile(0, 0, img));
+            map.addToTileSet(1, new ImageTile(0, 0, true, img));
         } catch (IOException ex) {
             ex.printStackTrace();
-            map.addToTileSet(1, new BasicColorTile(0, 0, Color.black, Color.red));
+            map.addToTileSet(1, new BasicColorTile(0, 0, true, Color.black, Color.red));
         }
         
         for(int i = 0; i < 20; i++){
@@ -75,7 +77,11 @@ public class HomePage extends Page{
         }
         
         map.buildMap();
+        map.setLeftPlayerSpawnTile(0, 0);
+        map.setRightPlayerSpawnTile(19, 0);
         
-        return map;
+        Area a = new Area(map);
+        Level l = new Level(new Area[]{a}, 0);
+        return l;
     }
 }

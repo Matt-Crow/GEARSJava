@@ -1,5 +1,6 @@
 package gears.sidescroller.gui;
 
+import gears.sidescroller.world.Level;
 import gears.sidescroller.world.TileMap;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -12,11 +13,7 @@ import java.awt.Graphics;
  * @author Matt Crow
  */
 public final class LevelPage extends Page{
-    /*
-    Once I implement Levels, this
-    will have its class changed
-    */
-    private TileMap currentLevel;
+    private Level currentLevel;
     
     public LevelPage(GamePane pane) {
         super(pane);
@@ -29,11 +26,11 @@ public final class LevelPage extends Page{
      * This method will be changed a bit once Level is
      * implemented.
      * 
-     * @param t the TileMap to set as the current level
+     * @param l the Level to set as the current level
      * @return this, for chaining purposes
      */
-    public final LevelPage setCurrentLevel(TileMap t){
-        currentLevel = t;
+    public final LevelPage setCurrentLevel(Level l){
+        currentLevel = l;
         return this;
     }
 

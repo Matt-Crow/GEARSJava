@@ -1,6 +1,8 @@
 package gears.sidescroller.world;
 
 import gears.io.StreamWriterUtil;
+import gears.sidescroller.entities.AbstractEntity;
+import gears.sidescroller.entities.Player;
 import gears.sidescroller.world.tiles.AbstractTile;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -21,6 +23,11 @@ public class TileMap {
     private final int[][] map;
     private final ArrayList<AbstractTile> builtMap;
     
+    private int leftPlayerSpawnX;
+    private int leftPlayerSpawnY;
+    private int rightPlayerSpawnX;
+    private int rightPlayerSpawnY;
+    
     private static final int NOT_SET = 0;
     
     /**
@@ -39,6 +46,32 @@ public class TileMap {
                 map[y][x] = NOT_SET;
             }
         }
+        leftPlayerSpawnX = 0;
+        rightPlayerSpawnX = 0;
+        leftPlayerSpawnY = 0;
+        rightPlayerSpawnY = 0;
+    }
+    
+    public final TileMap setLeftPlayerSpawnTile(int xIndex, int yIndex){
+        leftPlayerSpawnX = xIndex * AbstractTile.TILE_SIZE;
+        leftPlayerSpawnY = yIndex * AbstractTile.TILE_SIZE;
+        return this;
+    }
+    public final TileMap setRightPlayerSpawnTile(int xIndex, int yIndex){
+        rightPlayerSpawnX = xIndex * AbstractTile.TILE_SIZE;
+        rightPlayerSpawnY = yIndex * AbstractTile.TILE_SIZE;
+        return this;
+    }
+    
+    public final TileMap spawnPlayerLeft(Player p){
+        p.setX(leftPlayerSpawnX);
+        p.setY(leftPlayerSpawnY);
+        return this;
+    }
+    public final TileMap spawnPlayerRight(Player p){
+        p.setX(rightPlayerSpawnX);
+        p.setY(rightPlayerSpawnY);
+        return this;
     }
     
     /**
@@ -144,6 +177,19 @@ public class TileMap {
             b.append(String.join(", ", row)).append(StreamWriterUtil.NEWLINE);
         }
         return b.toString();
+    }
+    
+    /**
+     * Checks to see if the given entity is inside a block,
+     * and shoves them out if that block is tangible.
+     * 
+     * @param e the entitiy to check for collisions with
+     * @return whether or not a collision was detected
+     */
+    public final boolean checkForCollisions(AbstractEntity e){
+        boolean collided = false;
+        
+        return collided;
     }
     
     /**

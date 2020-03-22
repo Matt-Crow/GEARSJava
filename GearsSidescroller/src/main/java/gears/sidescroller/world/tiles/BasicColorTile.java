@@ -15,8 +15,8 @@ public class BasicColorTile extends AbstractTile{
     
     private static final int OUTLINE_OFFSET = TILE_SIZE / 10;
     
-    public BasicColorTile(int xIndex, int yIndex, Color outline, Color body) {
-        super(xIndex, yIndex);
+    public BasicColorTile(int xIndex, int yIndex, boolean tangible, Color outline, Color body) {
+        super(xIndex, yIndex, tangible);
         outlineColor = outline;
         bodyColor = body;
     }
@@ -36,6 +36,6 @@ public class BasicColorTile extends AbstractTile{
 
     @Override
     public AbstractTile copyTo(int xIndex, int yIndex) {
-        return new BasicColorTile(xIndex, yIndex, outlineColor, bodyColor);
+        return new BasicColorTile(xIndex, yIndex, getIsTangible(), outlineColor, bodyColor);
     }
 }
