@@ -11,11 +11,9 @@ import java.awt.Graphics;
  */
 public class Player extends AbstractEntity{
     
-    @Override
-    public AbstractEntity updateMovement(){
-        super.updateMovement();
-        //add jumping stuff here
-        return this;
+    public Player(){
+        super();
+        this.setSpeed(5);
     }
     
     @Override

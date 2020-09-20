@@ -1,18 +1,11 @@
 package gears.sidescroller.gui;
 
 import gears.sidescroller.entities.Player;
-import gears.sidescroller.world.Area;
 import gears.sidescroller.world.Level;
 import gears.sidescroller.world.LevelGenerator;
-import gears.sidescroller.world.TileMap;
-import gears.sidescroller.world.tiles.BasicColorTile;
-import gears.sidescroller.world.tiles.ImageTile;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -48,7 +41,12 @@ public class HomePage extends Page{
             getParentGamePane().switchToPage(GamePane.PLAY);
             Page p = getParentGamePane().getCurrentPage();
             if(p instanceof LevelPage){
-                ((LevelPage)p).setCurrentLevel(getDefaultWorld());
+                Level l = getDefaultWorld();
+                Player player = new Player();
+                l.loadPlayer(player);
+                ((LevelPage)p).setCurrentLevel(l);
+                new EntityControls(player).registerTo((LevelPage) p);
+                p.requestFocus();
             }
         });
         bottom.add(play);
@@ -64,31 +62,8 @@ public class HomePage extends Page{
      * @return 
      */
     private Level getDefaultWorld(){
-        
-        /*
-        TileMap map = new TileMap(20, 5);
-        
-        try {
-            BufferedImage img = ImageIO.read(HomePage.class.getResourceAsStream("/images/jarLogo.png"));
-            map.addToTileSet(1, new ImageTile(0, 0, true, img));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            map.addToTileSet(1, new BasicColorTile(0, 0, true, Color.black, Color.red));
-        }
-        
-        for(int i = 0; i < 20; i++){
-            map.setTile(i, 4, 1);
-        }
-        
-        map.buildMap();
-        map.setLeftPlayerSpawnTile(0, 0);
-        map.setRightPlayerSpawnTile(19, 0);
-        
-        Area a = new Area(map);
-        Level l = new Level(new Area[]{a}, 0);*/
         Level l = new LevelGenerator().generateRandom(3);
         l.init();
-        l.loadPlayer(new Player());
         
         return l;
     }

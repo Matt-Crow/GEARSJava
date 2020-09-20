@@ -4,6 +4,7 @@ import gears.sidescroller.util.Direction;
 import gears.sidescroller.util.PhysicsConstants;
 import gears.sidescroller.world.tiles.AbstractTile;
 import java.awt.Graphics;
+import java.util.HashMap;
 
 /**
  *
@@ -17,6 +18,7 @@ public abstract class AbstractEntity {
     private int height;
     private Direction facing;
     private boolean moving;
+    private final HashMap<Direction, Boolean> isMoveInDir;
     private final long id;
     
     private static long NEXT_ID = 0;
@@ -29,6 +31,7 @@ public abstract class AbstractEntity {
         height = AbstractTile.TILE_SIZE;
         facing = Direction.RIGHT;
         moving = false;
+        isMoveInDir = new HashMap<>();
         id = NEXT_ID;
         NEXT_ID++;
     }
@@ -84,6 +87,11 @@ public abstract class AbstractEntity {
         return moving;
     }
     
+    public final AbstractEntity setMovingInDir(Direction dir, boolean isMoving){
+        this.isMoveInDir.put(dir, isMoving);
+        return this;
+    }
+    
     /**
      * 
      * @return a unique identifier 
@@ -93,12 +101,17 @@ public abstract class AbstractEntity {
         return id;
     }
     
-    //Player will have to override this for jumping
     public AbstractEntity updateMovement(){
         if(moving){
             x += speed * facing.getXMod();
-            y += PhysicsConstants.GRAVITY * Direction.DOWN.getYMod();
+            //y += PhysicsConstants.GRAVITY * Direction.DOWN.getYMod();
         }
+        isMoveInDir.forEach((dir, isMove)->{
+            if(isMove){
+                x += speed * dir.getXMod();
+                y += speed * dir.getYMod();
+            }
+        });
         return this;
     }
     public final AbstractEntity update(){

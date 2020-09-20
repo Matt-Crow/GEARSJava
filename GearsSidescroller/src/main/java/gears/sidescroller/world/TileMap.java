@@ -182,8 +182,9 @@ public class TileMap {
      */
     public final boolean checkForCollisions(AbstractEntity e){
         boolean collided = false;
-        throw new RuntimeException("Still need to implement this");
+        //throw new RuntimeException("Still need to implement this");
         //return collided;
+        return collided;
     }
     
     /**
