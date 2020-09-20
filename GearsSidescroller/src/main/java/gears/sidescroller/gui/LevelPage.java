@@ -1,5 +1,6 @@
 package gears.sidescroller.gui;
 
+import gears.sidescroller.entities.AbstractEntity;
 import gears.sidescroller.world.Level;
 import gears.sidescroller.world.TileMap;
 import java.awt.Color;
@@ -19,7 +20,10 @@ import javax.swing.Timer;
 public final class LevelPage extends Page{
     private Level currentLevel;
     private final Timer timer;
-    private static int FPS = 20;
+    private AbstractEntity focusedEntity;
+    
+    public static final int FPS = 20;
+    
     public LevelPage(GamePane pane) {
         super(pane);
         currentLevel = null;
@@ -31,8 +35,13 @@ public final class LevelPage extends Page{
         timer.setRepeats(true);
         timer.start();
         setFocusable(true);
+        focusedEntity = null;
     }
     
+    public final LevelPage focusOnEntity(AbstractEntity e){
+        focusedEntity = e;
+        return this;
+    }
     /**
      * Registers a key control to the Canvas.
      * For example,
@@ -80,6 +89,12 @@ public final class LevelPage extends Page{
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
+        if(focusedEntity != null){
+            g.translate(
+                -(int)(focusedEntity.getX() - getWidth() / 2),
+                -(int)(focusedEntity.getY() - getHeight() / 2)
+            );
+        }
         if(currentLevel == null){
             g.setColor(Color.yellow);
             g.drawString("current level not set", getWidth() / 2, getHeight() / 2);

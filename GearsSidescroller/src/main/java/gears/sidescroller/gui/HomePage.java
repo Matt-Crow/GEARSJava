@@ -47,6 +47,7 @@ public class HomePage extends Page{
                 ((LevelPage)p).setCurrentLevel(l);
                 new EntityControls(player).registerTo((LevelPage) p);
                 p.requestFocus();
+                ((LevelPage)p).focusOnEntity(player);
             }
         });
         bottom.add(play);
