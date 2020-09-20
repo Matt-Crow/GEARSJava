@@ -17,6 +17,9 @@ public abstract class AbstractEntity {
     private int height;
     private Direction facing;
     private boolean moving;
+    private final long id;
+    
+    private static long NEXT_ID = 0;
     
     public AbstractEntity(){
         x = 0;
@@ -26,6 +29,8 @@ public abstract class AbstractEntity {
         height = AbstractTile.TILE_SIZE;
         facing = Direction.RIGHT;
         moving = false;
+        id = NEXT_ID;
+        NEXT_ID++;
     }
     
     public final AbstractEntity setX(int newX){
@@ -77,6 +82,15 @@ public abstract class AbstractEntity {
     }
     public final boolean isMoving(){
         return moving;
+    }
+    
+    /**
+     * 
+     * @return a unique identifier 
+     * for this entity
+     */
+    public final long getId(){
+        return id;
     }
     
     //Player will have to override this for jumping

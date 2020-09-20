@@ -3,6 +3,7 @@ package gears.sidescroller.world;
 import gears.sidescroller.entities.AbstractEntity;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * this will be used to store a tileMap,
@@ -13,23 +14,28 @@ import java.util.ArrayList;
  */
 public class Area {
     private final TileMap tileMap;
-    private final ArrayList<AbstractEntity> entities;
+    private final HashMap<Long, AbstractEntity> entities;
     
     public Area(TileMap t){
         tileMap = t;
-        entities = new ArrayList<>();
+        entities = new HashMap<>();
     }
     
     public Area addEntity(AbstractEntity e){
-        entities.add(e);
+        entities.put(e.getId(), e);
         return this;
     }
     public boolean removeEntity(AbstractEntity e){
-        return entities.remove(e);
+        return entities.remove(e.getId(), e);
+    }
+    
+    public Area init(){
+        //entities.values().forEach((e)->e.init());
+        return this;
     }
     
     public Area update(){
-        entities.forEach((e)->{
+        entities.values().forEach((e)->{
             e.update();
             tileMap.checkForCollisions(e);
         });
