@@ -3,6 +3,7 @@ package gears.sidescroller.gui;
 import gears.sidescroller.entities.Player;
 import gears.sidescroller.world.Area;
 import gears.sidescroller.world.Level;
+import gears.sidescroller.world.LevelGenerator;
 import gears.sidescroller.world.TileMap;
 import gears.sidescroller.world.tiles.BasicColorTile;
 import gears.sidescroller.world.tiles.ImageTile;
@@ -63,6 +64,8 @@ public class HomePage extends Page{
      * @return 
      */
     private Level getDefaultWorld(){
+        
+        /*
         TileMap map = new TileMap(20, 5);
         
         try {
@@ -82,7 +85,9 @@ public class HomePage extends Page{
         map.setRightPlayerSpawnTile(19, 0);
         
         Area a = new Area(map);
-        Level l = new Level(new Area[]{a}, 0);
+        Level l = new Level(new Area[]{a}, 0);*/
+        Level l = new LevelGenerator().generateRandom(3);
+        l.init();
         l.loadPlayer(new Player());
         
         return l;

@@ -30,6 +30,7 @@ public class Area {
     }
     
     public Area init(){
+        tileMap.buildMap();
         //entities.values().forEach((e)->e.init());
         return this;
     }

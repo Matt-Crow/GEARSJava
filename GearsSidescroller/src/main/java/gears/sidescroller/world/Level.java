@@ -26,6 +26,16 @@ public class Level {
         return this;
     }
     
+    public Level init(){
+        for(Area area : areas){
+            area.init();
+        }
+        if(player != null){
+            //player.init();
+        }
+        return this;
+    }
+    
     public Level update(){
         areas[currentArea].update();
         return this;
