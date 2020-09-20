@@ -1,4 +1,8 @@
-package gears.sidescroller.world;
+package gears.sidescroller.world.levels;
+
+import gears.sidescroller.world.levels.Level;
+import gears.sidescroller.world.areas.AreaGenerator;
+import gears.sidescroller.world.areas.Area;
 
 /**
  *

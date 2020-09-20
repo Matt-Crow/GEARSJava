@@ -1,5 +1,6 @@
-package gears.sidescroller.world;
+package gears.sidescroller.world.tileMaps;
 
+import gears.sidescroller.world.tileMaps.TileMap;
 import gears.sidescroller.world.tiles.TileGenerator;
 
 /**

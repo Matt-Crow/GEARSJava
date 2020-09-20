@@ -1,11 +1,14 @@
 package gears.sidescroller.gui;
 
 import gears.sidescroller.entities.AbstractEntity;
-import gears.sidescroller.world.Level;
-import gears.sidescroller.world.TileMap;
+import gears.sidescroller.entities.Player;
+import gears.sidescroller.world.levels.Level;
+import gears.sidescroller.world.levels.LevelGenerator;
+import gears.sidescroller.world.tileMaps.TileMap;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
@@ -36,6 +39,24 @@ public final class LevelPage extends Page{
         timer.start();
         setFocusable(true);
         focusedEntity = null;
+        
+        registerKey(KeyEvent.VK_R, true, ()->{
+            //regenerate random. Debugging tool
+            Level newLevel = new LevelGenerator().generateRandom(3);
+            // don't forget to load player!
+            if(focusedEntity != null && focusedEntity instanceof Player){
+                newLevel.loadPlayer((Player)focusedEntity);
+            }
+            
+            setCurrentLevel(newLevel);
+            newLevel.init();
+        });
+        registerKey(KeyEvent.VK_L, true, ()->{
+            // save world. placeholder
+            if(currentLevel != null){
+                System.out.println(currentLevel.toString()); //todo actually save it somehow
+            }
+        });
     }
     
     public final LevelPage focusOnEntity(AbstractEntity e){

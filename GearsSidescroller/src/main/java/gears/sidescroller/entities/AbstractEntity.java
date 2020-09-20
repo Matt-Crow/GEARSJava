@@ -1,7 +1,6 @@
 package gears.sidescroller.entities;
 
 import gears.sidescroller.util.Direction;
-import gears.sidescroller.util.PhysicsConstants;
 import gears.sidescroller.world.tiles.AbstractTile;
 import java.awt.Graphics;
 import java.util.HashMap;
@@ -16,8 +15,6 @@ public abstract class AbstractEntity {
     private int speed;
     private int width;
     private int height;
-    private Direction facing;
-    private boolean moving;
     private final HashMap<Direction, Boolean> isMoveInDir;
     private final long id;
     
@@ -29,8 +26,6 @@ public abstract class AbstractEntity {
         speed = 0;
         width = AbstractTile.TILE_SIZE;
         height = AbstractTile.TILE_SIZE;
-        facing = Direction.RIGHT;
-        moving = false;
         isMoveInDir = new HashMap<>();
         id = NEXT_ID;
         NEXT_ID++;
@@ -56,14 +51,6 @@ public abstract class AbstractEntity {
         height = h;
         return this;
     }
-    public final AbstractEntity setFacing(Direction newDir){
-        facing = newDir;
-        return this;
-    }
-    public final AbstractEntity setMoving(boolean isMoving){
-        moving = isMoving;
-        return this;
-    }
     
     public final int getX(){
         return x;
@@ -79,12 +66,6 @@ public abstract class AbstractEntity {
     }
     public final int getHeight(){
         return height;
-    }
-    public final Direction getFacing(){
-        return facing;
-    }
-    public final boolean isMoving(){
-        return moving;
     }
     
     public final AbstractEntity setMovingInDir(Direction dir, boolean isMoving){
@@ -102,10 +83,6 @@ public abstract class AbstractEntity {
     }
     
     public AbstractEntity updateMovement(){
-        if(moving){
-            x += speed * facing.getXMod();
-            //y += PhysicsConstants.GRAVITY * Direction.DOWN.getYMod();
-        }
         isMoveInDir.forEach((dir, isMove)->{
             if(isMove){
                 x += speed * dir.getXMod();

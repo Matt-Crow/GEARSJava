@@ -1,5 +1,6 @@
-package gears.sidescroller.world;
+package gears.sidescroller.world.tileMaps;
 
+import gears.sidescroller.world.tileMaps.TileMap;
 import gears.io.StreamReaderUtil;
 import gears.io.StreamWriterUtil;
 import java.io.IOException;

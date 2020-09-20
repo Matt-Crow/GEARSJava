@@ -1,6 +1,7 @@
-package gears.sidescroller.world;
+package gears.sidescroller.world.areas;
 
 import gears.sidescroller.entities.AbstractEntity;
+import gears.sidescroller.world.tileMaps.TileMap;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,5 +47,14 @@ public class Area {
     public Area draw(Graphics g){
         tileMap.draw(g);
         return this;
+    }
+    
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("TODO: better Area::toString\n");
+        sb.append("Tile Map:\n");
+        sb.append(tileMap.toString());
+        return sb.toString();
     }
 }

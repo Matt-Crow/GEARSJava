@@ -1,8 +1,8 @@
 package gears.sidescroller.gui;
 
 import gears.sidescroller.entities.Player;
-import gears.sidescroller.world.Level;
-import gears.sidescroller.world.LevelGenerator;
+import gears.sidescroller.world.levels.Level;
+import gears.sidescroller.world.levels.LevelGenerator;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;

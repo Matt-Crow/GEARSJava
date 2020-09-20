@@ -1,4 +1,4 @@
-package gears.sidescroller.world;
+package gears.sidescroller.world.tileMaps;
 
 import gears.io.StreamWriterUtil;
 import gears.sidescroller.entities.AbstractEntity;
@@ -197,5 +197,17 @@ public class TileMap {
     public final TileMap draw(Graphics g){
         builtMap.forEach((tile)->tile.draw(g));
         return this;
+    }
+    
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("TODO: better TileMap::toString\n");
+        sb.append("TILE MAP\n");
+        tileSet.forEach((i, tile)->{
+            sb.append(String.format("%d : %s\n", i, tile.toString()));
+        });
+        sb.append(getTileMapCsv());
+        return sb.toString();
     }
 }

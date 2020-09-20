@@ -1,5 +1,6 @@
-package gears.sidescroller.world;
+package gears.sidescroller.world.levels;
 
+import gears.sidescroller.world.areas.Area;
 import gears.sidescroller.entities.Player;
 import java.awt.Graphics;
 
@@ -46,5 +47,17 @@ public class Level {
             player.draw(g);
         }
         return this;
+    }
+    
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("TODO: better loggin in Level::toString\n");
+        sb.append("AREAS:\n");
+        for(int i = 0; i < areas.length; i++){
+            sb.append(String.format("Area #%d:\n", i));
+            sb.append(areas[i].toString());
+        }
+        return sb.toString();
     }
 }

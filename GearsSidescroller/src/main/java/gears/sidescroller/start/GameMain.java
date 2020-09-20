@@ -2,8 +2,8 @@ package gears.sidescroller.start;
 
 import gears.io.FileSelectorUtil;
 import gears.sidescroller.gui.GameFrame;
-import gears.sidescroller.world.TileMap;
-import gears.sidescroller.world.TileMapIO;
+import gears.sidescroller.world.tileMaps.TileMap;
+import gears.sidescroller.world.tileMaps.TileMapIO;
 import gears.sidescroller.world.tiles.BasicColorTile;
 import java.awt.Color;
 import java.io.FileNotFoundException;
