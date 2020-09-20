@@ -28,8 +28,6 @@ public class TileMap {
     private int rightPlayerSpawnX;
     private int rightPlayerSpawnY;
     
-    private static final int NOT_SET = 0;
-    
     /**
      * 
      * @param w the width of this TileMap, measured in tiles
@@ -43,7 +41,7 @@ public class TileMap {
         map = new int[height][width];
         for(int y = 0; y < height; y++){
             for(int x = 0; x < width; x++){
-                map[y][x] = NOT_SET;
+                map[y][x] = 0;
             }
         }
         leftPlayerSpawnX = 0;
@@ -86,9 +84,6 @@ public class TileMap {
      * @return this, for chaining purposes
      */
     public TileMap addToTileSet(int key, AbstractTile tile){
-        if(key == NOT_SET){
-            throw new IllegalArgumentException(String.format("Cannot set tile for key %d, as that key designates 'value not set'", NOT_SET));
-        }
         if(tile == null){
             throw new NullPointerException("tile cannot be null");
         }
@@ -136,12 +131,11 @@ public class TileMap {
         for(int y = 0; y < height; y++){
             for(int x = 0; x < width; x++){
                 key = map[y][x];
-                if(key != NOT_SET){
-                    if(tileSet.containsKey(key)){
-                        builtMap.add(tileSet.get(key).copyTo(x, y));
-                    } else {
-                        throw new RuntimeException(String.format("Tile set does not contain key '%d'", key));
-                    }
+                if(tileSet.containsKey(key)){
+                    builtMap.add(tileSet.get(key).copyTo(x, y));
+                } else {
+                    // not sure if I want this
+                    throw new RuntimeException(String.format("Tile set does not contain key '%d'", key));
                 }
             }
         }
