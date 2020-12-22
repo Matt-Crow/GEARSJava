@@ -1,6 +1,15 @@
+# GEARS
+
 TODO: everything
 
-Make this a top-down scroller, not a platformer
+Current Plan:
+* Make all core classes
+    * tile
+    * tile map
+    * entities
+    * machines
+* add factories for each
+* add serialization for each
 
 WASD to move,
 R to regenerate randomly generated world
