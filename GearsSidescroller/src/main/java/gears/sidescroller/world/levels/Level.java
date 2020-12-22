@@ -37,10 +37,15 @@ public class Level {
         return this;
     }
     
+    public Area getCurrentArea(){
+        return (currentArea >= 0 && currentArea < areas.length) ? areas[currentArea] : null;
+    }
+    
     public Level update(){
         areas[currentArea].update();
         return this;
     }
+    
     public Level draw(Graphics g){
         areas[currentArea].draw(g);
         if(player != null){

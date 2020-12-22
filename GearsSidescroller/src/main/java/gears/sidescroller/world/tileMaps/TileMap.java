@@ -187,6 +187,39 @@ public class TileMap {
         return b.toString();
     }
     
+    private boolean handleCollisions(AbstractEntity e, int tileXIdx, int tileYIdx){
+        boolean collided = false;
+        if(isValidIdx(tileXIdx, tileYIdx) && tileSet.get(map[tileYIdx][tileXIdx]).getIsTangible()){
+            collided = true;
+            // now know the entity has collided, so now figure out how to shove them out
+            int tileLeft = tileXIdx * AbstractTile.TILE_SIZE;
+            int tileTop = tileYIdx * AbstractTile.TILE_SIZE;
+            // these are the coordinates of the tile they are colliding with
+            int diffX = tileLeft - e.getX();
+            int diffY = tileTop - e.getY();
+            if(Math.abs(diffX) > Math.abs(diffY)){
+                // shove them to the side
+                if(diffX < AbstractTile.TILE_SIZE / 2){
+                    // entity is more than half way through the tile, so shove them right
+                    e.setX(tileLeft + AbstractTile.TILE_SIZE + 1);
+                } else {
+                    // not half way though, so shove left
+                    e.setX(tileLeft - e.getWidth() - 1);
+                }
+            } else {
+                // shove up or down
+                if(diffY < AbstractTile.TILE_SIZE / 2){
+                    // more than half way down, so shove down
+                    e.setY(tileTop + AbstractTile.TILE_SIZE + 1);
+                } else {
+                    // less, so pull up
+                    e.setY(tileTop - e.getHeight() - 1);
+                }
+            }
+        }
+        return collided;
+    }
+    
     /**
      * Checks to see if the given entity is inside a block,
      * and shoves them out if that block is tangible.
@@ -195,39 +228,27 @@ public class TileMap {
      * @return whether or not a collision was detected
      */
     public final boolean checkForCollisions(AbstractEntity e){
-        boolean collided = false;
+        /*
+        This gets the tile index for the UPPER LEFT corner of e
+        becuase of how integer division rounds down.
+        
+        Therefore, need to check for collisions with four tiles
+        in a 2x2 tile square to catch all the tiles they could
+        possibly be colliding with.
+        */
         int yIdx = e.getY() / AbstractTile.TILE_SIZE;
         int xIdx = e.getX() / AbstractTile.TILE_SIZE;
         
-        if(isValidIdx(xIdx, yIdx) && tileSet.get(map[yIdx][xIdx]).getIsTangible()){
-            collided = true;
-            // now know the entity has collided, so now figure out how to shove them out
-            int tileLeft = xIdx * AbstractTile.TILE_SIZE;
-            int tileTop = yIdx * AbstractTile.TILE_SIZE;
-            // these are the coordinates of the tile they are colliding with
-            int diffX = tileLeft - e.getX();
-            int diffY = tileTop - e.getY();
-            if(Math.abs(diffX) < Math.abs(diffY)){
-                // shove them to the side
-                if(diffX < AbstractTile.TILE_SIZE / 2){
-                    // entity is more than half way through the tile, so shove them right
-                    e.setX(tileLeft + AbstractTile.TILE_SIZE);
-                } else {
-                    // not half way though, so shove left
-                    e.setX(tileLeft - e.getWidth());
-                }
-            } else {
-                // shove up or down
-                if(diffY < AbstractTile.TILE_SIZE / 2){
-                    // more than half way down, so shove down
-                    e.setY(tileTop + AbstractTile.TILE_SIZE);
-                } else {
-                    // less, so pull up
-                    e.setY(tileTop - e.getHeight());
-                }
-            }
-        }
-        return collided;
+        boolean collUpperLeft = handleCollisions(e, xIdx, yIdx);
+        boolean collUpperRight = handleCollisions(e, xIdx + 1, yIdx);
+        boolean collLowerLeft = handleCollisions(e, xIdx, yIdx + 1);
+        boolean collLowerRight = handleCollisions(e, xIdx + 1, yIdx + 1);
+        
+        // do this to avoid short-circuit evaluation
+        return collUpperLeft
+            || collUpperRight
+            || collLowerLeft
+            || collLowerRight;
     }
     
     /**

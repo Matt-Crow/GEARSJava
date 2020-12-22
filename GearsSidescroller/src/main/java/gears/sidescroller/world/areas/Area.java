@@ -36,6 +36,10 @@ public class Area {
         return this;
     }
     
+    public TileMap getTileMap(){
+        return tileMap;
+    }
+    
     public Area update(){
         entities.values().forEach((e)->{
             e.update();
