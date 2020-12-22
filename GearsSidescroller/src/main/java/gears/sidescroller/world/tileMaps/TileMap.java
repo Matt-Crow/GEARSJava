@@ -95,6 +95,20 @@ public class TileMap {
     }
     
     /**
+     * Checks if the given values are valid indeces
+     * in the tile map array. That is to say,
+     * <code>tileMap[yIdx][xIdx]</code> will not throw an IndexOutOfBoundsException.
+     * 
+     * @param xIdx the x index into the array
+     * @param yIdx the y index into the array
+     * 
+     * @return whether or not the given indeces are valid. 
+     */
+    private boolean isValidIdx(int xIdx, int yIdx) {
+        return xIdx >= 0 && xIdx < width && yIdx >= 0 && yIdx < height;
+    }
+    
+    /**
      * Sets the tile key for the given x- and y-indeces.
      * 
      * @param xIndex the x-index for the tile
@@ -182,8 +196,37 @@ public class TileMap {
      */
     public final boolean checkForCollisions(AbstractEntity e){
         boolean collided = false;
-        //throw new RuntimeException("Still need to implement this");
-        //return collided;
+        int yIdx = e.getY() / AbstractTile.TILE_SIZE;
+        int xIdx = e.getX() / AbstractTile.TILE_SIZE;
+        
+        if(isValidIdx(xIdx, yIdx) && tileSet.get(map[yIdx][xIdx]).getIsTangible()){
+            collided = true;
+            // now know the entity has collided, so now figure out how to shove them out
+            int tileLeft = xIdx * AbstractTile.TILE_SIZE;
+            int tileTop = yIdx * AbstractTile.TILE_SIZE;
+            // these are the coordinates of the tile they are colliding with
+            int diffX = tileLeft - e.getX();
+            int diffY = tileTop - e.getY();
+            if(Math.abs(diffX) > Math.abs(diffY)){
+                // shove them to the side
+                if(diffX < AbstractTile.TILE_SIZE / 2){
+                    // entity is more than half way through the tile, so shove them right
+                    e.setX(tileLeft + AbstractTile.TILE_SIZE);
+                } else {
+                    // not half way though, so shove left
+                    e.setX(tileLeft - e.getWidth());
+                }
+            } else {
+                // shove up or down
+                if(diffY < AbstractTile.TILE_SIZE / 2){
+                    // more than half way down, so shove down
+                    e.setY(tileTop + AbstractTile.TILE_SIZE);
+                } else {
+                    // less, so pull up
+                    e.setY(tileTop - e.getHeight());
+                }
+            }
+        }
         return collided;
     }
     

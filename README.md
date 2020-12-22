@@ -8,6 +8,7 @@ Current Plan:
     * tile map
     * entities
     * machines
+    * structures
 * add factories for each
 * add serialization for each
 
