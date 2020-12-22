@@ -1,7 +1,10 @@
 package gears.sidescroller.gui;
 
+import gears.sidescroller.world.areas.Area;
+import gears.sidescroller.world.tileMaps.TileMap;
 import gears.sidescroller.entities.Player;
 import gears.sidescroller.world.levels.Level;
+import gears.sidescroller.world.tiles.TileGenerator;
 import gears.sidescroller.world.levels.LevelGenerator;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -63,7 +66,13 @@ public class HomePage extends Page{
      * @return 
      */
     private Level getDefaultWorld(){
-        Level l = new LevelGenerator().generateRandom(3);
+        //Level l = new LevelGenerator().generateRandom(3);
+        TileMap t = new TileMap(10, 10);
+        t.addToTileSet(0, new TileGenerator().generateRandom(false));
+        t.addToTileSet(1, new TileGenerator().generateRandom(true));
+        t.setTile(5, 5, 1);
+        Area testArea = new Area(t);
+        Level l = new Level(new Area[]{testArea}, 0);
         l.init();
         
         return l;

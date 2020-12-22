@@ -207,7 +207,7 @@ public class TileMap {
             // these are the coordinates of the tile they are colliding with
             int diffX = tileLeft - e.getX();
             int diffY = tileTop - e.getY();
-            if(Math.abs(diffX) > Math.abs(diffY)){
+            if(Math.abs(diffX) < Math.abs(diffY)){
                 // shove them to the side
                 if(diffX < AbstractTile.TILE_SIZE / 2){
                     // entity is more than half way through the tile, so shove them right
