@@ -81,7 +81,12 @@ public abstract class AbstractTile {
      * @param g the graphics context to draw this on.
      * @return this, for chaining purposes.
      */
-    public abstract AbstractTile draw(Graphics g);
+    public final AbstractTile draw(Graphics g){
+        drawAt(g, x, y);
+        return this;
+    }
+    
+    public abstract AbstractTile drawAt(Graphics g, int x, int y);
     
     /**
      * Creates a copy of this tile at the given coordinates.

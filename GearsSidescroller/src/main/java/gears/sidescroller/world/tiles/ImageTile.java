@@ -35,8 +35,8 @@ public class ImageTile extends AbstractTile{
     }
 
     @Override
-    public AbstractTile draw(Graphics g) {
-        g.drawImage(image, getXCoord(), getYCoord(), null);
+    public AbstractTile drawAt(Graphics g, int x, int y) {
+        g.drawImage(image, x, y, null);
         return this;
     }
 

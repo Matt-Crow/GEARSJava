@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 
 /**
  * A TileMap is used to store tiles in a two-dimensional matrix.
@@ -259,7 +260,11 @@ public class TileMap {
      * @return this, for chaining purposes
      */
     public final TileMap draw(Graphics g){
-        builtMap.forEach((tile)->tile.draw(g));
+        for(int x = 0; x < width; x++){
+            for(int y = 0; y < height; y++){
+                tileSet.get(map[y][x]).drawAt(g, x * TILE_SIZE, y * TILE_SIZE);
+            }
+        }
         return this;
     }
     

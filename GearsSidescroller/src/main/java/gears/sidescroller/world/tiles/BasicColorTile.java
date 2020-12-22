@@ -22,14 +22,14 @@ public class BasicColorTile extends AbstractTile{
     }
 
     @Override
-    public AbstractTile draw(Graphics g) {
+    public AbstractTile drawAt(Graphics g, int x, int y) {
         //outline
         g.setColor(outlineColor);
-        g.fillRect(getXCoord(), getYCoord(), TILE_SIZE, TILE_SIZE);
+        g.fillRect(x, y, TILE_SIZE, TILE_SIZE);
         
         //body
         g.setColor(bodyColor);
-        g.fillRect(getXCoord() + OUTLINE_OFFSET, getYCoord() + OUTLINE_OFFSET, TILE_SIZE - OUTLINE_OFFSET * 2, TILE_SIZE - OUTLINE_OFFSET * 2);
+        g.fillRect(x + OUTLINE_OFFSET, y + OUTLINE_OFFSET, TILE_SIZE - OUTLINE_OFFSET * 2, TILE_SIZE - OUTLINE_OFFSET * 2);
         
         return this;
     }
