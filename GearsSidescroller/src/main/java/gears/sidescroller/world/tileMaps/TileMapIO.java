@@ -37,23 +37,23 @@ public class TileMapIO {
         String[] rows = csvContent.split(StreamReaderUtil.NEWLINE);
         
         //find how large the tile map should be
-        int widestRow = 0;
-        int currWidth;
+        byte widestRow = 0;
+        byte currWidth;
         for(String row : rows){
-            currWidth = row.split(",").length;
+            currWidth = (byte)row.split(",").length;
             if(currWidth > widestRow){
                 widestRow = currWidth;
             }
         }
-        TileMap ret = new TileMap(widestRow, rows.length);
+        TileMap ret = new TileMap(widestRow, (byte)rows.length);
         
         //start setting tiles
         String[] currRow;
-        int tileKey;
-        for(int y = 0; y < rows.length; y++){
+        byte tileKey;
+        for(byte y = 0; y < rows.length; y++){
             currRow = rows[y].split(",");
-            for(int x = 0; x < currRow.length; x++){
-                tileKey = Integer.parseInt(currRow[x]);
+            for(byte x = 0; x < currRow.length; x++){
+                tileKey = Byte.parseByte(currRow[x]);
                 ret.setTile(x, y, tileKey);
             }
         }

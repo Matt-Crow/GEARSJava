@@ -22,26 +22,26 @@ public class TileMapGenerator {
         this.sinPeriod = sinPeriod;
     }
     
-    private int f(int x, int y){
-        return (int)(cosAmplitude * Math.cos(x / cosPeriod) + sinAmplitude * Math.sin(y / sinPeriod));
+    private byte f(byte x, byte y){
+        return (byte)(cosAmplitude * Math.cos(x / cosPeriod) + sinAmplitude * Math.sin(y / sinPeriod));
     }
     
-    public TileMap generateTileMap(int w, int h){
+    public TileMap generateTileMap(byte w, byte h){
         TileMap ret = new TileMap(w, h);
         
         // first, generate the tile set
         TileGenerator tileGen = new TileGenerator();
-        ret.addToTileSet(0, tileGen.generateRandom(false)); // should be able to walk on 0
+        ret.addToTileSet((byte)0, tileGen.generateRandom(false)); // should be able to walk on 0
         // since 0 will be the most common tile
         int maxZ = cosAmplitude + sinAmplitude; // highest tile index we can have
-        for(int i = 1; i < maxZ + 1; i++){ // skip index 0, as it is already set, but make sure to account for maxZ
+        for(byte i = 1; i < maxZ + 1; i++){ // skip index 0, as it is already set, but make sure to account for maxZ
             ret.addToTileSet(i, tileGen.generateRandom(true));
         }
         
         // second, set the tile map
-        for(int i = 0; i < w; i++){
-            for(int j = 0; j < h; j++){
-                ret.setTile(i, j, Math.max(0, f(i, j)));
+        for(byte i = 0; i < w; i++){
+            for(byte j = 0; j < h; j++){
+                ret.setTile(i, j, (byte)Math.max(0, f(i, j)));
             }
         }
         
@@ -53,7 +53,7 @@ public class TileMapGenerator {
         
         TileMap map;
         for(int i = 0; i < 20; i++){
-            map = gen.generateTileMap(20, 20);
+            map = gen.generateTileMap((byte)20, (byte)20);
             System.out.println(map.buildMap().getTileMapCsv());
         }
     }

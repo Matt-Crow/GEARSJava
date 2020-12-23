@@ -67,10 +67,10 @@ public class HomePage extends Page{
      */
     private Level getDefaultWorld(){
         //Level l = new LevelGenerator().generateRandom(3);
-        TileMap t = new TileMap(10, 10);
-        t.addToTileSet(0, new TileGenerator().generateRandom(false));
-        t.addToTileSet(1, new TileGenerator().generateRandom(true));
-        t.setTile(5, 5, 1);
+        TileMap t = new TileMap((byte)10, (byte)10);
+        t.addToTileSet((byte)0, new TileGenerator().generateRandom(false));
+        t.addToTileSet((byte)1, new TileGenerator().generateRandom(true));
+        t.setTile((byte)5, (byte)5, (byte)1);
         Area testArea = new Area(t);
         Level l = new Level(new Area[]{testArea}, 0);
         l.init();

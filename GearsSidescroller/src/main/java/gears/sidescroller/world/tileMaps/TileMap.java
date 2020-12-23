@@ -6,7 +6,6 @@ import gears.sidescroller.entities.Player;
 import gears.sidescroller.world.tiles.AbstractTile;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 
@@ -18,30 +17,48 @@ import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
  * @author Matt Crow
  */
 public class TileMap {
-    private final HashMap<Integer, AbstractTile> tileSet;
-    private final int width;
-    private final int height;
-    private final int[][] map;
-    private final ArrayList<AbstractTile> builtMap;
+    /*
+    The tileSet serves as a mapping of bytes to tiles.
+    Given the mapping b -> t, each instance of b in the
+    tile map represents an instance of t.
     
+    This field allows the class to use the Flyweight design
+    pattern to drastically minimize the amount of memory used
+    to store and retrieve tile map information.
+    */
+    private final HashMap<Byte, AbstractTile> tileSet;
+    private final byte width;
+    private final byte height;
+    private final byte[][] map;
+    private final ArrayList<AbstractTile> builtMap; // remove this
+    
+    /*
+    The coordinates players will
+    spawn at upon entering this tile map.
+    
+    This feature will need to be changed
+    in future versions, given the change
+    to overhead view.
+    */
     private int leftPlayerSpawnX;
     private int leftPlayerSpawnY;
     private int rightPlayerSpawnX;
     private int rightPlayerSpawnY;
     
     /**
+     * Creates a new TileMap of the given size.
      * 
      * @param w the width of this TileMap, measured in tiles
      * @param h the height of this TileMap, measured in tiles
      */
-    public TileMap(int w, int h){
+    public TileMap(byte w, byte h){
         tileSet = new HashMap<>();
         builtMap = new ArrayList<>();
         width = w;
         height = h;
-        map = new int[height][width];
-        for(int y = 0; y < height; y++){
-            for(int x = 0; x < width; x++){
+        map = new byte[height][width];
+        for(byte y = 0; y < height; y++){
+            for(byte x = 0; x < width; x++){
                 map[y][x] = 0;
             }
         }
@@ -49,28 +66,6 @@ public class TileMap {
         rightPlayerSpawnX = 0;
         leftPlayerSpawnY = 0;
         rightPlayerSpawnY = 0;
-    }
-    
-    public final TileMap setLeftPlayerSpawnTile(int xIndex, int yIndex){
-        leftPlayerSpawnX = xIndex * AbstractTile.TILE_SIZE;
-        leftPlayerSpawnY = yIndex * AbstractTile.TILE_SIZE;
-        return this;
-    }
-    public final TileMap setRightPlayerSpawnTile(int xIndex, int yIndex){
-        rightPlayerSpawnX = xIndex * AbstractTile.TILE_SIZE;
-        rightPlayerSpawnY = yIndex * AbstractTile.TILE_SIZE;
-        return this;
-    }
-    
-    public final TileMap spawnPlayerLeft(Player p){
-        p.setX(leftPlayerSpawnX);
-        p.setY(leftPlayerSpawnY);
-        return this;
-    }
-    public final TileMap spawnPlayerRight(Player p){
-        p.setX(rightPlayerSpawnX);
-        p.setY(rightPlayerSpawnY);
-        return this;
     }
     
     /**
@@ -84,7 +79,7 @@ public class TileMap {
      * @param tile
      * @return this, for chaining purposes
      */
-    public TileMap addToTileSet(int key, AbstractTile tile){
+    public TileMap addToTileSet(byte key, AbstractTile tile){
         if(tile == null){
             throw new NullPointerException("tile cannot be null");
         }
@@ -105,7 +100,7 @@ public class TileMap {
      * 
      * @return whether or not the given indeces are valid. 
      */
-    private boolean isValidIdx(int xIdx, int yIdx) {
+    private boolean isValidIdx(byte xIdx, byte yIdx) {
         return xIdx >= 0 && xIdx < width && yIdx >= 0 && yIdx < height;
     }
     
@@ -118,12 +113,9 @@ public class TileMap {
      * 
      * @return this, for chaining purposes
      */
-    public TileMap setTile(int xIndex, int yIndex, int key){
-        if(xIndex < 0 || xIndex >= width){
-            throw new IndexOutOfBoundsException(String.format("xIndex parameter must be withing the range 0 <= xIndex < %d, so %d is out of bounds", width, xIndex));
-        }
-        if(yIndex < 0 || yIndex >= height){
-            throw new IndexOutOfBoundsException(String.format("yIndex parameter must be withing the range 0 <= yIndex < %d, so %d is out of bounds", height, yIndex));
+    public TileMap setTile(byte xIndex, byte yIndex, byte key){
+        if(!isValidIdx(xIndex, yIndex)){
+            throw new IndexOutOfBoundsException(String.format("Map indeces must range from (0 <= x < %d, 0 <= y < %d), so the point (%d, %d) is invalid.", width, height, xIndex, yIndex));
         }
         if(!builtMap.isEmpty()){
             throw new RuntimeException("Cannot edit the tile map while this is alread built: call clearBuiltMap, setTile, then buildMap");
@@ -142,9 +134,9 @@ public class TileMap {
      */
     public TileMap buildMap(){
         builtMap.clear();
-        int key;
-        for(int y = 0; y < height; y++){
-            for(int x = 0; x < width; x++){
+        byte key;
+        for(byte y = 0; y < height; y++){
+            for(byte x = 0; x < width; x++){
                 key = map[y][x];
                 if(tileSet.containsKey(key)){
                     builtMap.add(tileSet.get(key).copyTo(x, y));
@@ -177,18 +169,17 @@ public class TileMap {
     public final String getTileMapCsv(){
         StringBuilder b = new StringBuilder();
         String[] row;
-        for(int y = 0; y < height; y++){
-            row = Arrays.stream(map[y]).mapToObj((int cell)->{
-                return Integer.toString(cell);
-            }).toArray((int size)->{
-                return new String[size];
-            });
+        for(byte y = 0; y < height; y++){
+            row = new String[width];
+            for(byte x = 0; x < width; x++){
+                row[x] = Byte.toString(map[y][x]);
+            }
             b.append(String.join(", ", row)).append(StreamWriterUtil.NEWLINE);
         }
         return b.toString();
     }
     
-    private boolean handleCollisions(AbstractEntity e, int tileXIdx, int tileYIdx){
+    private boolean handleCollisions(AbstractEntity e, byte tileXIdx, byte tileYIdx){
         boolean collided = false;
         if(isValidIdx(tileXIdx, tileYIdx) && tileSet.get(map[tileYIdx][tileXIdx]).getIsTangible()){
             collided = true;
@@ -237,13 +228,13 @@ public class TileMap {
         in a 2x2 tile square to catch all the tiles they could
         possibly be colliding with.
         */
-        int yIdx = e.getY() / AbstractTile.TILE_SIZE;
-        int xIdx = e.getX() / AbstractTile.TILE_SIZE;
+        byte yIdx = (byte)(e.getY() / AbstractTile.TILE_SIZE);
+        byte xIdx = (byte)(e.getX() / AbstractTile.TILE_SIZE);
         
         boolean collUpperLeft = handleCollisions(e, xIdx, yIdx);
-        boolean collUpperRight = handleCollisions(e, xIdx + 1, yIdx);
-        boolean collLowerLeft = handleCollisions(e, xIdx, yIdx + 1);
-        boolean collLowerRight = handleCollisions(e, xIdx + 1, yIdx + 1);
+        boolean collUpperRight = handleCollisions(e, (byte)(xIdx+1), yIdx);
+        boolean collLowerLeft = handleCollisions(e, xIdx, (byte)(yIdx+1));
+        boolean collLowerRight = handleCollisions(e, (byte)(xIdx+1), (byte)(yIdx+1));
         
         // do this to avoid short-circuit evaluation
         return collUpperLeft
@@ -260,8 +251,8 @@ public class TileMap {
      * @return this, for chaining purposes
      */
     public final TileMap draw(Graphics g){
-        for(int x = 0; x < width; x++){
-            for(int y = 0; y < height; y++){
+        for(byte x = 0; x < width; x++){
+            for(byte y = 0; y < height; y++){
                 tileSet.get(map[y][x]).drawAt(g, x * TILE_SIZE, y * TILE_SIZE);
             }
         }
@@ -278,5 +269,31 @@ public class TileMap {
         });
         sb.append(getTileMapCsv());
         return sb.toString();
+    }
+    
+    
+    
+    /*
+    Need to change these later
+    */
+    public final TileMap setLeftPlayerSpawnTile(int xIndex, int yIndex){
+        leftPlayerSpawnX = xIndex * AbstractTile.TILE_SIZE;
+        leftPlayerSpawnY = yIndex * AbstractTile.TILE_SIZE;
+        return this;
+    }
+    public final TileMap setRightPlayerSpawnTile(int xIndex, int yIndex){
+        rightPlayerSpawnX = xIndex * AbstractTile.TILE_SIZE;
+        rightPlayerSpawnY = yIndex * AbstractTile.TILE_SIZE;
+        return this;
+    }
+    public final TileMap spawnPlayerLeft(Player p){
+        p.setX(leftPlayerSpawnX);
+        p.setY(leftPlayerSpawnY);
+        return this;
+    }
+    public final TileMap spawnPlayerRight(Player p){
+        p.setX(rightPlayerSpawnX);
+        p.setY(rightPlayerSpawnY);
+        return this;
     }
 }

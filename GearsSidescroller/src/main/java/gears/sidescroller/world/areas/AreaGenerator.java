@@ -18,7 +18,7 @@ public class AreaGenerator {
             rng.nextInt(max - 1) + 1, 
             rng.nextInt(max - 1) + 1, 
             rng.nextInt(max - 1) + 1
-        ).generateTileMap(20, 20));
+        ).generateTileMap((byte)20, (byte)20));
         
         return ret;
     }
