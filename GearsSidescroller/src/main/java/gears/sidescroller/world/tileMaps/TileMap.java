@@ -5,7 +5,6 @@ import gears.sidescroller.entities.AbstractEntity;
 import gears.sidescroller.entities.Player;
 import gears.sidescroller.world.tiles.AbstractTile;
 import java.awt.Graphics;
-import java.util.ArrayList;
 import java.util.HashMap;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 
@@ -30,7 +29,6 @@ public class TileMap {
     private final byte width;
     private final byte height;
     private final byte[][] map;
-    private final ArrayList<AbstractTile> builtMap; // remove this
     
     /*
     The coordinates players will
@@ -53,7 +51,6 @@ public class TileMap {
      */
     public TileMap(byte w, byte h){
         tileSet = new HashMap<>();
-        builtMap = new ArrayList<>();
         width = w;
         height = h;
         map = new byte[height][width];
@@ -82,9 +79,6 @@ public class TileMap {
     public TileMap addToTileSet(byte key, AbstractTile tile){
         if(tile == null){
             throw new NullPointerException("tile cannot be null");
-        }
-        if(!builtMap.isEmpty()){
-            throw new RuntimeException("Cannot edit the tile map while this is alread built: call clearBuiltMap, addToTileSet, then buildMap");
         }
         tileSet.put(key, tile);
         return this;
@@ -117,46 +111,9 @@ public class TileMap {
         if(!isValidIdx(xIndex, yIndex)){
             throw new IndexOutOfBoundsException(String.format("Map indeces must range from (0 <= x < %d, 0 <= y < %d), so the point (%d, %d) is invalid.", width, height, xIndex, yIndex));
         }
-        if(!builtMap.isEmpty()){
-            throw new RuntimeException("Cannot edit the tile map while this is alread built: call clearBuiltMap, setTile, then buildMap");
-        }
         
         map[yIndex][xIndex] = key;
         
-        return this;
-    }
-    
-    /**
-     * Constructs the map based
-     * on the current tile map.
-     * 
-     * @return this, for chaining purposes 
-     */
-    public TileMap buildMap(){
-        builtMap.clear();
-        byte key;
-        for(byte y = 0; y < height; y++){
-            for(byte x = 0; x < width; x++){
-                key = map[y][x];
-                if(tileSet.containsKey(key)){
-                    builtMap.add(tileSet.get(key).copyTo(x, y));
-                } else {
-                    // not sure if I want this
-                    throw new RuntimeException(String.format("Tile set does not contain key '%d'", key));
-                }
-            }
-        }
-        return this;
-    }
-    
-    /**
-     * Clears the built map cache, allowing
-     * the tile map to be changed.
-     * 
-     * @return this, for chaining purposes.
-     */
-    public final TileMap clearBuiltMap(){
-        builtMap.clear();
         return this;
     }
     
@@ -177,6 +134,20 @@ public class TileMap {
             b.append(String.join(", ", row)).append(StreamWriterUtil.NEWLINE);
         }
         return b.toString();
+    }
+    
+    private void keepInBounds(AbstractEntity e){
+        if(e.getX() < 0){
+            e.setX(0);
+        } else if(e.getX() + e.getWidth() >= this.width * TILE_SIZE){
+            e.setX(this.width * TILE_SIZE - e.getWidth());
+        }
+        
+        if(e.getY() < 0){
+            e.setY(0);
+        } else if(e.getY() + e.getHeight() >= this.height * TILE_SIZE){
+            e.setY(this.height * TILE_SIZE - e.getHeight());
+        }
     }
     
     private boolean handleCollisions(AbstractEntity e, byte tileXIdx, byte tileYIdx){
@@ -220,6 +191,8 @@ public class TileMap {
      * @return whether or not a collision was detected
      */
     public final boolean checkForCollisions(AbstractEntity e){
+        keepInBounds(e);
+        
         /*
         This gets the tile index for the UPPER LEFT corner of e
         becuase of how integer division rounds down.
@@ -228,6 +201,7 @@ public class TileMap {
         in a 2x2 tile square to catch all the tiles they could
         possibly be colliding with.
         */
+        
         byte yIdx = (byte)(e.getY() / AbstractTile.TILE_SIZE);
         byte xIdx = (byte)(e.getX() / AbstractTile.TILE_SIZE);
         

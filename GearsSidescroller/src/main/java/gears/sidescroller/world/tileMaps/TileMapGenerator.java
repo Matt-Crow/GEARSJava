@@ -54,7 +54,7 @@ public class TileMapGenerator {
         TileMap map;
         for(int i = 0; i < 20; i++){
             map = gen.generateTileMap((byte)20, (byte)20);
-            System.out.println(map.buildMap().getTileMapCsv());
+            System.out.println(map.getTileMapCsv());
         }
     }
 }
