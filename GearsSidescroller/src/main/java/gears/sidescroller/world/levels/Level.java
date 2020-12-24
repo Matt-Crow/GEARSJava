@@ -106,6 +106,8 @@ public class Level implements MapBoundsReachedListener {
                 currentAreaX = newXIdx;
                 currentAreaY = newYIdx;
                 getCurrentArea().getTileMap().spawnEntityFromDir(player, Direction.rotateCounterClockWise(Direction.rotateCounterClockWise(whatSide)));
+                getCurrentArea().addEntity(player);
+                System.out.println();
             }
         }
     }

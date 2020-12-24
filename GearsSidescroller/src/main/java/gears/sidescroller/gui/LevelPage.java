@@ -110,6 +110,10 @@ public final class LevelPage extends Page{
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
+        if(this.currentLevel.getCurrentArea().getTileMap().checkForCollisions(focusedEntity)){
+            //g.setColor(new Color(255, 0, 0, 127));
+            //g.fillRect(0, 0, getWidth(), getHeight());
+        }
         if(focusedEntity != null){
             g.translate(
                 -(int)(focusedEntity.getX() - getWidth() / 2),
