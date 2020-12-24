@@ -3,10 +3,12 @@ package gears.sidescroller.world.tileMaps;
 import gears.io.StreamWriterUtil;
 import gears.sidescroller.entities.AbstractEntity;
 import gears.sidescroller.entities.Player;
+import gears.sidescroller.util.Direction;
 import gears.sidescroller.world.tiles.AbstractTile;
 import java.awt.Graphics;
 import java.util.HashMap;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
+import java.awt.Point;
 
 /**
  * A TileMap is used to store tiles in a two-dimensional matrix.
@@ -30,19 +32,6 @@ public class TileMap {
     private final byte height;
     private final byte[][] map;
     
-    /*
-    The coordinates players will
-    spawn at upon entering this tile map.
-    
-    This feature will need to be changed
-    in future versions, given the change
-    to overhead view.
-    */
-    private int leftPlayerSpawnX;
-    private int leftPlayerSpawnY;
-    private int rightPlayerSpawnX;
-    private int rightPlayerSpawnY;
-    
     /**
      * Creates a new TileMap of the given size.
      * 
@@ -59,10 +48,6 @@ public class TileMap {
                 map[y][x] = 0;
             }
         }
-        leftPlayerSpawnX = 0;
-        rightPlayerSpawnX = 0;
-        leftPlayerSpawnY = 0;
-        rightPlayerSpawnY = 0;
     }
     
     /**
@@ -96,6 +81,10 @@ public class TileMap {
      */
     private boolean isValidIdx(byte xIdx, byte yIdx) {
         return xIdx >= 0 && xIdx < width && yIdx >= 0 && yIdx < height;
+    }
+    
+    private boolean isTileOpen(byte xIdx, byte yIdx){
+        return isValidIdx(xIdx, yIdx) && !tileSet.get(map[yIdx][xIdx]).getIsTangible();
     }
     
     /**
@@ -245,29 +234,51 @@ public class TileMap {
         return sb.toString();
     }
     
+    private Point searchForValidSpawnTile(byte initialXIdx, byte initialYIdx){
+        byte xIdx = initialXIdx;
+        byte yIdx = initialYIdx;
+        boolean currPointIsValid = isTileOpen(xIdx, yIdx);
+        Direction spiralDir = Direction.UP;
+        byte spiralLength = 1;
+        byte spiralLengthThusFar = 0;
+        while(!currPointIsValid){ // might need something to prevent infinite loop
+            // search in a spiralling pattern
+            xIdx += spiralDir.getXMod();
+            yIdx += spiralDir.getYMod();
+            spiralLengthThusFar++;
+            if(spiralLengthThusFar >= spiralLength){ // time to turn
+                spiralDir = Direction.rotateCounterClockWise(spiralDir);
+                spiralLengthThusFar = 0;
+                if(spiralDir.equals(Direction.UP)){
+                    // completed one loop
+                    spiralLength += 1; // search in a wider spiral
+                }
+            }
+            //System.out.println(spiralDir.getName());
+            currPointIsValid = isTileOpen(xIdx, yIdx);
+        }
+        return new Point(xIdx, yIdx);
+    }
     
+    public final TileMap spawnEntityFromLeft(AbstractEntity e){
+        Point spawnTile = searchForValidSpawnTile((byte)0, (byte)(e.getY()/TILE_SIZE));
+        if(spawnTile == null){
+            throw new RuntimeException("No valid spawn points");
+        } else {
+            e.setX((int)spawnTile.getX());
+            e.setY((int)spawnTile.getY());
+        }
+        return this;
+    }
     
-    /*
-    Need to change these later
-    */
-    public final TileMap setLeftPlayerSpawnTile(int xIndex, int yIndex){
-        leftPlayerSpawnX = xIndex * AbstractTile.TILE_SIZE;
-        leftPlayerSpawnY = yIndex * AbstractTile.TILE_SIZE;
-        return this;
-    }
-    public final TileMap setRightPlayerSpawnTile(int xIndex, int yIndex){
-        rightPlayerSpawnX = xIndex * AbstractTile.TILE_SIZE;
-        rightPlayerSpawnY = yIndex * AbstractTile.TILE_SIZE;
-        return this;
-    }
-    public final TileMap spawnPlayerLeft(Player p){
-        p.setX(leftPlayerSpawnX);
-        p.setY(leftPlayerSpawnY);
-        return this;
-    }
-    public final TileMap spawnPlayerRight(Player p){
-        p.setX(rightPlayerSpawnX);
-        p.setY(rightPlayerSpawnY);
+    public final TileMap spawnEntityCenter(AbstractEntity e){
+        Point spawnTile = searchForValidSpawnTile((byte) (width / 2), (byte)(height / 2));
+        if(spawnTile == null){
+            throw new RuntimeException("No valid spawn points");
+        } else {
+            e.setX((int)spawnTile.getX() * TILE_SIZE);
+            e.setY((int)spawnTile.getY() * TILE_SIZE);
+        }
         return this;
     }
 }

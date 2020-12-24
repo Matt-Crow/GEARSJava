@@ -24,6 +24,7 @@ public class Level {
     public Level loadPlayer(Player p){
         player = p;
         areas[currentArea].addEntity(p); //don't forget to remove the player when changing areas
+        areas[currentArea].getTileMap().spawnEntityCenter(p);
         return this;
     }
     

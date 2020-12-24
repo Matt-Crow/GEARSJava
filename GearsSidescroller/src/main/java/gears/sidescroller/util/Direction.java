@@ -31,4 +31,15 @@ public enum Direction {
     public final int getYMod(){
         return yMod;
     }
+    
+    public static final Direction rotateCounterClockWise(Direction d){
+        Direction[] dirs = new Direction[]{RIGHT, UP, LEFT, DOWN};
+        int currIdx = -1;
+        for(int i = 0; currIdx == -1 && i < dirs.length; i++){
+            if(dirs[i].equals(d)){
+                currIdx = i;
+            }
+        }
+        return dirs[(currIdx + 1) % dirs.length];
+    }
 }
