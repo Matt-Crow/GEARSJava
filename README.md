@@ -1,8 +1,6 @@
 # GEARS
 
 TODO:
-* change TileMap player spawning
-
 Current Plan:
 * Make all core classes
     * tile
