@@ -6,6 +6,7 @@ import gears.sidescroller.util.Direction;
 import gears.sidescroller.world.tileMaps.MapBoundsReachedListener;
 import java.awt.Graphics;
 import java.util.function.Consumer;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -102,12 +103,15 @@ public class Level implements MapBoundsReachedListener {
             if(areas[newYIdx][newXIdx] == null){
                 throw new UnsupportedOperationException("TODO: generate new area");
             } else {
-                //getCurrentArea().removeEntity(player); Causes concurrent modification
+                Area oldArea = getCurrentArea();
+                SwingUtilities.invokeLater(()->{
+                    oldArea.removeEntity(player);
+                });
                 currentAreaX = newXIdx;
                 currentAreaY = newYIdx;
                 getCurrentArea().getTileMap().spawnEntityFromDir(player, Direction.rotateCounterClockWise(Direction.rotateCounterClockWise(whatSide)));
                 getCurrentArea().addEntity(player);
-                System.out.println();
+                System.out.printf("Moved player to area (%d, %d)\n", newXIdx, newYIdx);
             }
         }
     }

@@ -2,7 +2,6 @@ package gears.sidescroller.world.tileMaps;
 
 import gears.io.StreamWriterUtil;
 import gears.sidescroller.entities.AbstractEntity;
-import gears.sidescroller.entities.Player;
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.world.tiles.AbstractTile;
 import java.awt.Graphics;
@@ -134,7 +133,7 @@ public class TileMap {
             e.setX(0);
             fireMapBoundsReached(Direction.LEFT);
         } else if(e.getX() + e.getWidth() >= this.width * TILE_SIZE){
-            e.setX(this.width * TILE_SIZE - e.getWidth());
+            e.setX(this.width * TILE_SIZE - e.getWidth() - 1);
             fireMapBoundsReached(Direction.RIGHT);
         }
         
@@ -142,7 +141,7 @@ public class TileMap {
             e.setY(0);
             fireMapBoundsReached(Direction.UP);
         } else if(e.getY() + e.getHeight() >= this.height * TILE_SIZE){
-            e.setY(this.height * TILE_SIZE - e.getHeight());
+            e.setY(this.height * TILE_SIZE - e.getHeight() - 1);
             fireMapBoundsReached(Direction.DOWN);
         }
     }
