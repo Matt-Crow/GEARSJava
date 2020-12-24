@@ -253,6 +253,7 @@ public class TileMap {
         byte spiralLength = 1;
         byte spiralLengthThusFar = 0;
         int numTilesChecked = 0;
+        boolean justTurned = true;
         while(ret == null && numTilesChecked < this.height * this.width){
             if(this.isValidIdx(xIdx, yIdx)){
                 numTilesChecked++; // doesn't run if checking a point outside the map
@@ -264,9 +265,12 @@ public class TileMap {
             if(spiralLengthThusFar >= spiralLength){ // time to turn
                 spiralDir = Direction.rotateCounterClockWise(spiralDir);
                 spiralLengthThusFar = 0;
-                if(spiralDir.equals(Direction.UP)){
+                if(justTurned){
+                    justTurned = false;
+                } else { // need to increase spiral length every other turn
                     // completed one loop
                     spiralLength += 1; // search in a wider spiral
+                    justTurned = true;
                 }
             }
             //System.out.println(spiralDir.getName());
