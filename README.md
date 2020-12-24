@@ -1,7 +1,8 @@
 # GEARS
 
 TODO:
-Matrix2D class for both TileMap and Level
+* Matrix2D class for both TileMap and Level
+* maybe for finding where to spawn player, find the open tile with the shortest distance away instead of spiral search
 
 Current Plan:
 * Make all core classes
