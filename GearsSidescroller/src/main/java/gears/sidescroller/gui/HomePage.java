@@ -72,7 +72,7 @@ public class HomePage extends Page{
         t.addToTileSet((byte)1, new TileGenerator().generateRandom(true));
         t.setTile((byte)5, (byte)5, (byte)1);
         Area testArea = new Area(t);
-        Level l = new Level(new Area[]{testArea}, 0);
+        Level l = new Level(new Area[][]{{testArea}}, 0, 0);
         l.init();
         
         return l;
