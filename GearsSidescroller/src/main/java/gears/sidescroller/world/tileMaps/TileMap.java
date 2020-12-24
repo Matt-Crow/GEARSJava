@@ -234,14 +234,29 @@ public class TileMap {
         return sb.toString();
     }
     
+    /**
+     * Searches for an intangible tile index around the given tile map coordinates.
+     * 
+     * @param initialXIdx the tile x index to check for intangible tiles around
+     * @param initialYIdx the tile y index to check fro intangible tiles around
+     * 
+     * @return the indeces of an intangible tile around the given tile, or null if no open tiles exist
+     */
     private Point searchForValidSpawnTile(byte initialXIdx, byte initialYIdx){
+        Point ret = null;
         byte xIdx = initialXIdx;
         byte yIdx = initialYIdx;
-        boolean currPointIsValid = isTileOpen(xIdx, yIdx);
+        if(isTileOpen(xIdx, yIdx)){
+            ret = new Point(xIdx, yIdx);
+        }        
         Direction spiralDir = Direction.UP;
         byte spiralLength = 1;
         byte spiralLengthThusFar = 0;
-        while(!currPointIsValid){ // might need something to prevent infinite loop
+        int numTilesChecked = 0;
+        while(ret == null && numTilesChecked < this.height * this.width){
+            if(this.isValidIdx(xIdx, yIdx)){
+                numTilesChecked++; // doesn't run if checking a point outside the map
+            }
             // search in a spiralling pattern
             xIdx += spiralDir.getXMod();
             yIdx += spiralDir.getYMod();
@@ -255,30 +270,84 @@ public class TileMap {
                 }
             }
             //System.out.println(spiralDir.getName());
-            currPointIsValid = isTileOpen(xIdx, yIdx);
+            if(isTileOpen(xIdx, yIdx)){
+                ret = new Point(xIdx, yIdx);
+            }
         }
-        return new Point(xIdx, yIdx);
+        return ret;
     }
     
-    public final TileMap spawnEntityFromLeft(AbstractEntity e){
-        Point spawnTile = searchForValidSpawnTile((byte)0, (byte)(e.getY()/TILE_SIZE));
+    /**
+     * Sets an entity's coordinates to those of an open tile around the given tile.
+     * 
+     * @param e the entity to set coordinates for
+     * @param xIdx the tile x index to check around
+     * @param yIdx the tile y index to check around
+     * @return this, for chaining purposes
+     */
+    private TileMap spawnEntityFromPoint(AbstractEntity e, byte xIdx, byte yIdx){
+        Point spawnTile = searchForValidSpawnTile(xIdx, yIdx);
         if(spawnTile == null){
-            throw new RuntimeException("No valid spawn points");
+            throw new RuntimeException("No valid spawn tiles");
         } else {
-            e.setX((int)spawnTile.getX());
-            e.setY((int)spawnTile.getY());
+            e.setX((int)(spawnTile.getX()*TILE_SIZE));
+            e.setY((int)(spawnTile.getY()*TILE_SIZE));
         }
         return this;
-    }
+    }    
     
+    /**
+     * Attempts to set an Entity's coordinates around the center
+     * of this TileMap.
+     * 
+     * @param e the Entity to set coordinates for
+     * @return this, for chaining purposes
+     */
     public final TileMap spawnEntityCenter(AbstractEntity e){
-        Point spawnTile = searchForValidSpawnTile((byte) (width / 2), (byte)(height / 2));
-        if(spawnTile == null){
-            throw new RuntimeException("No valid spawn points");
-        } else {
-            e.setX((int)spawnTile.getX() * TILE_SIZE);
-            e.setY((int)spawnTile.getY() * TILE_SIZE);
-        }
-        return this;
+        return spawnEntityFromPoint(e, (byte) (width / 2), (byte)(height / 2));
+    }
+    
+    /**
+     * Attempts to set an Entity's coordinates around the left side
+     * of this TileMap.
+     * 
+     * @param e the Entity to set coordinates for
+     * @return this, for chaining purposes
+     */
+    public final TileMap spawnEntityFromLeft(AbstractEntity e){
+        return spawnEntityFromPoint(e, (byte)0, (byte)(e.getY()/TILE_SIZE));
+    }
+    
+    /**
+     * Attempts to set an Entity's coordinates around the right side
+     * of this TileMap.
+     * 
+     * @param e the Entity to set coordinates for
+     * @return this, for chaining purposes
+     */
+    public final TileMap spawnEntityFromRight(AbstractEntity e){
+        return spawnEntityFromPoint(e, (byte)(this.width - 1), (byte)(e.getY()/TILE_SIZE));
+    }
+    
+    /**
+     * Attempts to set an Entity's coordinates around the top
+     * of this TileMap.
+     * 
+     * @param e the Entity to set coordinates for
+     * @return this, for chaining purposes
+     */
+    public final TileMap spawnEntityFromTop(AbstractEntity e){
+        return spawnEntityFromPoint(e, (byte)(e.getX()/TILE_SIZE), (byte)0);
+    }
+    
+    /**
+     * Attempts to set an Entity's coordinates around the bottom
+     * of this TileMap.
+     * 
+     * @param e the Entity to set coordinates for
+     * @return this, for chaining purposes
+     */
+    public final TileMap spawnEntityFromBottom(AbstractEntity e){
+        return spawnEntityFromPoint(e, (byte)(e.getX()/TILE_SIZE), (byte)(this.height - 1));
     }
 }
