@@ -3,7 +3,6 @@ package gears.sidescroller.world.areas;
 import gears.sidescroller.entities.AbstractEntity;
 import gears.sidescroller.world.tileMaps.TileMap;
 import java.awt.Graphics;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -19,7 +18,7 @@ public class Area {
     
     public Area(TileMap t){
         tileMap = t;
-        entities = new HashMap<>();
+        entities = new HashMap<>();        
     }
     
     public Area addEntity(AbstractEntity e){

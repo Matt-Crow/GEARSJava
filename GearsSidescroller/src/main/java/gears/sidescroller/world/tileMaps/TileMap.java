@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import java.util.HashMap;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 import java.awt.Point;
+import java.util.LinkedList;
 
 /**
  * A TileMap is used to store tiles in a two-dimensional matrix.
@@ -32,6 +33,8 @@ public class TileMap {
     private final byte height;
     private final byte[][] map;
     
+    private final LinkedList<MapBoundsReachedListener> boundsReachedListeners;
+    
     /**
      * Creates a new TileMap of the given size.
      * 
@@ -48,6 +51,7 @@ public class TileMap {
                 map[y][x] = 0;
             }
         }
+        boundsReachedListeners = new LinkedList<>();
     }
     
     /**
@@ -128,14 +132,18 @@ public class TileMap {
     private void keepInBounds(AbstractEntity e){
         if(e.getX() < 0){
             e.setX(0);
+            fireMapBoundsReached(Direction.LEFT);
         } else if(e.getX() + e.getWidth() >= this.width * TILE_SIZE){
             e.setX(this.width * TILE_SIZE - e.getWidth());
+            fireMapBoundsReached(Direction.RIGHT);
         }
         
         if(e.getY() < 0){
             e.setY(0);
+            fireMapBoundsReached(Direction.UP);
         } else if(e.getY() + e.getHeight() >= this.height * TILE_SIZE){
             e.setY(this.height * TILE_SIZE - e.getHeight());
+            fireMapBoundsReached(Direction.DOWN);
         }
     }
     
@@ -311,6 +319,42 @@ public class TileMap {
         return spawnEntityFromPoint(e, (byte) (width / 2), (byte)(height / 2));
     }
     
+    public final TileMap spawnEntityFromDir(AbstractEntity e, Direction dir){
+        /*
+        table  | x   | y
+        left   | 0     e.y
+        right  | w     e.y
+        top    | e.x   0
+        bottom | e.x   h
+        */
+        
+        switch(dir){
+            case LEFT:
+                spawnEntityFromLeft(e);
+                break;
+            case RIGHT:
+                spawnEntityFromRight(e);
+                break;
+            case UP:
+                spawnEntityFromTop(e);
+                break;
+            case DOWN:
+                spawnEntityFromBottom(e);
+                break;
+            default:
+                throw new UnsupportedOperationException("Cannot spawn Entity from Direction " + dir.getName());
+        }
+        
+        /*
+        Math doesn't work
+        spawnEntityFromPoint(e, 
+            (byte)((e.getX()/TILE_SIZE) + (1 - Math.abs(dir.getXMod())) * this.width),
+            (byte)((e.getY()/TILE_SIZE) + (1 - Math.abs(dir.getYMod())) * this.height)
+        );
+        */
+        return this;
+    }
+    
     /**
      * Attempts to set an Entity's coordinates around the left side
      * of this TileMap.
@@ -353,5 +397,14 @@ public class TileMap {
      */
     public final TileMap spawnEntityFromBottom(AbstractEntity e){
         return spawnEntityFromPoint(e, (byte)(e.getX()/TILE_SIZE), (byte)(this.height - 1));
+    }
+    
+    public final TileMap addMapBoundsReachListener(MapBoundsReachedListener listener){
+        this.boundsReachedListeners.add(listener);
+        return this;
+    }
+    private TileMap fireMapBoundsReached(Direction fromDir){
+        this.boundsReachedListeners.forEach((listener)->listener.boundReached(fromDir));
+        return this;
     }
 }
