@@ -154,6 +154,7 @@ public class TileMap {
             int tileLeft = tileXIdx * AbstractTile.TILE_SIZE;
             int tileTop = tileYIdx * AbstractTile.TILE_SIZE;
             // these are the coordinates of the tile they are colliding with
+            
             int diffX = tileLeft - e.getX();
             int diffY = tileTop - e.getY();
             if(Math.abs(diffX) > Math.abs(diffY)){
@@ -362,7 +363,26 @@ public class TileMap {
      * @return this, for chaining purposes
      */
     public final TileMap spawnEntityFromLeft(AbstractEntity e){
-        return spawnEntityFromPoint(e, (byte)0, (byte)(e.getY()/TILE_SIZE));
+        byte xIdx = 0;
+        byte origYIdx = (byte)(e.getY()/TILE_SIZE);
+        boolean isValidSpawn = false;
+        for(byte searchRadius = 0; !isValidSpawn && searchRadius < this.height; searchRadius++){
+            // check downward
+            isValidSpawn = this.isTileOpen(xIdx, (byte) (origYIdx + searchRadius));
+            if(isValidSpawn){
+                e.setX(xIdx * TILE_SIZE);
+                e.setY((origYIdx + searchRadius) * TILE_SIZE);
+            } else {
+                // check upward
+                isValidSpawn = this.isTileOpen(xIdx, (byte) (origYIdx - searchRadius));
+                if(isValidSpawn){
+                    e.setX(xIdx * TILE_SIZE);
+                    e.setY((origYIdx - searchRadius) * TILE_SIZE);
+                }
+            }
+        }
+        
+        return this; //spawnEntityFromPoint(e, (byte)0, (byte)(e.getY()/TILE_SIZE));
     }
     
     /**

@@ -1,7 +1,6 @@
 package gears.sidescroller.world.areas;
 
 import gears.sidescroller.world.tileMaps.TileMapGenerator;
-import gears.sidescroller.world.areas.Area;
 import java.util.Random;
 
 /**
