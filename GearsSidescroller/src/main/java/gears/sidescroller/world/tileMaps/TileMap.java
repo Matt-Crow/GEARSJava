@@ -162,18 +162,22 @@ public class TileMap {
                 if(diffX < AbstractTile.TILE_SIZE / 2){
                     // entity is more than half way through the tile, so shove them right
                     e.setX(tileLeft + AbstractTile.TILE_SIZE);
-                } else {
+                } else if(diffX < TILE_SIZE){
                     // not half way though, so shove left
                     e.setX(tileLeft - e.getWidth());
+                } else {
+                    // diffX it too large, so don't shove left or right
                 }
             } else {
                 // shove up or down
                 if(diffY < AbstractTile.TILE_SIZE / 2){
                     // more than half way down, so shove down
                     e.setY(tileTop + AbstractTile.TILE_SIZE);
-                } else {
+                } else if (diffY < TILE_SIZE) {
                     // less, so pull up
                     e.setY(tileTop - e.getHeight());
+                } else {
+                    // diffY is too large, so don't shove up or down
                 }
             }
         }
