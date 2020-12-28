@@ -2,6 +2,7 @@ package gears.sidescroller.entities;
 
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.world.tiles.AbstractTile;
+import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 import java.awt.Graphics;
 import java.util.HashMap;
 
@@ -35,10 +36,20 @@ public abstract class AbstractEntity {
         x = newX;
         return this;
     }
+    public final AbstractEntity setXIdx(int newX){
+        x = newX * TILE_SIZE;
+        return this;
+    }
+    
     public final AbstractEntity setY(int newY){
         y = newY;
         return this;
     }
+    public final AbstractEntity setYIdx(int newY){
+        y = newY * TILE_SIZE;
+        return this;
+    }
+    
     public final AbstractEntity setSpeed(int s){
         speed = s;
         return this;
@@ -52,12 +63,38 @@ public abstract class AbstractEntity {
         return this;
     }
     
+    /**
+     * 
+     * @return the x-coordinate of this entity, in pixel-space 
+     */
     public final int getX(){
         return x;
     }
+    
+    /**
+     * 
+     * @return the x-coordinate of this entity, in index-space.
+     */
+    public final int getXIdx(){
+        return x / TILE_SIZE;
+    }
+    
+    /**
+     * 
+     * @return the y-coordinate of this entity, in pixel-space 
+     */
     public final int getY(){
         return y;
     }
+    
+    /**
+     * 
+     * @return the y-coordinate of this entity, in index-space
+     */
+    public final int getYIdx(){
+        return y / TILE_SIZE;
+    }
+    
     public final int getSpeed(){
         return speed;
     }

@@ -320,6 +320,8 @@ public class TileMap {
     }
     
     public final TileMap spawnEntityFromDir(AbstractEntity e, Direction dir){
+        linearOpenSpawnTileSearch(e, dir);
+        
         /*
         table  | x   | y
         left   | 0     e.y
@@ -327,7 +329,7 @@ public class TileMap {
         top    | e.x   0
         bottom | e.x   h
         */
-        
+        /*
         switch(dir){
             case LEFT:
                 spawnEntityFromLeft(e);
@@ -344,7 +346,7 @@ public class TileMap {
             default:
                 throw new UnsupportedOperationException("Cannot spawn Entity from Direction " + dir.getName());
         }
-        
+        */
         /*
         Math doesn't work
         spawnEntityFromPoint(e, 
@@ -354,6 +356,69 @@ public class TileMap {
         */
         return this;
     }
+    
+    private boolean linearOpenSpawnTileSearch(AbstractEntity e, Direction fromDir){
+        boolean isValidSpawn = false;
+        Direction lineDirection = Direction.rotateCounterClockWise(fromDir);
+        byte initialXIdx = 0;
+        byte initialYIdx = 0;
+        switch(fromDir){
+            case UP:
+                initialXIdx = (byte)e.getXIdx();
+                initialYIdx = 0;
+                break;
+            case DOWN:
+                initialXIdx = (byte)e.getXIdx();
+                initialYIdx = this.height;
+                break;
+            case LEFT:
+                initialXIdx = 0;
+                initialYIdx = (byte)e.getYIdx();
+                break;
+            case RIGHT:
+                initialXIdx = this.width;
+                initialYIdx = (byte)e.getYIdx();
+                break;
+            default:
+                throw new UnsupportedOperationException(String.format("Cannot do linear tile search with direction \"%s\"", fromDir.getName()));
+        }
+        
+        boolean posRadValid = false;
+        boolean negRadValid = false;
+        byte currXIdx = initialXIdx;
+        byte currYIdx = initialYIdx;
+        for(byte searchRadius = 0; !isValidSpawn && posRadValid && negRadValid; searchRadius++){
+            // check positive radius direction
+            currXIdx = (byte) (initialXIdx + lineDirection.getXMod() * searchRadius);
+            currYIdx = (byte) (initialYIdx + lineDirection.getYMod() * searchRadius);
+            posRadValid = this.isValidIdx(currXIdx, currYIdx);
+            if(posRadValid){
+                // check if the positive tile is open
+                isValidSpawn = this.isTileOpen(currXIdx, currYIdx);
+            }
+            
+            // check negative radius direction
+            if(!isValidSpawn){
+                currXIdx = (byte) (initialXIdx - lineDirection.getXMod() * searchRadius);
+                currYIdx = (byte) (initialYIdx - lineDirection.getYMod() * searchRadius);
+                negRadValid = this.isValidIdx(currXIdx, currYIdx);
+                if(negRadValid){
+                    // check if the negative tile is open
+                    isValidSpawn = this.isTileOpen(currXIdx, currYIdx);
+                }
+            }
+            
+            // set entity coordinates if either spawn is valid
+            if(isValidSpawn){
+                e.setXIdx(currXIdx);
+                e.setYIdx(currYIdx);
+            }
+        }
+        
+        
+        return isValidSpawn;
+    }
+    
     
     /**
      * Attempts to set an Entity's coordinates around the left side
