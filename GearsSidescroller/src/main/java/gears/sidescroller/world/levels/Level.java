@@ -103,15 +103,20 @@ public class Level implements MapBoundsReachedListener {
             if(areas[newYIdx][newXIdx] == null){
                 throw new UnsupportedOperationException("TODO: generate new area");
             } else {
-                Area oldArea = getCurrentArea();
-                SwingUtilities.invokeLater(()->{
-                    oldArea.removeEntity(player);
-                });
-                currentAreaX = newXIdx;
-                currentAreaY = newYIdx;
-                getCurrentArea().getTileMap().spawnEntityFromDir(player, Direction.rotateCounterClockWise(Direction.rotateCounterClockWise(whatSide)));
-                getCurrentArea().addEntity(player);
-                System.out.printf("Moved player to area (%d, %d)\n", newXIdx, newYIdx);
+                boolean canSpawn = areas[newYIdx][newXIdx].getTileMap().spawnEntityFromDir(player, Direction.rotateCounterClockWise(Direction.rotateCounterClockWise(whatSide)));
+                if(canSpawn){
+                    Area oldArea = getCurrentArea();
+                    SwingUtilities.invokeLater(()->{
+                        oldArea.removeEntity(player);
+                    });
+                    currentAreaX = newXIdx;
+                    currentAreaY = newYIdx;
+                    getCurrentArea().addEntity(player);
+                    System.out.printf("Moved player to area (%d, %d)\n", newXIdx, newYIdx);
+                } else {
+                    System.out.printf("Cannot spawn player in area:\n %s \n", areas[newYIdx][newXIdx].toString());
+                }
+                
             }
         }
     }

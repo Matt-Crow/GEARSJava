@@ -132,7 +132,7 @@ public class TileMap {
         if(e.getX() < 0){
             e.setX(0);
             fireMapBoundsReached(Direction.LEFT);
-        } else if(e.getX() + e.getWidth() >= this.width * TILE_SIZE){
+        } else if(e.getX() > this.width * TILE_SIZE - e.getWidth()){
             e.setX(this.width * TILE_SIZE - e.getWidth() - 1);
             fireMapBoundsReached(Direction.RIGHT);
         }
@@ -140,7 +140,7 @@ public class TileMap {
         if(e.getY() < 0){
             e.setY(0);
             fireMapBoundsReached(Direction.UP);
-        } else if(e.getY() + e.getHeight() >= this.height * TILE_SIZE){
+        } else if(e.getY() > this.height * TILE_SIZE - e.getHeight()){
             e.setY(this.height * TILE_SIZE - e.getHeight() - 1);
             fireMapBoundsReached(Direction.DOWN);
         }
@@ -319,8 +319,8 @@ public class TileMap {
         return spawnEntityFromPoint(e, (byte) (width / 2), (byte)(height / 2));
     }
     
-    public final TileMap spawnEntityFromDir(AbstractEntity e, Direction dir){
-        linearOpenSpawnTileSearch(e, dir);
+    public final boolean spawnEntityFromDir(AbstractEntity e, Direction dir){
+        return linearOpenSpawnTileSearch(e, dir);
         
         /*
         table  | x   | y
@@ -354,7 +354,7 @@ public class TileMap {
             (byte)((e.getY()/TILE_SIZE) + (1 - Math.abs(dir.getYMod())) * this.height)
         );
         */
-        return this;
+        //return this;
     }
     
     private boolean linearOpenSpawnTileSearch(AbstractEntity e, Direction fromDir){
@@ -369,22 +369,22 @@ public class TileMap {
                 break;
             case DOWN:
                 initialXIdx = (byte)e.getXIdx();
-                initialYIdx = this.height;
+                initialYIdx = (byte) (this.height - 1);
                 break;
             case LEFT:
                 initialXIdx = 0;
                 initialYIdx = (byte)e.getYIdx();
                 break;
             case RIGHT:
-                initialXIdx = this.width;
+                initialXIdx = (byte) (this.width - 1);
                 initialYIdx = (byte)e.getYIdx();
                 break;
             default:
                 throw new UnsupportedOperationException(String.format("Cannot do linear tile search with direction \"%s\"", fromDir.getName()));
         }
         
-        boolean posRadValid = false;
-        boolean negRadValid = false;
+        boolean posRadValid = true;
+        boolean negRadValid = true;
         byte currXIdx = initialXIdx;
         byte currYIdx = initialYIdx;
         for(byte searchRadius = 0; !isValidSpawn && posRadValid && negRadValid; searchRadius++){
