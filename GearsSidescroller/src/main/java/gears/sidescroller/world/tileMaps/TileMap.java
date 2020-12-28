@@ -161,19 +161,19 @@ public class TileMap {
                 // shove them to the side
                 if(diffX < AbstractTile.TILE_SIZE / 2){
                     // entity is more than half way through the tile, so shove them right
-                    e.setX(tileLeft + AbstractTile.TILE_SIZE + 1);
+                    e.setX(tileLeft + AbstractTile.TILE_SIZE);
                 } else {
                     // not half way though, so shove left
-                    e.setX(tileLeft - e.getWidth() - 1);
+                    e.setX(tileLeft - e.getWidth());
                 }
             } else {
                 // shove up or down
                 if(diffY < AbstractTile.TILE_SIZE / 2){
                     // more than half way down, so shove down
-                    e.setY(tileTop + AbstractTile.TILE_SIZE + 1);
+                    e.setY(tileTop + AbstractTile.TILE_SIZE);
                 } else {
                     // less, so pull up
-                    e.setY(tileTop - e.getHeight() - 1);
+                    e.setY(tileTop - e.getHeight());
                 }
             }
         }
@@ -321,40 +321,6 @@ public class TileMap {
     
     public final boolean spawnEntityFromDir(AbstractEntity e, Direction dir){
         return linearOpenSpawnTileSearch(e, dir);
-        
-        /*
-        table  | x   | y
-        left   | 0     e.y
-        right  | w     e.y
-        top    | e.x   0
-        bottom | e.x   h
-        */
-        /*
-        switch(dir){
-            case LEFT:
-                spawnEntityFromLeft(e);
-                break;
-            case RIGHT:
-                spawnEntityFromRight(e);
-                break;
-            case UP:
-                spawnEntityFromTop(e);
-                break;
-            case DOWN:
-                spawnEntityFromBottom(e);
-                break;
-            default:
-                throw new UnsupportedOperationException("Cannot spawn Entity from Direction " + dir.getName());
-        }
-        */
-        /*
-        Math doesn't work
-        spawnEntityFromPoint(e, 
-            (byte)((e.getX()/TILE_SIZE) + (1 - Math.abs(dir.getXMod())) * this.width),
-            (byte)((e.getY()/TILE_SIZE) + (1 - Math.abs(dir.getYMod())) * this.height)
-        );
-        */
-        //return this;
     }
     
     private boolean linearOpenSpawnTileSearch(AbstractEntity e, Direction fromDir){
@@ -415,72 +381,7 @@ public class TileMap {
             }
         }
         
-        
         return isValidSpawn;
-    }
-    
-    
-    /**
-     * Attempts to set an Entity's coordinates around the left side
-     * of this TileMap.
-     * 
-     * @param e the Entity to set coordinates for
-     * @return this, for chaining purposes
-     */
-    public final TileMap spawnEntityFromLeft(AbstractEntity e){
-        byte xIdx = 0;
-        byte origYIdx = (byte)(e.getY()/TILE_SIZE);
-        boolean isValidSpawn = false;
-        for(byte searchRadius = 0; !isValidSpawn && searchRadius < this.height; searchRadius++){
-            // check downward
-            isValidSpawn = this.isTileOpen(xIdx, (byte) (origYIdx + searchRadius));
-            if(isValidSpawn){
-                e.setX(xIdx * TILE_SIZE);
-                e.setY((origYIdx + searchRadius) * TILE_SIZE);
-            } else {
-                // check upward
-                isValidSpawn = this.isTileOpen(xIdx, (byte) (origYIdx - searchRadius));
-                if(isValidSpawn){
-                    e.setX(xIdx * TILE_SIZE);
-                    e.setY((origYIdx - searchRadius) * TILE_SIZE);
-                }
-            }
-        }
-        
-        return this; //spawnEntityFromPoint(e, (byte)0, (byte)(e.getY()/TILE_SIZE));
-    }
-    
-    /**
-     * Attempts to set an Entity's coordinates around the right side
-     * of this TileMap.
-     * 
-     * @param e the Entity to set coordinates for
-     * @return this, for chaining purposes
-     */
-    public final TileMap spawnEntityFromRight(AbstractEntity e){
-        return spawnEntityFromPoint(e, (byte)(this.width - 1), (byte)(e.getY()/TILE_SIZE));
-    }
-    
-    /**
-     * Attempts to set an Entity's coordinates around the top
-     * of this TileMap.
-     * 
-     * @param e the Entity to set coordinates for
-     * @return this, for chaining purposes
-     */
-    public final TileMap spawnEntityFromTop(AbstractEntity e){
-        return spawnEntityFromPoint(e, (byte)(e.getX()/TILE_SIZE), (byte)0);
-    }
-    
-    /**
-     * Attempts to set an Entity's coordinates around the bottom
-     * of this TileMap.
-     * 
-     * @param e the Entity to set coordinates for
-     * @return this, for chaining purposes
-     */
-    public final TileMap spawnEntityFromBottom(AbstractEntity e){
-        return spawnEntityFromPoint(e, (byte)(e.getX()/TILE_SIZE), (byte)(this.height - 1));
     }
     
     public final TileMap addMapBoundsReachListener(MapBoundsReachedListener listener){
