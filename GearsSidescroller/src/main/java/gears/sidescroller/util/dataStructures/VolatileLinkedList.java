@@ -18,12 +18,14 @@ public class VolatileLinkedList<T> {
     
     public final void add(T value){
         VolatileNode<T> nn = new VolatileNode<>(this, value);
+        if(head == null){
+            tail = nn; // nn is the only node
+        } else {
+            head.setPrev(nn);
+        }
         nn.setNext(head);
         head = nn;
         // insert before head to prevent issues while iterating
-        if(tail == null){
-            tail = nn;
-        }
     }
     
     public final void forEach(Consumer<T> doThis){
@@ -32,6 +34,10 @@ public class VolatileLinkedList<T> {
             doThis.accept(curr.getValue());
             curr = curr.getNext();
         }
+    }
+    
+    public final boolean isEmpty(){
+        return head == null;
     }
     
     protected final void notifyHeadDelete(){
@@ -63,13 +69,18 @@ public class VolatileLinkedList<T> {
     }
     
     public static void main(String[] args){
-        VolatileLinkedList<Integer> list = new VolatileLinkedList<>();
+        VolatileLinkedList<ClockTest> list = new VolatileLinkedList<>();
         for(int i = 1; i < 5; i++){
-            list.add(i);
+            list.add(new ClockTest(i));
             System.out.println(list);
         }
         
-        list.forEach((i)->list.add(i*i));
+        list.forEach((i)->list.add(new ClockTest(i.getTime() * i.getTime())));
         System.out.println(list);
+        
+        while(!list.isEmpty()){
+            System.out.println(list);
+            list.forEach((clock)->clock.tick());
+        }
     }
 }

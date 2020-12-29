@@ -15,6 +15,15 @@ class VolatileNode<T> {
         this.value = value;
         prev = null;
         next = null;
+        
+        //@SuppressWarnings("unchecked")
+        if(value instanceof Removable){
+            ((Removable)value).addRemovalListener((i)->{
+                if(i.equals(value)){
+                    delete();
+                }
+            });
+        }
     }
     
     public final T getValue(){
