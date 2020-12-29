@@ -133,7 +133,7 @@ public class TileMap {
             e.setX(0);
             fireMapBoundsReached(Direction.LEFT);
         } else if(e.getX() > this.width * TILE_SIZE - e.getWidth()){
-            e.setX(this.width * TILE_SIZE - e.getWidth() - 1);
+            e.setX(this.width * TILE_SIZE - e.getWidth());
             fireMapBoundsReached(Direction.RIGHT);
         }
         
@@ -141,7 +141,7 @@ public class TileMap {
             e.setY(0);
             fireMapBoundsReached(Direction.UP);
         } else if(e.getY() > this.height * TILE_SIZE - e.getHeight()){
-            e.setY(this.height * TILE_SIZE - e.getHeight() - 1);
+            e.setY(this.height * TILE_SIZE - e.getHeight());
             fireMapBoundsReached(Direction.DOWN);
         }
     }
@@ -357,7 +357,7 @@ public class TileMap {
         boolean negRadValid = true;
         byte currXIdx = initialXIdx;
         byte currYIdx = initialYIdx;
-        for(byte searchRadius = 0; !isValidSpawn && posRadValid && negRadValid; searchRadius++){
+        for(byte searchRadius = 0; !isValidSpawn && (posRadValid || negRadValid); searchRadius++){
             // check positive radius direction
             currXIdx = (byte) (initialXIdx + lineDirection.getXMod() * searchRadius);
             currYIdx = (byte) (initialYIdx + lineDirection.getYMod() * searchRadius);
