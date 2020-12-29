@@ -4,6 +4,7 @@ import gears.sidescroller.world.areas.Area;
 import gears.sidescroller.entities.Player;
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.world.tileMaps.MapBoundsReachedListener;
+import gears.sidescroller.world.tileMaps.TileMap;
 import java.awt.Graphics;
 import java.util.function.Consumer;
 import javax.swing.SwingUtilities;
@@ -95,10 +96,10 @@ public class Level implements MapBoundsReachedListener {
     }
 
     @Override
-    public void boundReached(Direction whatSide) {
+    public void boundReached(TileMap whatMap, Direction whatSide) {
         int newXIdx = this.currentAreaX + whatSide.getXMod();
         int newYIdx = this.currentAreaY + whatSide.getYMod();
-        if(newYIdx >= 0 && newYIdx < this.areas.length && newXIdx >= 0 && newXIdx < this.areas[0].length){
+        if(whatMap.equals(this.getCurrentArea().getTileMap()) && newYIdx >= 0 && newYIdx < this.areas.length && newXIdx >= 0 && newXIdx < this.areas[0].length){
             // is valid index
             if(areas[newYIdx][newXIdx] == null){
                 throw new UnsupportedOperationException("TODO: generate new area");
@@ -108,6 +109,11 @@ public class Level implements MapBoundsReachedListener {
                     Area oldArea = getCurrentArea();
                     SwingUtilities.invokeLater(()->{
                         oldArea.removeEntity(player);
+                        /*
+                        The invokeLater may be causing problems
+                        need my SafeList here to allow removing 
+                        player
+                        */
                     });
                     currentAreaX = newXIdx;
                     currentAreaY = newYIdx;
@@ -116,7 +122,6 @@ public class Level implements MapBoundsReachedListener {
                 } else {
                     System.out.printf("Cannot spawn player in area:\n %s \n", areas[newYIdx][newXIdx].toString());
                 }
-                
             }
         }
     }

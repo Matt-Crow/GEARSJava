@@ -393,7 +393,7 @@ public class TileMap {
         return this;
     }
     private TileMap fireMapBoundsReached(Direction fromDir){
-        this.boundsReachedListeners.forEach((listener)->listener.boundReached(fromDir));
+        this.boundsReachedListeners.forEach((listener)->listener.boundReached(this, fromDir));
         return this;
     }
 }

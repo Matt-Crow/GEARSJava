@@ -3,6 +3,7 @@
 TODO:
 * Matrix2D class for both TileMap and Level
 * having issues with collision checking when moving to a new area
+    - Caused by old area checking for collisions after moving player to new area
 
 Current Plan:
 * Make all core classes

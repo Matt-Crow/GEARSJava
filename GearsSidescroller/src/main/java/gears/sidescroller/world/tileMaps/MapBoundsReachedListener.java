@@ -8,5 +8,5 @@ import gears.sidescroller.util.Direction;
  */
 
 public interface MapBoundsReachedListener {
-    public void boundReached(Direction whatSide);
+    public void boundReached(TileMap whatMap, Direction whatSide);
 }
