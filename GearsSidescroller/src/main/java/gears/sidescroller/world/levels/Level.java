@@ -1,5 +1,6 @@
 package gears.sidescroller.world.levels;
 
+import gears.sidescroller.entities.AbstractEntity;
 import gears.sidescroller.world.areas.Area;
 import gears.sidescroller.entities.Player;
 import gears.sidescroller.util.Direction;
@@ -96,7 +97,7 @@ public class Level implements MapBoundsReachedListener {
     }
 
     @Override
-    public void boundReached(TileMap whatMap, Direction whatSide) {
+    public void boundReached(TileMap whatMap, Direction whatSide, AbstractEntity byWhat) {
         int newXIdx = this.currentAreaX + whatSide.getXMod();
         int newYIdx = this.currentAreaY + whatSide.getYMod();
         if(whatMap.equals(this.getCurrentArea().getTileMap()) && newYIdx >= 0 && newYIdx < this.areas.length && newXIdx >= 0 && newXIdx < this.areas[0].length){
@@ -104,23 +105,18 @@ public class Level implements MapBoundsReachedListener {
             if(areas[newYIdx][newXIdx] == null){
                 throw new UnsupportedOperationException("TODO: generate new area");
             } else {
-                boolean canSpawn = areas[newYIdx][newXIdx].getTileMap().spawnEntityFromDir(player, Direction.rotateCounterClockWise(Direction.rotateCounterClockWise(whatSide)));
+                boolean canSpawn = areas[newYIdx][newXIdx].getTileMap().spawnEntityFromDir(byWhat, Direction.rotateCounterClockWise(Direction.rotateCounterClockWise(whatSide)));
                 if(canSpawn){
-                    Area oldArea = getCurrentArea();
-                    SwingUtilities.invokeLater(()->{
-                        oldArea.removeEntity(player);
-                        /*
-                        The invokeLater may be causing problems
-                        need my SafeList here to allow removing 
-                        player
-                        */
-                    });
-                    currentAreaX = newXIdx;
-                    currentAreaY = newYIdx;
-                    getCurrentArea().addEntity(player);
-                    System.out.printf("Moved player to area (%d, %d)\n", newXIdx, newYIdx);
+                    byWhat.remove(); // remove from old area
+                    areas[newYIdx][newXIdx].addEntity(byWhat);
+                    
+                    if(byWhat.equals(player)){
+                        currentAreaX = newXIdx;
+                        currentAreaY = newYIdx;
+                        System.out.printf("Moved player to area (%d, %d)\n", newXIdx, newYIdx);
+                    }
                 } else {
-                    System.out.printf("Cannot spawn player in area:\n %s \n", areas[newYIdx][newXIdx].toString());
+                    System.out.printf("Cannot spawn entity in area:\n %s \n", areas[newYIdx][newXIdx].toString());
                 }
             }
         }

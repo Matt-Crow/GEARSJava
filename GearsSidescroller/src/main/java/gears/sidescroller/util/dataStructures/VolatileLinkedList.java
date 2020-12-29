@@ -50,9 +50,10 @@ public class VolatileLinkedList<T> {
      */
     protected final void notifyHeadDelete(){
         if(head == null){
-            throw new UnsupportedOperationException("Only head should invoke this method");
+            //throw new UnsupportedOperationException("Only head should invoke this method");
+        } else {
+            head = head.getNext();
         }
-        head = head.getNext();
     }
     
     /**
@@ -60,9 +61,10 @@ public class VolatileLinkedList<T> {
      */
     protected final void notifyTailDelete(){
         if(tail == null){
-            throw new UnsupportedOperationException("Only tail should invoke this method");
+            //throw new UnsupportedOperationException("Only tail should invoke this method");
+        } else {
+            tail = tail.getPrev();
         }
-        tail = tail.getPrev();
     }
     
     @Override

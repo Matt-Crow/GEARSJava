@@ -131,18 +131,18 @@ public class TileMap {
     private void keepInBounds(AbstractEntity e){
         if(e.getX() < 0){
             e.setX(0);
-            fireMapBoundsReached(Direction.LEFT);
+            fireMapBoundsReached(Direction.LEFT, e);
         } else if(e.getX() > this.width * TILE_SIZE - e.getWidth()){
             e.setX(this.width * TILE_SIZE - e.getWidth());
-            fireMapBoundsReached(Direction.RIGHT);
+            fireMapBoundsReached(Direction.RIGHT, e);
         }
         
         if(e.getY() < 0){
             e.setY(0);
-            fireMapBoundsReached(Direction.UP);
+            fireMapBoundsReached(Direction.UP, e);
         } else if(e.getY() > this.height * TILE_SIZE - e.getHeight()){
             e.setY(this.height * TILE_SIZE - e.getHeight());
-            fireMapBoundsReached(Direction.DOWN);
+            fireMapBoundsReached(Direction.DOWN, e);
         }
     }
     
@@ -392,8 +392,8 @@ public class TileMap {
         this.boundsReachedListeners.add(listener);
         return this;
     }
-    private TileMap fireMapBoundsReached(Direction fromDir){
-        this.boundsReachedListeners.forEach((listener)->listener.boundReached(this, fromDir));
+    private TileMap fireMapBoundsReached(Direction fromDir, AbstractEntity byWhat){
+        this.boundsReachedListeners.forEach((listener)->listener.boundReached(this, fromDir, byWhat));
         return this;
     }
 }

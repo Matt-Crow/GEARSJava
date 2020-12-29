@@ -1,9 +1,9 @@
 package gears.sidescroller.world.areas;
 
 import gears.sidescroller.entities.AbstractEntity;
+import gears.sidescroller.util.dataStructures.VolatileLinkedList;
 import gears.sidescroller.world.tileMaps.TileMap;
 import java.awt.Graphics;
-import java.util.HashMap;
 
 /**
  * this will be used to store a tileMap,
@@ -14,19 +14,16 @@ import java.util.HashMap;
  */
 public class Area {
     private final TileMap tileMap;
-    private final HashMap<Long, AbstractEntity> entities;
+    private final VolatileLinkedList<AbstractEntity> entities;
     
     public Area(TileMap t){
         tileMap = t;
-        entities = new HashMap<>();        
+        entities = new VolatileLinkedList<>();        
     }
     
     public Area addEntity(AbstractEntity e){
-        entities.put(e.getId(), e);
+        entities.add(e);
         return this;
-    }
-    public boolean removeEntity(AbstractEntity e){
-        return entities.remove(e.getId(), e);
     }
     
     public Area init(){
@@ -39,7 +36,7 @@ public class Area {
     }
     
     public Area update(){
-        entities.values().forEach((e)->{
+        entities.forEach((e)->{
             e.update();
             tileMap.checkForCollisions(e);
         });

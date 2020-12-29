@@ -1,5 +1,6 @@
 package gears.sidescroller.world.tileMaps;
 
+import gears.sidescroller.entities.AbstractEntity;
 import gears.sidescroller.util.Direction;
 
 /**
@@ -8,5 +9,5 @@ import gears.sidescroller.util.Direction;
  */
 
 public interface MapBoundsReachedListener {
-    public void boundReached(TileMap whatMap, Direction whatSide);
+    public void boundReached(TileMap whatMap, Direction whatSide, AbstractEntity byWhat);
 }

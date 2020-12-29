@@ -1,16 +1,20 @@
 package gears.sidescroller.entities;
 
 import gears.sidescroller.util.Direction;
+import gears.sidescroller.util.dataStructures.Removable;
+import gears.sidescroller.util.dataStructures.RemovalListener;
 import gears.sidescroller.world.tiles.AbstractTile;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 import java.awt.Graphics;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.function.Consumer;
 
 /**
  *
  * @author Matt Crow
  */
-public abstract class AbstractEntity {
+public abstract class AbstractEntity implements Removable{
     private int x;
     private int y;
     private int speed;
@@ -21,7 +25,10 @@ public abstract class AbstractEntity {
     
     private static long NEXT_ID = 0;
     
+    protected final LinkedList<RemovalListener> removalListeners;
+    
     public AbstractEntity(){
+        this.removalListeners = new LinkedList<>();
         x = 0;
         y = 0;
         speed = 0;
@@ -136,4 +143,14 @@ public abstract class AbstractEntity {
     
     public abstract AbstractEntity doUpdate();
     public abstract void draw(Graphics g);
+
+    @Override
+    public void addRemovalListener(RemovalListener listener) {
+        this.removalListeners.add(listener);
+    }
+
+    @Override
+    public void forEachRemovalListener(Consumer<RemovalListener> doThis) {
+        this.removalListeners.forEach(doThis);
+    }
 }

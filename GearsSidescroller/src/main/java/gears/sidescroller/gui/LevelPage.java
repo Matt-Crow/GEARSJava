@@ -45,6 +45,7 @@ public final class LevelPage extends Page{
             Level newLevel = new LevelGenerator().generateRandom(3);
             // don't forget to load player!
             if(focusedEntity != null && focusedEntity instanceof Player){
+                focusedEntity.remove(); // remove from old level, if any
                 newLevel.loadPlayer((Player)focusedEntity);
             }
             
