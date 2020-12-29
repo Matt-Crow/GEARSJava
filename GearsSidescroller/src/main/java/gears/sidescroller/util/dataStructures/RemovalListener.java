@@ -1,9 +1,9 @@
 package gears.sidescroller.util.dataStructures;
 
 /**
- *
- * @author Matt
+ * This interface is currently only used by VolatileNode to listen for an item being removed.
+ * @author Matt Crow
  */
-public interface RemovalListener<T> {
-    public void itemRemoved(Removable<T> item);
+public interface RemovalListener {
+    public void itemRemoved(Removable item);
 }

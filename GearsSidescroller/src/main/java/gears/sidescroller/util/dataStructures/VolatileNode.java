@@ -1,7 +1,7 @@
 package gears.sidescroller.util.dataStructures;
 
 /**
- *
+ * VolatileNodes are used by a VolatileLinkedList to store its contents.
  * @author Matt
  */
 class VolatileNode<T> {
@@ -16,7 +16,6 @@ class VolatileNode<T> {
         prev = null;
         next = null;
         
-        //@SuppressWarnings("unchecked")
         if(value instanceof Removable){
             ((Removable)value).addRemovalListener((i)->{
                 if(i.equals(value)){
@@ -43,6 +42,9 @@ class VolatileNode<T> {
         return prev;
     }
     
+    /**
+     * In-place deletion from the list. Generally speaking, this will be invoked by the RemovalListener in this constructor
+     */
     protected final void delete(){
         if(prev == null){
             // has no previous, so this is the head.

@@ -4,11 +4,11 @@ import java.util.LinkedList;
 import java.util.function.Consumer;
 
 /**
- *
+ * This is an implementation example for the Removable interface
  * @author Matt
  */
-public class ClockTest implements Removable<ClockTest> {
-    private final LinkedList<RemovalListener<ClockTest>> removalListeners;
+public class ClockTest implements Removable {
+    private final LinkedList<RemovalListener> removalListeners;
     private int timeLeft;
     
     public ClockTest(int timeLeft){
@@ -21,12 +21,12 @@ public class ClockTest implements Removable<ClockTest> {
     }
     
     @Override
-    public void addRemovalListener(RemovalListener<ClockTest> listener) {
+    public void addRemovalListener(RemovalListener listener) {
         removalListeners.add(listener);
     }
 
     @Override
-    public void forEachRemovalListener(Consumer<RemovalListener<ClockTest>> doThis) {
+    public void forEachRemovalListener(Consumer<RemovalListener> doThis) {
         removalListeners.forEach(doThis);
     }
     

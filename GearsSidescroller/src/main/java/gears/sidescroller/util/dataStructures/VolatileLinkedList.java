@@ -3,8 +3,13 @@ package gears.sidescroller.util.dataStructures;
 import java.util.function.Consumer;
 
 /**
- *
- * @author Matt
+ * A VolatileLinkedList is used to store a list of items which are expected to be removed at some point.
+ * 
+ * Items are inserted in backwards order, so items added during iteration are not iterated over during that iteration.
+ * Items may be removed from this list during iteration without interrupting the iteration.
+ * 
+ * @author Matt Crow
+ * @param <T> the type of element which will be stored in each node
  */
 public class VolatileLinkedList<T> {
     private VolatileNode<T> head;
@@ -40,6 +45,9 @@ public class VolatileLinkedList<T> {
         return head == null;
     }
     
+    /**
+     * Fired by the head when it is deleted.
+     */
     protected final void notifyHeadDelete(){
         if(head == null){
             throw new UnsupportedOperationException("Only head should invoke this method");
@@ -47,6 +55,9 @@ public class VolatileLinkedList<T> {
         head = head.getNext();
     }
     
+    /**
+     * Fired by the tail when it is deleted.
+     */
     protected final void notifyTailDelete(){
         if(tail == null){
             throw new UnsupportedOperationException("Only tail should invoke this method");
