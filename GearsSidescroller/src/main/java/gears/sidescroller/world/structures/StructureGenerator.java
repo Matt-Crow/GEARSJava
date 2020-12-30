@@ -1,8 +1,11 @@
 package gears.sidescroller.world.structures;
 
 import gears.sidescroller.util.Direction;
+import gears.sidescroller.world.tiles.ImageTile;
 import gears.sidescroller.world.tiles.TileGenerator;
+import java.io.IOException;
 import java.util.Random;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -27,6 +30,11 @@ public class StructureGenerator {
         );
         newStruct.setKeyToVal(0, new TileGenerator().generateRandom(false));
         newStruct.setKeyToVal(1, new TileGenerator().generateRandom(true));
+        try {
+            newStruct.setKeyToVal(1, new ImageTile(0, 0, true, ImageIO.read(StructureGenerator.class.getResourceAsStream("/images/jarLogo.png"))));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
         // build the room's walls
         // top & bottom walls
         for(int x = 0; x < width; x++){

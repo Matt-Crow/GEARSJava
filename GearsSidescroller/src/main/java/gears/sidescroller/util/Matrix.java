@@ -69,6 +69,23 @@ public class Matrix<T> {
         return xIdx >= 0 && xIdx < this.width && yIdx >= 0 && yIdx < this.height;
     }
     
+    public final void insertMatrix(int xIdx, int yIdx, Matrix<T> otherMatrix){
+        // first, add new keys
+        int thisCurrMax = this.keyToValue.keySet().stream().reduce(0, Math::max);
+        otherMatrix.forEachKeyToValue((otherMatrixKey, otherMatrixValue)->{
+            this.setKeyToVal(thisCurrMax + otherMatrixKey, otherMatrixValue);
+        });
+        
+        // next, fit as much of the new matrix as possible into this one
+        for(int dx = 0; dx < otherMatrix.getWidthInCells(); dx++){
+            for(int dy = 0; dy < otherMatrix.getHeightInCells(); dy++){
+                if(isValidIdx(xIdx + dx, yIdx + dy)){
+                    this.set(xIdx + dx, yIdx + dy, otherMatrix.map[dy][dx] + thisCurrMax);
+                }
+            }
+        }
+    }
+    
     public final void forEachKeyToValue(BiConsumer<Integer, T> doThis){
         this.keyToValue.forEach(doThis);
     }
