@@ -5,6 +5,7 @@ import gears.sidescroller.world.areas.Area;
 import gears.sidescroller.entities.Player;
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.world.tileMaps.MapBoundsReachedListener;
+import gears.sidescroller.world.tileMaps.OutOfBoundsEvent;
 import gears.sidescroller.world.tileMaps.TileMap;
 import java.awt.Graphics;
 import java.util.function.Consumer;
@@ -97,20 +98,20 @@ public class Level implements MapBoundsReachedListener {
     }
 
     @Override
-    public void boundReached(TileMap whatMap, Direction whatSide, AbstractEntity byWhat) {
-        int newXIdx = this.currentAreaX + whatSide.getXMod();
-        int newYIdx = this.currentAreaY + whatSide.getYMod();
-        if(whatMap.equals(this.getCurrentArea().getTileMap()) && newYIdx >= 0 && newYIdx < this.areas.length && newXIdx >= 0 && newXIdx < this.areas[0].length){
+    public void boundReached(OutOfBoundsEvent event) {
+        int newXIdx = this.currentAreaX + event.getDirection().getXMod();
+        int newYIdx = this.currentAreaY + event.getDirection().getYMod();
+        if(event.getMap().equals(this.getCurrentArea().getTileMap()) && newYIdx >= 0 && newYIdx < this.areas.length && newXIdx >= 0 && newXIdx < this.areas[0].length){
             // is valid index
             if(areas[newYIdx][newXIdx] == null){
                 throw new UnsupportedOperationException("TODO: generate new area");
             } else {
-                boolean canSpawn = areas[newYIdx][newXIdx].getTileMap().spawnEntityFromDir(byWhat, Direction.rotateCounterClockWise(Direction.rotateCounterClockWise(whatSide)));
+                boolean canSpawn = areas[newYIdx][newXIdx].getTileMap().spawnEntityFromDir(event.getOutOfBoundsEntity(), Direction.rotateCounterClockWise(Direction.rotateCounterClockWise(event.getDirection())));
                 if(canSpawn){
-                    byWhat.remove(); // remove from old area
-                    areas[newYIdx][newXIdx].addEntity(byWhat);
+                    event.getOutOfBoundsEntity().remove(); // remove from old area
+                    areas[newYIdx][newXIdx].addEntity(event.getOutOfBoundsEntity());
                     
-                    if(byWhat.equals(player)){
+                    if(event.getOutOfBoundsEntity().equals(player)){
                         currentAreaX = newXIdx;
                         currentAreaY = newYIdx;
                         System.out.printf("Moved player to area (%d, %d)\n", newXIdx, newYIdx);

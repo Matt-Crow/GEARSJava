@@ -128,22 +128,42 @@ public class TileMap {
         return b.toString();
     }
     
-    private void keepInBounds(AbstractEntity e){
+    private OutOfBoundsEvent checkIfOutsideBounds(AbstractEntity e){
+        OutOfBoundsEvent lrEvent = null; // left-right
+        OutOfBoundsEvent udEvent = null; // up-down
         if(e.getX() < 0){
             e.setX(0);
-            fireMapBoundsReached(Direction.LEFT, e);
+            //fireMapBoundsReached(Direction.LEFT, e);
+            lrEvent = new OutOfBoundsEvent(this, e, Direction.LEFT);
         } else if(e.getX() > this.width * TILE_SIZE - e.getWidth()){
             e.setX(this.width * TILE_SIZE - e.getWidth());
-            fireMapBoundsReached(Direction.RIGHT, e);
+            //fireMapBoundsReached(Direction.RIGHT, e);
+            lrEvent = new OutOfBoundsEvent(this, e, Direction.RIGHT);
         }
         
         if(e.getY() < 0){
             e.setY(0);
-            fireMapBoundsReached(Direction.UP, e);
+            //fireMapBoundsReached(Direction.UP, e);
+            udEvent = new OutOfBoundsEvent(this, e, Direction.UP);
         } else if(e.getY() > this.height * TILE_SIZE - e.getHeight()){
             e.setY(this.height * TILE_SIZE - e.getHeight());
-            fireMapBoundsReached(Direction.DOWN, e);
+            //fireMapBoundsReached(Direction.DOWN, e);
+            udEvent = new OutOfBoundsEvent(this, e, Direction.DOWN);
         }
+        
+        OutOfBoundsEvent event = null;
+        if(lrEvent == null){
+            event = udEvent;
+        } else if(udEvent == null){
+            event = lrEvent;
+        } else {
+            // neither is null, so favor the direction more out of bounds
+            double dx = Math.abs(e.getX() - this.width * TILE_SIZE / 2); // distance from center
+            double dy = Math.abs(e.getY() - this.height * TILE_SIZE / 2);
+            event = (dx < dy) ? udEvent : lrEvent;
+        }
+        
+        return event;
     }
     
     private boolean handleCollisions(AbstractEntity e, byte tileXIdx, byte tileYIdx){
@@ -192,7 +212,7 @@ public class TileMap {
      * @return whether or not a collision was detected
      */
     public final boolean checkForCollisions(AbstractEntity e){
-        keepInBounds(e);
+        OutOfBoundsEvent boundChecking = checkIfOutsideBounds(e);
         
         /*
         This gets the tile index for the UPPER LEFT corner of e
@@ -210,6 +230,11 @@ public class TileMap {
         boolean collUpperRight = handleCollisions(e, (byte)(xIdx+1), yIdx);
         boolean collLowerLeft = handleCollisions(e, xIdx, (byte)(yIdx+1));
         boolean collLowerRight = handleCollisions(e, (byte)(xIdx+1), (byte)(yIdx+1));
+        
+        // AFTER handling collisions with this map, notify listeners if the entity left the area
+        if(boundChecking != null){
+            this.fireMapBoundsReached(boundChecking);
+        }        
         
         // do this to avoid short-circuit evaluation
         return collUpperLeft
@@ -392,8 +417,8 @@ public class TileMap {
         this.boundsReachedListeners.add(listener);
         return this;
     }
-    private TileMap fireMapBoundsReached(Direction fromDir, AbstractEntity byWhat){
-        this.boundsReachedListeners.forEach((listener)->listener.boundReached(this, fromDir, byWhat));
+    private TileMap fireMapBoundsReached(OutOfBoundsEvent event){
+        this.boundsReachedListeners.forEach((listener)->listener.boundReached(event));
         return this;
     }
 }

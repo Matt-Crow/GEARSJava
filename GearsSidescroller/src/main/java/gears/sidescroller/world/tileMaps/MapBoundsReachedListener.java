@@ -1,13 +1,10 @@
 package gears.sidescroller.world.tileMaps;
 
-import gears.sidescroller.entities.AbstractEntity;
-import gears.sidescroller.util.Direction;
-
 /**
  *
  * @author Matt
  */
 
 public interface MapBoundsReachedListener {
-    public void boundReached(TileMap whatMap, Direction whatSide, AbstractEntity byWhat);
+    public void boundReached(OutOfBoundsEvent event);
 }
