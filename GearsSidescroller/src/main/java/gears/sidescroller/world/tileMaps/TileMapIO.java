@@ -21,7 +21,7 @@ public class TileMapIO {
      * @throws IOException 
      */
     public static void writeTileMapCsv(OutputStream csvFile, TileMap tileMap) throws IOException{
-        StreamWriterUtil.writeStream(csvFile, tileMap.getTileMapCsv());
+        StreamWriterUtil.writeStream(csvFile, tileMap.getAsCsv());
     }
     
     /**

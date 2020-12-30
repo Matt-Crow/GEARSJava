@@ -1,11 +1,10 @@
 package gears.sidescroller.world.tileMaps;
 
-import gears.io.StreamWriterUtil;
 import gears.sidescroller.entities.AbstractEntity;
 import gears.sidescroller.util.Direction;
+import gears.sidescroller.util.Matrix;
 import gears.sidescroller.world.tiles.AbstractTile;
 import java.awt.Graphics;
-import java.util.HashMap;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 import java.awt.Point;
 import java.util.LinkedList;
@@ -15,23 +14,13 @@ import java.util.LinkedList;
  * This allows for O(1) lookup for collisions, as well as fast
  * reading and writing.
  * 
+ * This class uses the Flyweight design
+ * pattern to drastically minimize the amount of memory used
+ * to store and retrieve tile map information.
+ * 
  * @author Matt Crow
  */
-public class TileMap {
-    /*
-    The tileSet serves as a mapping of bytes to tiles.
-    Given the mapping b -> t, each instance of b in the
-    tile map represents an instance of t.
-    
-    This field allows the class to use the Flyweight design
-    pattern to drastically minimize the amount of memory used
-    to store and retrieve tile map information.
-    */
-    private final HashMap<Byte, AbstractTile> tileSet;
-    private final byte width;
-    private final byte height;
-    private final byte[][] map;
-    
+public class TileMap extends Matrix<AbstractTile>{
     private final LinkedList<MapBoundsReachedListener> boundsReachedListeners;
     
     /**
@@ -40,17 +29,17 @@ public class TileMap {
      * @param w the width of this TileMap, measured in tiles
      * @param h the height of this TileMap, measured in tiles
      */
-    public TileMap(byte w, byte h){
-        tileSet = new HashMap<>();
-        width = w;
-        height = h;
-        map = new byte[height][width];
-        for(byte y = 0; y < height; y++){
-            for(byte x = 0; x < width; x++){
-                map[y][x] = 0;
-            }
-        }
+    public TileMap(int w, int h){
+        super(w, h);
         boundsReachedListeners = new LinkedList<>();
+    }
+    
+    public final int getWidthInPixels(){
+        return getWidth() * TILE_SIZE;
+    }
+    
+    public final int getHeightInPixels(){
+        return getHeight() * TILE_SIZE;
     }
     
     /**
@@ -65,29 +54,12 @@ public class TileMap {
      * @return this, for chaining purposes
      */
     public TileMap addToTileSet(byte key, AbstractTile tile){
-        if(tile == null){
-            throw new NullPointerException("tile cannot be null");
-        }
-        tileSet.put(key, tile);
+        setKeyToVal(key, tile);
         return this;
     }
     
-    /**
-     * Checks if the given values are valid indeces
-     * in the tile map array. That is to say,
-     * <code>tileMap[yIdx][xIdx]</code> will not throw an IndexOutOfBoundsException.
-     * 
-     * @param xIdx the x index into the array
-     * @param yIdx the y index into the array
-     * 
-     * @return whether or not the given indeces are valid. 
-     */
-    private boolean isValidIdx(byte xIdx, byte yIdx) {
-        return xIdx >= 0 && xIdx < width && yIdx >= 0 && yIdx < height;
-    }
-    
     private boolean isTileOpen(byte xIdx, byte yIdx){
-        return isValidIdx(xIdx, yIdx) && !tileSet.get(map[yIdx][xIdx]).getIsTangible();
+        return isValidIdx(xIdx, yIdx) && !get(xIdx, yIdx).getIsTangible();
     }
     
     /**
@@ -100,54 +72,28 @@ public class TileMap {
      * @return this, for chaining purposes
      */
     public TileMap setTile(byte xIndex, byte yIndex, byte key){
-        if(!isValidIdx(xIndex, yIndex)){
-            throw new IndexOutOfBoundsException(String.format("Map indeces must range from (0 <= x < %d, 0 <= y < %d), so the point (%d, %d) is invalid.", width, height, xIndex, yIndex));
-        }
-        
-        map[yIndex][xIndex] = key;
-        
+        set(xIndex, yIndex, key);
         return this;
     }
     
-    /**
-     * Gets this' tile map as CSV. Note that this does not include
-     * this' tile set.
-     * 
-     * @return this' tile map in CSV format, ready to write to a file. 
-     */
-    public final String getTileMapCsv(){
-        StringBuilder b = new StringBuilder();
-        String[] row;
-        for(byte y = 0; y < height; y++){
-            row = new String[width];
-            for(byte x = 0; x < width; x++){
-                row[x] = Byte.toString(map[y][x]);
-            }
-            b.append(String.join(", ", row)).append(StreamWriterUtil.NEWLINE);
-        }
-        return b.toString();
-    }
+    
     
     private OutOfBoundsEvent checkIfOutsideBounds(AbstractEntity e){
         OutOfBoundsEvent lrEvent = null; // left-right
         OutOfBoundsEvent udEvent = null; // up-down
         if(e.getX() < 0){
             e.setX(0);
-            //fireMapBoundsReached(Direction.LEFT, e);
             lrEvent = new OutOfBoundsEvent(this, e, Direction.LEFT);
-        } else if(e.getX() > this.width * TILE_SIZE - e.getWidth()){
-            e.setX(this.width * TILE_SIZE - e.getWidth());
-            //fireMapBoundsReached(Direction.RIGHT, e);
+        } else if(e.getX() > getWidthInPixels() - e.getWidth()){
+            e.setX(getWidthInPixels() - e.getWidth());
             lrEvent = new OutOfBoundsEvent(this, e, Direction.RIGHT);
         }
         
         if(e.getY() < 0){
             e.setY(0);
-            //fireMapBoundsReached(Direction.UP, e);
             udEvent = new OutOfBoundsEvent(this, e, Direction.UP);
-        } else if(e.getY() > this.height * TILE_SIZE - e.getHeight()){
-            e.setY(this.height * TILE_SIZE - e.getHeight());
-            //fireMapBoundsReached(Direction.DOWN, e);
+        } else if(e.getY() > getHeightInPixels() - e.getHeight()){
+            e.setY(getHeightInPixels() - e.getHeight());
             udEvent = new OutOfBoundsEvent(this, e, Direction.DOWN);
         }
         
@@ -158,8 +104,8 @@ public class TileMap {
             event = lrEvent;
         } else {
             // neither is null, so favor the direction more out of bounds
-            double dx = Math.abs(e.getX() - this.width * TILE_SIZE / 2); // distance from center
-            double dy = Math.abs(e.getY() - this.height * TILE_SIZE / 2);
+            double dx = Math.abs(e.getX() - getWidthInPixels() / 2); // distance from center
+            double dy = Math.abs(e.getY() - getHeightInPixels() / 2);
             event = (dx < dy) ? udEvent : lrEvent;
         }
         
@@ -168,7 +114,7 @@ public class TileMap {
     
     private boolean handleCollisions(AbstractEntity e, byte tileXIdx, byte tileYIdx){
         boolean collided = false;
-        if(isValidIdx(tileXIdx, tileYIdx) && tileSet.get(map[tileYIdx][tileXIdx]).getIsTangible()){
+        if(isValidIdx(tileXIdx, tileYIdx) && get(tileXIdx, tileYIdx).getIsTangible()){
             collided = true;
             // now know the entity has collided, so now figure out how to shove them out
             int tileLeft = tileXIdx * AbstractTile.TILE_SIZE;
@@ -251,11 +197,9 @@ public class TileMap {
      * @return this, for chaining purposes
      */
     public final TileMap draw(Graphics g){
-        for(byte x = 0; x < width; x++){
-            for(byte y = 0; y < height; y++){
-                tileSet.get(map[y][x]).drawAt(g, x * TILE_SIZE, y * TILE_SIZE);
-            }
-        }
+        forEachCell((tile, xIdx, yIdx)->{
+            tile.drawAt(g, xIdx * TILE_SIZE, yIdx * TILE_SIZE);
+        });
         return this;
     }
     
@@ -264,10 +208,10 @@ public class TileMap {
         StringBuilder sb = new StringBuilder();
         sb.append("TODO: better TileMap::toString\n");
         sb.append("TILE MAP\n");
-        tileSet.forEach((i, tile)->{
+        forEachKeyToValue((i, tile)->{
             sb.append(String.format("%d : %s\n", i, tile.toString()));
         });
-        sb.append(getTileMapCsv());
+        sb.append(getAsCsv());
         return sb.toString();
     }
     
@@ -291,7 +235,7 @@ public class TileMap {
         byte spiralLengthThusFar = 0;
         int numTilesChecked = 0;
         boolean justTurned = true;
-        while(ret == null && numTilesChecked < this.height * this.width){
+        while(ret == null && numTilesChecked < this.getHeight() * this.getWidth()){
             if(this.isValidIdx(xIdx, yIdx)){
                 numTilesChecked++; // doesn't run if checking a point outside the map
             }
@@ -345,7 +289,7 @@ public class TileMap {
      * @return this, for chaining purposes
      */
     public final TileMap spawnEntityCenter(AbstractEntity e){
-        return spawnEntityFromPoint(e, (byte) (width / 2), (byte)(height / 2));
+        return spawnEntityFromPoint(e, (byte) (getWidth() / 2), (byte)(getHeight() / 2));
     }
     
     public final boolean spawnEntityFromDir(AbstractEntity e, Direction dir){
@@ -364,14 +308,14 @@ public class TileMap {
                 break;
             case DOWN:
                 initialXIdx = (byte)e.getXIdx();
-                initialYIdx = (byte) (this.height - 1);
+                initialYIdx = (byte) (this.getHeight() - 1);
                 break;
             case LEFT:
                 initialXIdx = 0;
                 initialYIdx = (byte)e.getYIdx();
                 break;
             case RIGHT:
-                initialXIdx = (byte) (this.width - 1);
+                initialXIdx = (byte) (this.getWidth() - 1);
                 initialYIdx = (byte)e.getYIdx();
                 break;
             default:

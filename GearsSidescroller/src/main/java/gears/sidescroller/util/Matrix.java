@@ -1,7 +1,9 @@
 package gears.sidescroller.util;
 
+import gears.io.StreamWriterUtil;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.function.BiConsumer;
 
 /**
  * The Matrix class is used to store a 2D array of values.
@@ -30,6 +32,14 @@ public class Matrix<T> {
         }
     }
     
+    public final int getWidth(){
+        return width;
+    }
+    
+    public final int getHeight(){
+        return height;
+    }
+    
     public final void setKeyToVal(int key, T val){
         if(key < 0){
             throw new IllegalArgumentException(String.format("Key must be non-negative, so %d isn't allowed", key));
@@ -37,9 +47,57 @@ public class Matrix<T> {
         keyToValue.put(key, val);
     }
     
-    public final Matrix set(int x, int y, int val){
-        this.map[y][x] = val;
+    public final Matrix set(int xIdx, int yIdx, int val){
+        if(!isValidIdx(xIdx, yIdx)){
+            throw new IndexOutOfBoundsException();
+        }
+        this.map[yIdx][xIdx] = val;
         return this;
+    }
+    
+    public final T get(int xIdx, int yIdx){
+        if(!isValidIdx(xIdx, yIdx)){
+            throw new IndexOutOfBoundsException();
+        }
+        if(!keyToValue.containsKey(map[yIdx][xIdx])){
+            throw new NullPointerException(String.format("Matrix does not contain the key %d", map[yIdx][xIdx]));
+        }
+        return keyToValue.get(map[yIdx][xIdx]);
+    }
+        
+    public final boolean isValidIdx(int xIdx, int yIdx){
+        return xIdx >= 0 && xIdx < this.width && yIdx >= 0 && yIdx < this.height;
+    }
+    
+    public final void forEachKeyToValue(BiConsumer<Integer, T> doThis){
+        this.keyToValue.forEach(doThis);
+    }
+    
+    public final void forEachCell(TriConsumer<T, Integer, Integer> doThis){
+        for(int y = 0; y < height; y++){
+            for(int x = 0; x < width; x++){
+                doThis.accept(get(x, y), x, y);
+            }
+        }
+    }
+    
+    /**
+     * Gets this as CSV. Note that this does not include
+     * this' key to value mapping.
+     * 
+     * @return this in CSV format, ready to write to a file. 
+     */
+    public final String getAsCsv(){
+        StringBuilder b = new StringBuilder();
+        String[] row;
+        for(byte y = 0; y < height; y++){
+            row = new String[width];
+            for(byte x = 0; x < width; x++){
+                row[x] = Integer.toString(map[y][x]);
+            }
+            b.append(String.join(", ", row)).append(StreamWriterUtil.NEWLINE);
+        }
+        return b.toString();
     }
     
     @Override
