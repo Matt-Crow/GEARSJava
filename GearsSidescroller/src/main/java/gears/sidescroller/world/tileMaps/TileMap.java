@@ -35,11 +35,11 @@ public class TileMap extends Matrix<AbstractTile>{
     }
     
     public final int getWidthInPixels(){
-        return getWidth() * TILE_SIZE;
+        return getWidthInCells() * TILE_SIZE;
     }
     
     public final int getHeightInPixels(){
-        return getHeight() * TILE_SIZE;
+        return getHeightInCells() * TILE_SIZE;
     }
     
     /**
@@ -235,7 +235,7 @@ public class TileMap extends Matrix<AbstractTile>{
         byte spiralLengthThusFar = 0;
         int numTilesChecked = 0;
         boolean justTurned = true;
-        while(ret == null && numTilesChecked < this.getHeight() * this.getWidth()){
+        while(ret == null && numTilesChecked < this.getHeightInCells() * this.getWidthInCells()){
             if(this.isValidIdx(xIdx, yIdx)){
                 numTilesChecked++; // doesn't run if checking a point outside the map
             }
@@ -289,7 +289,7 @@ public class TileMap extends Matrix<AbstractTile>{
      * @return this, for chaining purposes
      */
     public final TileMap spawnEntityCenter(AbstractEntity e){
-        return spawnEntityFromPoint(e, (byte) (getWidth() / 2), (byte)(getHeight() / 2));
+        return spawnEntityFromPoint(e, (byte) (getWidthInCells() / 2), (byte)(getHeightInCells() / 2));
     }
     
     public final boolean spawnEntityFromDir(AbstractEntity e, Direction dir){
@@ -308,14 +308,14 @@ public class TileMap extends Matrix<AbstractTile>{
                 break;
             case DOWN:
                 initialXIdx = (byte)e.getXIdx();
-                initialYIdx = (byte) (this.getHeight() - 1);
+                initialYIdx = (byte) (this.getHeightInCells() - 1);
                 break;
             case LEFT:
                 initialXIdx = 0;
                 initialYIdx = (byte)e.getYIdx();
                 break;
             case RIGHT:
-                initialXIdx = (byte) (this.getWidth() - 1);
+                initialXIdx = (byte) (this.getWidthInCells() - 1);
                 initialYIdx = (byte)e.getYIdx();
                 break;
             default:

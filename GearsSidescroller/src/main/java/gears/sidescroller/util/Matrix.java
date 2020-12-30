@@ -32,11 +32,11 @@ public class Matrix<T> {
         }
     }
     
-    public final int getWidth(){
+    public final int getWidthInCells(){
         return width;
     }
     
-    public final int getHeight(){
+    public final int getHeightInCells(){
         return height;
     }
     

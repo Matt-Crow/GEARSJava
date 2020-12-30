@@ -28,9 +28,10 @@ public class BasicColorTile extends AbstractTile{
         g.fillRect(x, y, TILE_SIZE, TILE_SIZE);
         
         //body
-        g.setColor(bodyColor);
-        g.fillRect(x + OUTLINE_OFFSET, y + OUTLINE_OFFSET, TILE_SIZE - OUTLINE_OFFSET * 2, TILE_SIZE - OUTLINE_OFFSET * 2);
-        
+        if(this.getIsTangible()){
+            g.setColor(bodyColor);
+            g.fillRect(x + OUTLINE_OFFSET, y + OUTLINE_OFFSET, TILE_SIZE - OUTLINE_OFFSET * 2, TILE_SIZE - OUTLINE_OFFSET * 2);
+        }
         return this;
     }
 
