@@ -3,6 +3,7 @@ package gears.sidescroller.gui;
 import gears.sidescroller.world.areas.Area;
 import gears.sidescroller.world.tileMaps.TileMap;
 import gears.sidescroller.entities.Player;
+import gears.sidescroller.world.Machines.PowerGenerator;
 import gears.sidescroller.world.levels.Level;
 import gears.sidescroller.world.tiles.TileGenerator;
 import gears.sidescroller.world.levels.LevelGenerator;
@@ -71,7 +72,9 @@ public class HomePage extends Page{
         t.addToTileSet((byte)0, new TileGenerator().generateRandom(false));
         t.addToTileSet((byte)1, new TileGenerator().generateRandom(true));
         t.setTile((byte)5, (byte)5, (byte)1);
+        PowerGenerator gen = new PowerGenerator(300, 300);
         Area testArea = new Area(t);
+        testArea.addMachine(gen);
         Level l = new Level(new Area[][]{{testArea}}, 0, 0);
         l.init();
         
