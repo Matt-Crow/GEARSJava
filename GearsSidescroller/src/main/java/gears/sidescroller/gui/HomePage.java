@@ -3,7 +3,7 @@ package gears.sidescroller.gui;
 import gears.sidescroller.world.areas.Area;
 import gears.sidescroller.world.tileMaps.TileMap;
 import gears.sidescroller.entities.Player;
-import gears.sidescroller.world.Machines.PowerGenerator;
+import gears.sidescroller.world.machines.PowerGenerator;
 import gears.sidescroller.world.levels.Level;
 import gears.sidescroller.world.tiles.TileGenerator;
 import gears.sidescroller.world.levels.LevelGenerator;

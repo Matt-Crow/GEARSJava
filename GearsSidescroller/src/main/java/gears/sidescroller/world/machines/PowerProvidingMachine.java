@@ -1,4 +1,4 @@
-package gears.sidescroller.world.Machines;
+package gears.sidescroller.world.machines;
 
 /**
  * Machines implementing the PowerProvidingMachine

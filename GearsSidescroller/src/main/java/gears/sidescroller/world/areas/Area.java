@@ -2,8 +2,8 @@ package gears.sidescroller.world.areas;
 
 import gears.sidescroller.entities.AbstractEntity;
 import gears.sidescroller.util.dataStructures.VolatileLinkedList;
-import gears.sidescroller.world.Machines.AbstractMachine;
-import gears.sidescroller.world.Machines.PowerProvidingMachine;
+import gears.sidescroller.world.machines.AbstractMachine;
+import gears.sidescroller.world.machines.PowerProvidingMachine;
 import gears.sidescroller.world.tileMaps.TileMap;
 import java.awt.Graphics;
 import java.util.HashSet;

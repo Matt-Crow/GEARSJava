@@ -1,4 +1,4 @@
-package gears.sidescroller.world.Machines;
+package gears.sidescroller.world.machines;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -22,8 +22,8 @@ public class PowerGenerator extends AbstractMachine implements PowerProvidingMac
     public void draw(Graphics g) {
         int x = getX();
         int y = getY();
-        int w = getWidthInPixels();
-        int h = getHeightInPixels();
+        int w = getWidth();
+        int h = getHeight();
         int offset = w / 10;
         g.setColor(Color.GRAY);
         g.fillOval(x, y, w, h);
