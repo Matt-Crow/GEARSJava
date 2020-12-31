@@ -25,6 +25,10 @@ public class Matrix<T> {
         this.width = width;
         this.height = height;
         this.map = new int[height][width];
+        clear();
+    }
+    
+    public final void clear(){
         for(int y = 0; y < height; y++){
             for(int x = 0; x < width; x++){
                 this.map[y][x] = 0;

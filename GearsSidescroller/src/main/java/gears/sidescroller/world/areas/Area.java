@@ -14,10 +14,12 @@ import java.awt.Graphics;
  */
 public class Area {
     private final TileMap tileMap;
+    private final PowerGrid powerGrid;
     private final VolatileLinkedList<AbstractEntity> entities;
     
     public Area(TileMap t){
         tileMap = t;
+        powerGrid = new PowerGrid(t.getWidthInCells(), t.getHeightInCells());
         entities = new VolatileLinkedList<>();        
     }
     
@@ -35,7 +37,20 @@ public class Area {
         return tileMap;
     }
     
+    private void updatePowerGrid(){
+        // TODO: set tiles in power grid based on power-supplying machines
+        powerGrid.clear();
+        
+        // temporary, for testing purposes
+        powerGrid.forEachCell((b, xIdx, yIdx)->{
+            if((xIdx + yIdx) % 2 == 0){
+                powerGrid.set(xIdx, yIdx, 1);
+            }
+        });
+    }
+    
     public Area update(){
+        updatePowerGrid();
         entities.forEach((e)->{
             e.update();
             tileMap.checkForCollisions(e);
@@ -44,7 +59,11 @@ public class Area {
     }
     
     public Area draw(Graphics g){
+        boolean debug = true; // move this
         tileMap.draw(g);
+        if(debug){
+            powerGrid.draw(g);
+        }
         return this;
     }
     

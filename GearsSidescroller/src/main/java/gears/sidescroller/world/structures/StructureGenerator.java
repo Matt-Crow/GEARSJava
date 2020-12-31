@@ -31,6 +31,7 @@ public class StructureGenerator {
         newStruct.setKeyToVal(0, new TileGenerator().generateRandom(false));
         newStruct.setKeyToVal(1, new TileGenerator().generateRandom(true));
         try {
+            System.out.append("TODO: change StructureGenerator to not use image tiles");
             newStruct.setKeyToVal(1, new ImageTile(0, 0, true, ImageIO.read(StructureGenerator.class.getResourceAsStream("/images/jarLogo.png"))));
         } catch (IOException ex) {
             ex.printStackTrace();

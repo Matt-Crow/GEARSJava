@@ -31,7 +31,6 @@ public class AreaGenerator {
                 rng.nextInt(map.getHeightInCells() - newStruct.getHeightInCells()), 
                 newStruct
             );
-            //System.out.println(newStruct.getAsCsv());
         }
         
         Area ret = new Area(map);
