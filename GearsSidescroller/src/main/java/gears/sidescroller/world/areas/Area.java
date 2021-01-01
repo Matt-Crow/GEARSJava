@@ -60,11 +60,13 @@ public class Area {
         boolean powerWasProvided = false;
         LinkedList<PowerProvidingMachine> currentSet = firstSet;
         LinkedList<PowerProvidingMachine> nextSet;
+        AbstractMachine asMachine = null;
         do {
             powerWasProvided = false;
             nextSet = new LinkedList<>();
             for(PowerProvidingMachine machine : currentSet){
-                if(machine.isProvidingPower()){
+                asMachine = (AbstractMachine)machine;
+                if(asMachine.isPowered(powerGrid.get(asMachine.getXIdx(), asMachine.getYIdx()))){
                     powerWasProvided = powerGrid.applyPowerFrom(machine);
                 } else {
                     nextSet.add(machine);
@@ -86,7 +88,9 @@ public class Area {
             tileMap.checkForCollisions(e); // need to add checking for machines
         });
         machines.forEach((m)->{
-            m.update();
+            if(m.isPowered(powerGrid.get(m.getXIdx(), m.getYIdx()))){
+                m.update();
+            }
         });
         return this;
     }

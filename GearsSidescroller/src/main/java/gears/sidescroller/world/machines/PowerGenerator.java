@@ -10,7 +10,7 @@ import java.awt.Graphics;
 public class PowerGenerator extends AbstractMachine implements PowerProvidingMachine {
 
     public PowerGenerator(int x, int y) {
-        super(x, y);
+        super(x, y, true);
     }
 
     @Override
@@ -29,11 +29,6 @@ public class PowerGenerator extends AbstractMachine implements PowerProvidingMac
         g.fillOval(x, y, w, h);
         g.setColor(new Color(255, 255, 0, 100));
         g.fillOval(x + offset, y + offset, w - 2 * offset, h - 2 * offset);
-    }
-
-    @Override
-    public boolean isProvidingPower() {
-        return true;
     }
 
     @Override
