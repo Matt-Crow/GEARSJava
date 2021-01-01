@@ -1,5 +1,7 @@
 package gears.sidescroller.entities;
 
+import gears.sidescroller.util.Collidable;
+import gears.sidescroller.util.CollisionBox;
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.world.ObjectInWorld;
 import gears.sidescroller.util.dataStructures.Removable;
@@ -14,7 +16,7 @@ import java.util.function.Consumer;
  *
  * @author Matt Crow
  */
-public abstract class AbstractEntity extends ObjectInWorld implements Removable{
+public abstract class AbstractEntity extends ObjectInWorld implements Collidable, Removable{
     private int speed;
     private final HashMap<Direction, Boolean> isMoveInDir;
     private final long id;
@@ -72,7 +74,11 @@ public abstract class AbstractEntity extends ObjectInWorld implements Removable{
     
     public abstract AbstractEntity doUpdate();
     public abstract void draw(Graphics g);
-
+    
+    @Override
+    public CollisionBox getCollisionBox(){
+        return new CollisionBox(this);
+    }
     @Override
     public void addRemovalListener(RemovalListener listener) {
         this.removalListeners.add(listener);

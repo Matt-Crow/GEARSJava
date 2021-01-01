@@ -7,7 +7,6 @@ package gears.sidescroller.world.machines;
  * @author Matt Crow
  */
 public interface PowerProvidingMachine {
-    
     /**
      * 
      * @return the radius of the square of power this provides,

@@ -1,6 +1,7 @@
 package gears.sidescroller.world.tileMaps;
 
 import gears.sidescroller.entities.AbstractEntity;
+import gears.sidescroller.util.CollisionBox;
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.util.Matrix;
 import gears.sidescroller.world.tiles.AbstractTile;
@@ -76,8 +77,6 @@ public class TileMap extends Matrix<AbstractTile>{
         return this;
     }
     
-    
-    
     private OutOfBoundsEvent checkIfOutsideBounds(AbstractEntity e){
         OutOfBoundsEvent lrEvent = null; // left-right
         OutOfBoundsEvent udEvent = null; // up-down
@@ -116,36 +115,12 @@ public class TileMap extends Matrix<AbstractTile>{
         boolean collided = false;
         if(isValidIdx(tileXIdx, tileYIdx) && get(tileXIdx, tileYIdx).getIsTangible()){
             collided = true;
-            // now know the entity has collided, so now figure out how to shove them out
-            int tileLeft = tileXIdx * AbstractTile.TILE_SIZE;
-            int tileTop = tileYIdx * AbstractTile.TILE_SIZE;
-            // these are the coordinates of the tile they are colliding with
-            
-            int diffX = tileLeft - e.getX();
-            int diffY = tileTop - e.getY();
-            if(Math.abs(diffX) > Math.abs(diffY)){
-                // shove them to the side
-                if(diffX < AbstractTile.TILE_SIZE / 2){
-                    // entity is more than half way through the tile, so shove them right
-                    e.setX(tileLeft + AbstractTile.TILE_SIZE);
-                } else if(diffX < TILE_SIZE){
-                    // not half way though, so shove left
-                    e.setX(tileLeft - e.getWidth());
-                } else {
-                    // diffX it too large, so don't shove left or right
-                }
-            } else {
-                // shove up or down
-                if(diffY < AbstractTile.TILE_SIZE / 2){
-                    // more than half way down, so shove down
-                    e.setY(tileTop + AbstractTile.TILE_SIZE);
-                } else if (diffY < TILE_SIZE) {
-                    // less, so pull up
-                    e.setY(tileTop - e.getHeight());
-                } else {
-                    // diffY is too large, so don't shove up or down
-                }
-            }
+            new CollisionBox(
+                tileXIdx * TILE_SIZE,
+                tileYIdx * TILE_SIZE,
+                TILE_SIZE,
+                TILE_SIZE
+            ).shoveOut(e);
         }
         return collided;
     }
