@@ -11,10 +11,12 @@ import java.awt.Graphics;
  */
 public abstract class AbstractMachine extends ObjectInWorld {
     private final boolean isSelfPowering;
+    private boolean isExternallyPowered;
     
     public AbstractMachine(int x, int y, int w, int h, boolean selfPowering){
         super(x, y, w, h);
         isSelfPowering = selfPowering;
+        isExternallyPowered = false;
     }
     
     public AbstractMachine(int x, int y, boolean selfPowering){
@@ -25,8 +27,12 @@ public abstract class AbstractMachine extends ObjectInWorld {
         this(x, y, true);
     }
     
-    public final boolean isPowered(boolean gridStatus){
-        return isSelfPowering || gridStatus;
+    public final void setExternallyPowered(boolean b){
+        this.isExternallyPowered = b;
+    }
+    
+    public final boolean isPowered(){
+        return isSelfPowering || isExternallyPowered;
     }
     
     public abstract void update();

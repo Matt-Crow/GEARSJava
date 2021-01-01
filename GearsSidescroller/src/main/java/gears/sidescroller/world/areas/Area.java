@@ -67,7 +67,8 @@ public class Area {
             nextSet = new LinkedList<>();
             for(PowerProvidingMachine machine : currentSet){
                 asMachine = (AbstractMachine)machine;
-                if(asMachine.isPowered(powerGrid.get(asMachine.getXIdx(), asMachine.getYIdx()))){
+                asMachine.setExternallyPowered(powerGrid.get(asMachine.getXIdx(), asMachine.getYIdx()));
+                if(asMachine.isPowered()){
                     powerWasProvided = powerGrid.applyPowerFrom(machine);
                 } else {
                     nextSet.add(machine);
@@ -80,6 +81,11 @@ public class Area {
         This helps catch cases where a machine earlier in the list is originally unpowered,
         but gets power by a later machine in the list.
         */
+        
+        // lastly, set all Machine's powered status
+        machines.forEach((machine)->{
+            machine.setExternallyPowered(powerGrid.get(machine.getXIdx(), machine.getYIdx()));
+        });
     }
     
     public Area update(){
@@ -92,7 +98,7 @@ public class Area {
             });
         });
         machines.forEach((m)->{
-            if(m.isPowered(powerGrid.get(m.getXIdx(), m.getYIdx()))){
+            if(m.isPowered()){
                 m.update();
             }
         });

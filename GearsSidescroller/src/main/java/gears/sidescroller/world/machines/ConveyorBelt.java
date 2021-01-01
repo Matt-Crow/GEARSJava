@@ -75,7 +75,7 @@ public class ConveyorBelt extends AbstractMachine {
     @Override
     public boolean checkForCollisions(AbstractEntity e) {
         boolean collided = this.getCollisionBox().isCollidingWith(e);
-        if(collided){
+        if(collided && isPowered()){
             e.setX(e.getX() + this.movesStuffInThisDirection.getXMod() * this.speed);
             e.setY(e.getY() + this.movesStuffInThisDirection.getYMod() * this.speed);
         }
