@@ -1,14 +1,10 @@
 package gears.sidescroller.world.areas;
 
 import gears.sidescroller.entities.AbstractEntity;
-import gears.sidescroller.util.Collidable;
 import gears.sidescroller.util.dataStructures.VolatileLinkedList;
 import gears.sidescroller.world.machines.AbstractMachine;
-import gears.sidescroller.world.machines.PowerProvidingMachine;
 import gears.sidescroller.world.tileMaps.TileMap;
 import java.awt.Graphics;
-import java.util.HashSet;
-import java.util.LinkedList;
 
 /**
  * this will be used to store a tileMap,
@@ -51,30 +47,17 @@ public class Area {
     
     private void updatePowerGrid(){
         powerGrid.clear();
-        
-        LinkedList<PowerProvidingMachine> firstSet = new LinkedList<>();
-        machines.forEach((machine)->{
-            if(machine instanceof PowerProvidingMachine){
-                firstSet.add((PowerProvidingMachine)machine);
-            }
-        });
         boolean powerWasProvided = false;
-        LinkedList<PowerProvidingMachine> currentSet = firstSet;
-        LinkedList<PowerProvidingMachine> nextSet;
         AbstractMachine asMachine = null;
         do {
             powerWasProvided = false;
-            nextSet = new LinkedList<>();
-            for(PowerProvidingMachine machine : currentSet){
+            for(Object machine : machines.toArray()){
                 asMachine = (AbstractMachine)machine;
                 asMachine.setExternallyPowered(powerGrid.get(asMachine.getXIdx(), asMachine.getYIdx()));
                 if(asMachine.isPowered()){
-                    powerWasProvided = powerGrid.applyPowerFrom(machine);
-                } else {
-                    nextSet.add(machine);
+                    powerWasProvided |= powerGrid.applyPowerFrom(asMachine); // "Or equals" prevents true from being replaced with false
                 }
             }
-            currentSet = nextSet;
         } while(powerWasProvided);
         /*
         keep updating until no new PowerProvidingMachines are powered

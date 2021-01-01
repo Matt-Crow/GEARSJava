@@ -59,6 +59,14 @@ public class ObjectInWorld implements Collidable {
         return x / TILE_SIZE;
     }
     
+    public final int getCenterX(){
+        return x + width / 2;
+    }
+    
+    public final int getCenterXIdx(){
+        return getCenterX() / TILE_SIZE;
+    }
+    
     /**
      * 
      * @return the y-coordinate of this object, in pixel-space 
@@ -73,6 +81,14 @@ public class ObjectInWorld implements Collidable {
      */
     public final int getYIdx(){
         return y / TILE_SIZE;
+    }
+    
+    public final int getCenterY(){
+        return y + height / 2;
+    }
+    
+    public final int getCenterYIdx(){
+        return getCenterY() / TILE_SIZE;
     }
     
     public final int getWidth(){

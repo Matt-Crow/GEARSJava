@@ -15,22 +15,23 @@ import java.awt.Graphics;
  * @author Matt Crow
  */
 public class PowerGrid extends Matrix<Boolean> {
-    private static double alpha = 0;
+    private double alpha;
     
     public PowerGrid(int width, int height) {
         super(width, height);
         this.setKeyToVal(0, Boolean.FALSE);
         this.setKeyToVal(1, Boolean.TRUE);
+        alpha = 0;
     }
     
-    public final boolean applyPowerFrom(PowerProvidingMachine machine){
+    public final boolean applyPowerFrom(AbstractMachine machine){
+        boolean machineProvidesPower = machine instanceof PowerProvidingMachine && machine.isPowered();
+        return machineProvidesPower && generateSquareOfPower(machine.getCenterXIdx(), machine.getCenterYIdx(), ((PowerProvidingMachine)machine).getPowerAreaRadiusInTiles());
+    }
+    private boolean generateSquareOfPower(int centerXIdx, int centerYIdx, int radius){
         boolean newPowerAdded = false;
-        int radius = machine.getPowerAreaRadiusInTiles();
-        AbstractMachine asMachine = (AbstractMachine)machine;
-        //                      this gets the center of the machine                       and this goes to the left side of the power square
-        int squareOfPowerXIdx = (asMachine.getXIdx() + asMachine.getWidthInTiles() / 2) - radius;
-        int squareOfPowerYIdx = (asMachine.getYIdx() + asMachine.getHeightInTiles() / 2) - radius;
-        
+        int squareOfPowerXIdx = centerXIdx - radius;
+        int squareOfPowerYIdx = centerYIdx - radius;
         for(int dx = 0; dx <= radius * 2; dx++){
             for(int dy = 0; dy <= radius * 2; dy++){
                 if(
@@ -42,7 +43,6 @@ public class PowerGrid extends Matrix<Boolean> {
                 }
             }
         }
-        
         return newPowerAdded;
     }
     

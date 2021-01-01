@@ -1,5 +1,6 @@
 package gears.sidescroller.util.dataStructures;
 
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 /**
@@ -39,6 +40,28 @@ public class VolatileLinkedList<T> {
             doThis.accept(curr.getValue());
             curr = curr.getNext();
         }
+    }
+    
+    public final Object[] toArray(){
+        Object[] ret = new Object[getSize()]; // can't do generic array
+        int idx = ret.length - 1; // go backwards
+        VolatileNode<T> curr = head;
+        while(curr != null){
+            ret[idx] = curr.getValue();
+            idx--;
+            curr = curr.getNext();
+        }
+        return ret;
+    }
+    
+    public final int getSize(){
+        int ret = 0;
+        VolatileNode<T> curr = head;
+        while(curr != null){
+            ret++;
+            curr = curr.getNext();
+        }
+        return ret;
     }
     
     public final boolean isEmpty(){

@@ -2,6 +2,7 @@
 
 TODO:
 * remove placeholder area from HomePage
+* implement Gear machine as a power provider that does not self-power
 
 Current Plan:
 * Make all core classes
