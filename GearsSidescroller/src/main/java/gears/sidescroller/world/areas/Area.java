@@ -1,6 +1,7 @@
 package gears.sidescroller.world.areas;
 
 import gears.sidescroller.entities.AbstractEntity;
+import gears.sidescroller.util.Collidable;
 import gears.sidescroller.util.dataStructures.VolatileLinkedList;
 import gears.sidescroller.world.machines.AbstractMachine;
 import gears.sidescroller.world.machines.PowerProvidingMachine;
@@ -85,7 +86,10 @@ public class Area {
         updatePowerGrid();
         entities.forEach((e)->{
             e.update();
-            tileMap.checkForCollisions(e); // need to add checking for machines
+            tileMap.checkForCollisions(e); 
+            machines.forEach((machine)->{
+                machine.checkForCollisions(e);
+            });
         });
         machines.forEach((m)->{
             if(m.isPowered(powerGrid.get(m.getXIdx(), m.getYIdx()))){

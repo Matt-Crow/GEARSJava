@@ -1,5 +1,6 @@
 package gears.sidescroller.world.machines;
 
+import gears.sidescroller.entities.AbstractEntity;
 import gears.sidescroller.world.ObjectInWorld;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 import java.awt.Graphics;
@@ -31,4 +32,6 @@ public abstract class AbstractMachine extends ObjectInWorld {
     public abstract void update();
     
     public abstract void draw(Graphics g);
+    
+    public abstract boolean checkForCollisions(AbstractEntity e);
 }

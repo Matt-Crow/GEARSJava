@@ -1,5 +1,6 @@
 package gears.sidescroller.world.machines;
 
+import gears.sidescroller.entities.AbstractEntity;
 import java.awt.Color;
 import java.awt.Graphics;
 
@@ -34,6 +35,11 @@ public class PowerGenerator extends AbstractMachine implements PowerProvidingMac
     @Override
     public int getPowerAreaRadiusInTiles() {
         return 3;
+    }
+
+    @Override
+    public boolean checkForCollisions(AbstractEntity e) {
+        return this.getCollisionBox().shoveOut(e);
     }
 
 }

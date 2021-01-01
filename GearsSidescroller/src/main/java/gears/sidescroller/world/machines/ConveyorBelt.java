@@ -1,5 +1,6 @@
 package gears.sidescroller.world.machines;
 
+import gears.sidescroller.entities.AbstractEntity;
 import gears.sidescroller.util.Direction;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 import java.awt.Color;
@@ -69,5 +70,15 @@ public class ConveyorBelt extends AbstractMachine {
     
         g.setColor(Color.GRAY);
         g.fillRect(lineStartX + xOffset + lineXOffset, lineStartY + yOffset + lineYOffset, lineWidth, lineHeight);
+    }
+
+    @Override
+    public boolean checkForCollisions(AbstractEntity e) {
+        boolean collided = this.getCollisionBox().isCollidingWith(e);
+        if(collided){
+            e.setX(e.getX() + this.movesStuffInThisDirection.getXMod() * this.speed);
+            e.setY(e.getY() + this.movesStuffInThisDirection.getYMod() * this.speed);
+        }
+        return collided;
     }
 }

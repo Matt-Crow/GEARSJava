@@ -1,5 +1,7 @@
 package gears.sidescroller.world;
 
+import gears.sidescroller.util.Collidable;
+import gears.sidescroller.util.CollisionBox;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 
 /**
@@ -11,7 +13,7 @@ import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
  * 
  * @author Matt Crow
  */
-public class ObjectInWorld {
+public class ObjectInWorld implements Collidable {
     private int x;
     private int y;
     private final int width;
@@ -85,5 +87,10 @@ public class ObjectInWorld {
     }
     public final int getHeightInTiles(){
         return height / TILE_SIZE;
+    }
+
+    @Override
+    public CollisionBox getCollisionBox() {
+        return new CollisionBox(this);
     }
 }

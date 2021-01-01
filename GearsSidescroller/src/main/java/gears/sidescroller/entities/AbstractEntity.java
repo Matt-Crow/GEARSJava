@@ -16,7 +16,7 @@ import java.util.function.Consumer;
  *
  * @author Matt Crow
  */
-public abstract class AbstractEntity extends ObjectInWorld implements Collidable, Removable{
+public abstract class AbstractEntity extends ObjectInWorld implements Removable{
     private int speed;
     private final HashMap<Direction, Boolean> isMoveInDir;
     private final long id;
@@ -75,10 +75,6 @@ public abstract class AbstractEntity extends ObjectInWorld implements Collidable
     public abstract AbstractEntity doUpdate();
     public abstract void draw(Graphics g);
     
-    @Override
-    public CollisionBox getCollisionBox(){
-        return new CollisionBox(this);
-    }
     @Override
     public void addRemovalListener(RemovalListener listener) {
         this.removalListeners.add(listener);
