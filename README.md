@@ -1,7 +1,7 @@
 # GEARS
 
 TODO:
-* Matrix2D class for both TileMap and Level
+* remove placeholder area from HomePage
 
 Current Plan:
 * Make all core classes

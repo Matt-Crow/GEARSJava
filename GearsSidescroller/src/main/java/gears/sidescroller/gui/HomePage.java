@@ -3,10 +3,13 @@ package gears.sidescroller.gui;
 import gears.sidescroller.world.areas.Area;
 import gears.sidescroller.world.tileMaps.TileMap;
 import gears.sidescroller.entities.Player;
+import gears.sidescroller.util.Direction;
 import gears.sidescroller.world.machines.PowerGenerator;
 import gears.sidescroller.world.levels.Level;
 import gears.sidescroller.world.tiles.TileGenerator;
 import gears.sidescroller.world.levels.LevelGenerator;
+import gears.sidescroller.world.machines.ConveyorBelt;
+import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -73,8 +76,10 @@ public class HomePage extends Page{
         t.addToTileSet((byte)1, new TileGenerator().generateRandom(true));
         t.setTile((byte)5, (byte)5, (byte)1);
         PowerGenerator gen = new PowerGenerator(300, 300);
+        ConveyorBelt belt = new ConveyorBelt(600, 300, false, TILE_SIZE / 10, Direction.LEFT);
         Area testArea = new Area(t);
         testArea.addMachine(gen);
+        testArea.addMachine(belt);
         Level l = new Level(new Area[][]{{testArea}}, 0, 0);
         l.init();
         
