@@ -5,7 +5,7 @@ TODO:
 * implement Gear machine as a power provider that does not self-power
 
 Current Plan:
-* Make all core classes
+* Make all core classes:
     * tile
     * tile map
     * entities
