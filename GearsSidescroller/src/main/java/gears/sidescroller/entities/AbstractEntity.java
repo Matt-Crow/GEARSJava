@@ -1,7 +1,5 @@
 package gears.sidescroller.entities;
 
-import gears.sidescroller.util.Collidable;
-import gears.sidescroller.util.CollisionBox;
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.world.ObjectInWorld;
 import gears.sidescroller.util.dataStructures.Removable;

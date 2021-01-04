@@ -28,6 +28,10 @@ String mavenArtifactId = name
 group = mavenGroupId
 version = mavenVersion
 
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-Xlint:unchecked'
+}
+
 task sourcesJar(type: Jar, dependsOn: classes, description: 'Creates a jar from the source files.') {
     classifier = 'sources'
     from sourceSets.main.allSource

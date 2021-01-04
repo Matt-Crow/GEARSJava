@@ -29,7 +29,7 @@ public class GearItem extends AbstractItem {
     public boolean doAction(Player whoUsedItem, Area inArea) {
         GearMachine thisAsMachine = new GearMachine(whoUsedItem.getXIdx() * TILE_SIZE, whoUsedItem.getYIdx() * TILE_SIZE);
         inArea.addMachine(thisAsMachine);
-        this.remove(); // ... from whoUsedItem's inventory 
+        this.remove(); // ... from whoUsedItem's inventory (currently does nothing, as this is stored in an ArrayList)
         return true; // gear was placed
     }
 

@@ -1,4 +1,6 @@
 **/.gradle
 **/.nb-gradle
 *.class
-!**/build
+**/build/*
+!**/build/libs
+!**/build/docs

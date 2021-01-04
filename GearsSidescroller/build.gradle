@@ -9,13 +9,25 @@
 // Note however, that you may define your own "run" and "debug" task if you
 // prefer. In this case NetBeans will not add these tasks but you may rely on
 // your own implementation.
+
+plugins {
+    id 'application'
+}
+
+project.mainClassName = "gears.sidescroller.start.GameMain"
+project.version = "0.5"
+
 if (!hasProperty('mainClass')) {
-    ext.mainClass = 'gears.sidescroller.start.GameMain'
+    ext.mainClass = project.mainClassName
 }
 
 jar {
     manifest{
-        attributes 'Main-Class': 'gears.sidescroller.start.GameMain'
+        attributes (
+            'Main-Class': project.mainClassName,
+            'Implementation-Title': project.name,
+            'Implementation-Version': project.version
+        )
     }
     
     from {
