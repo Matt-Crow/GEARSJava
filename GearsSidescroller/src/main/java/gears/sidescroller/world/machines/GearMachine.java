@@ -12,7 +12,7 @@ import java.awt.Graphics;
  *
  * @author Matt
  */
-public class GearMachine extends AbstractMachine {
+public class GearMachine extends AbstractMachine implements PowerProvidingMachine {
     private int currentState;
     private int frameCount;
     private static final int TIME_UNTIL_UPDATE = 20; // where am I storing frame rate?
@@ -44,6 +44,11 @@ public class GearMachine extends AbstractMachine {
     public boolean checkForCollisions(AbstractEntity e) {
         // don't shove out
         return this.getCollisionBox().isCollidingWith(e);
+    }
+
+    @Override
+    public int getPowerAreaRadiusInTiles() {
+        return 1;
     }
 
 }

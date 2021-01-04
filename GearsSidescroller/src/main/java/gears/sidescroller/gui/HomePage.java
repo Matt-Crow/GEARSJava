@@ -78,7 +78,7 @@ public class HomePage extends Page{
         t.setTile((byte)5, (byte)5, (byte)1);
         PowerGenerator gen = new PowerGenerator(300, 300);
         ConveyorBelt belt = new ConveyorBelt(600, 300, false, TILE_SIZE / 10, Direction.LEFT);
-        GearMachine gear = new GearMachine(600, 400);
+        GearMachine gear = new GearMachine(700, 400);
         
         Area testArea = new Area(t);
         testArea.addMachine(gen);
