@@ -47,17 +47,12 @@ public class HomePage extends Page{
         JButton play = new JButton("Play a level");
         play.addActionListener((e)->{
             //change this to direct to a level selector
-            getParentGamePane().switchToPage(GamePane.PLAY);
-            Page p = getParentGamePane().getCurrentPage();
-            if(p instanceof LevelPage){
-                Level l = getDefaultWorld();
-                Player player = new Player();
-                l.loadPlayer(player);
-                ((LevelPage)p).setCurrentLevel(l);
-                new PlayerControls(player).registerTo((LevelPage) p);
-                p.requestFocus();
-                ((LevelPage)p).focusOnEntity(player);
-            }
+            LevelPage newPage = new LevelPage(
+                getParentGamePane(),
+                getDefaultWorld(),
+                new Player()
+            );
+            getParentGamePane().switchToPage(newPage);
         });
         bottom.add(play);
         JButton button3 = new JButton("Button 3");

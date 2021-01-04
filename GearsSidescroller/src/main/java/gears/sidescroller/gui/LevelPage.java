@@ -1,10 +1,8 @@
 package gears.sidescroller.gui;
 
-import gears.sidescroller.entities.AbstractEntity;
 import gears.sidescroller.entities.Player;
 import gears.sidescroller.world.levels.Level;
 import gears.sidescroller.world.levels.LevelGenerator;
-import gears.sidescroller.world.tileMaps.TileMap;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -14,22 +12,26 @@ import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
 /**
- * The LevelPage class is used to render TileMaps
- * (later it will render Levels), and allow
- * the user to play the game.
+ * The LevelPage class is used to render Levels, 
+ * and allows the user to play the game.
  * 
  * @author Matt Crow
  */
 public final class LevelPage extends Page{
-    private Level currentLevel;
+    private final Level currentLevel;
     private final Timer timer;
-    private AbstractEntity focusedEntity;
+    private final Player focusedEntity;
     
     public static final int FPS = 20;
     
-    public LevelPage(GamePane pane) {
+    public LevelPage(GamePane pane, Level forLevel, Player thePlayer) {
         super(pane);
-        currentLevel = null;
+        currentLevel = forLevel;
+        currentLevel.loadPlayer(thePlayer);
+        currentLevel.init();
+        new PlayerControls(thePlayer).registerTo(this);
+        focusedEntity = thePlayer;
+        
         setBackground(Color.black);
         setFocusable(true); //I might need this for controls
         timer = new Timer(1000 / FPS, (e)->{
@@ -38,19 +40,18 @@ public final class LevelPage extends Page{
         timer.setRepeats(true);
         timer.start();
         setFocusable(true);
-        focusedEntity = null;
         
         registerKey(KeyEvent.VK_R, true, ()->{
             //regenerate random. Debugging tool
+            this.getInputMap().clear(); // un-register controls
+            this.getActionMap().clear();
+            focusedEntity.remove();
             Level newLevel = new LevelGenerator().generateRandom(3);
-            // don't forget to load player!
-            if(focusedEntity != null && focusedEntity instanceof Player){
-                focusedEntity.remove(); // remove from old level, if any
-                newLevel.loadPlayer((Player)focusedEntity);
-            }
-            
-            setCurrentLevel(newLevel);
-            newLevel.init();
+            this.getParentGamePane().switchToPage(new LevelPage(
+                getParentGamePane(),
+                newLevel,
+                focusedEntity
+            ));
         });
         registerKey(KeyEvent.VK_L, true, ()->{
             // save world. placeholder
@@ -58,12 +59,10 @@ public final class LevelPage extends Page{
                 System.out.println(currentLevel.toString()); //todo actually save it somehow
             }
         });
+        
+        
     }
     
-    public final LevelPage focusOnEntity(AbstractEntity e){
-        focusedEntity = e;
-        return this;
-    }
     /**
      * Registers a key control to the Canvas.
      * For example,
@@ -89,27 +88,13 @@ public final class LevelPage extends Page{
         });
     }
     
-    /**
-     * This method will be changed a bit once Level is
-     * implemented.
-     * 
-     * @param l the Level to set as the current level
-     * @return this, for chaining purposes
-     */
-    public final LevelPage setCurrentLevel(Level l){
-        currentLevel = l;
-        return this;
-    }
-    
     public final Level getCurrentLevel(){
         return currentLevel;
     }
     
     private void update(){
-        if(currentLevel != null){
-            currentLevel.update();
-            repaint();
-        }
+        currentLevel.update();
+        repaint();
     }
 
     @Override
@@ -119,17 +104,10 @@ public final class LevelPage extends Page{
             //g.setColor(new Color(255, 0, 0, 127));
             //g.fillRect(0, 0, getWidth(), getHeight());
         }
-        if(focusedEntity != null){
-            g.translate(
-                -(int)(focusedEntity.getX() - getWidth() / 2),
-                -(int)(focusedEntity.getY() - getHeight() / 2)
-            );
-        }
-        if(currentLevel == null){
-            g.setColor(Color.yellow);
-            g.drawString("current level not set", getWidth() / 2, getHeight() / 2);
-        } else {
-            currentLevel.draw(g);
-        }
+        g.translate(
+            -(int)(focusedEntity.getX() - getWidth() / 2),
+            -(int)(focusedEntity.getY() - getHeight() / 2)
+        );
+        currentLevel.draw(g);
     }
 }

@@ -15,6 +15,7 @@ Current Plan:
 * add serialization for each
 
 Need sprite loader
+Add ability to pick up gears the player placed
 
 WASD to move,
 I to use current item (placeholder until I have an inventory), 
