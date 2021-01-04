@@ -2,6 +2,7 @@ package gears.sidescroller.world.areas;
 
 import gears.sidescroller.entities.AbstractEntity;
 import gears.sidescroller.util.dataStructures.VolatileLinkedList;
+import gears.sidescroller.world.items.AbstractItem;
 import gears.sidescroller.world.machines.AbstractMachine;
 import gears.sidescroller.world.tileMaps.TileMap;
 import java.awt.Graphics;
@@ -18,12 +19,14 @@ public class Area {
     private final PowerGrid powerGrid;
     private final VolatileLinkedList<AbstractEntity> entities;
     private final VolatileLinkedList<AbstractMachine> machines;
+    private final VolatileLinkedList<AbstractItem> items;
     
     public Area(TileMap t){
         tileMap = t;
         powerGrid = new PowerGrid(t.getWidthInCells(), t.getHeightInCells());
         entities = new VolatileLinkedList<>();
         machines = new VolatileLinkedList<>();
+        items = new VolatileLinkedList<>();
     }
     
     public Area addEntity(AbstractEntity e){
@@ -33,6 +36,11 @@ public class Area {
     
     public Area addMachine(AbstractMachine m){
         machines.add(m);
+        return this;
+    }
+    
+    public Area addItem(AbstractItem i){
+        items.add(i);
         return this;
     }
     
@@ -79,24 +87,31 @@ public class Area {
             machines.forEach((machine)->{
                 machine.checkForCollisions(e);
             });
+            items.forEach((item)->{
+                item.checkForCollisions(e);
+            });
         });
         machines.forEach((m)->{
             if(m.isPowered()){
                 m.update();
             }
         });
+        items.forEach((i)->{
+            //i.update(); Don't currently have an update method
+        });
         return this;
     }
     
     public Area draw(Graphics g){
-        boolean debug = true; // move this
         tileMap.draw(g);
         machines.forEach((m)->{
             m.draw(g);
         });
-        if(debug){
-            powerGrid.draw(g);
-        }
+        items.forEach((item)->{
+            item.draw(g);
+        });
+        powerGrid.draw(g);
+        
         return this;
     }
     

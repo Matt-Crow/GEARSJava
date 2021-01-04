@@ -4,6 +4,7 @@ import gears.sidescroller.world.areas.Area;
 import gears.sidescroller.world.tileMaps.TileMap;
 import gears.sidescroller.entities.Player;
 import gears.sidescroller.util.Direction;
+import gears.sidescroller.world.items.GearItem;
 import gears.sidescroller.world.machines.PowerGenerator;
 import gears.sidescroller.world.levels.Level;
 import gears.sidescroller.world.tiles.TileGenerator;
@@ -84,6 +85,9 @@ public class HomePage extends Page{
         testArea.addMachine(gen);
         testArea.addMachine(belt);
         testArea.addMachine(gear);
+        
+        GearItem item = new GearItem(100, 100, Color.CYAN);
+        testArea.addItem(item);
         
         Level l = new Level(new Area[][]{{testArea}}, 0, 0);
         l.init();
