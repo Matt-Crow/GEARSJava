@@ -11,8 +11,11 @@ Current Plan:
     * entities
     * machines
     * structures
+    * item (can pick up)
 * add factories for each
 * add serialization for each
+
+Need sprite loader
 
 WASD to move,
 R to regenerate randomly generated world

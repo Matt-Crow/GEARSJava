@@ -58,6 +58,17 @@ public class Matrix<T> {
         this.map[yIdx][xIdx] = val;
         return this;
     }
+    public final Matrix setContents(int[][] contents){
+        if(!isValidIdx(contents[0].length - 1, contents.length - 1)){
+            throw new IndexOutOfBoundsException("Contents are too large");
+        }
+        for(int yIdx = 0; yIdx < contents.length; yIdx++){
+            for(int xIdx = 0; xIdx < contents[yIdx].length; xIdx++){
+                this.map[yIdx][xIdx] = contents[yIdx][xIdx];
+            }
+        }
+        return this;
+    }
     
     public final T get(int xIdx, int yIdx){
         if(!isValidIdx(xIdx, yIdx)){
