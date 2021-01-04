@@ -101,6 +101,10 @@ public final class LevelPage extends Page{
         return this;
     }
     
+    public final Level getCurrentLevel(){
+        return currentLevel;
+    }
+    
     private void update(){
         if(currentLevel != null){
             currentLevel.update();

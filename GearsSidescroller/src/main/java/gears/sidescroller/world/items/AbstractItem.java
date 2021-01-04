@@ -5,6 +5,7 @@ import gears.sidescroller.entities.Player;
 import gears.sidescroller.util.dataStructures.Removable;
 import gears.sidescroller.util.dataStructures.RemovalListener;
 import gears.sidescroller.world.ObjectInWorld;
+import gears.sidescroller.world.areas.Area;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 import java.awt.Graphics;
 import java.util.LinkedList;
@@ -26,6 +27,7 @@ public abstract class AbstractItem extends ObjectInWorld implements Removable {
         boolean collided = this.getCollisionBox().isCollidingWith(e);
         if(collided && e instanceof Player){
             this.remove();
+            ((Player)e).pickupItem(this);
         }
         return collided;
     }
@@ -39,6 +41,8 @@ public abstract class AbstractItem extends ObjectInWorld implements Removable {
     public void forEachRemovalListener(Consumer<RemovalListener> doThis) {
         removalListeners.forEach(doThis);
     }
+    
+    public abstract boolean doAction(Player whoUsedItem, Area inArea);
     
     public abstract void draw(Graphics g);
 }

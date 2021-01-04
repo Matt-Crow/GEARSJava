@@ -15,6 +15,10 @@ public class EntityControls {
         this.controlledEntity = controlledEntity;
     }
     
+    protected final AbstractEntity getContolledEntity(){
+        return controlledEntity;
+    }
+    
     private Runnable setMovingInDir(Direction d, boolean shouldMove){
         return ()->controlledEntity.setMovingInDir(d, shouldMove);
     }
@@ -29,7 +33,7 @@ public class EntityControls {
         p.registerKey(keyEvent, false, noMoveInDir(d));
     }
     
-    public final void registerTo(LevelPage p){
+    public void registerTo(LevelPage p){
         keyToDir(p, KeyEvent.VK_W, Direction.UP);
         keyToDir(p, KeyEvent.VK_A, Direction.LEFT);
         keyToDir(p, KeyEvent.VK_S, Direction.DOWN);

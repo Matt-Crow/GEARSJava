@@ -54,7 +54,7 @@ public class HomePage extends Page{
                 Player player = new Player();
                 l.loadPlayer(player);
                 ((LevelPage)p).setCurrentLevel(l);
-                new EntityControls(player).registerTo((LevelPage) p);
+                new PlayerControls(player).registerTo((LevelPage) p);
                 p.requestFocus();
                 ((LevelPage)p).focusOnEntity(player);
             }
@@ -86,8 +86,14 @@ public class HomePage extends Page{
         testArea.addMachine(belt);
         testArea.addMachine(gear);
         
-        GearItem item = new GearItem(100, 100, Color.CYAN);
-        testArea.addItem(item);
+        GearItem[] items = new GearItem[]{
+            new GearItem(100, 100, Color.CYAN),
+            new GearItem(200, 100, Color.CYAN),
+            new GearItem(100, 200, Color.CYAN)
+        };
+        for(int i = 0; i < items.length; i++){
+            testArea.addItem(items[i]);
+        }
         
         Level l = new Level(new Area[][]{{testArea}}, 0, 0);
         l.init();

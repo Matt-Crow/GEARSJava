@@ -17,5 +17,6 @@ Current Plan:
 Need sprite loader
 
 WASD to move,
+I to use current item (placeholder until I have an inventory), 
 R to regenerate randomly generated world
 L to log the world to System.out

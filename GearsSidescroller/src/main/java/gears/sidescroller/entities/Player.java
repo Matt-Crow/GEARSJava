@@ -2,22 +2,37 @@ package gears.sidescroller.entities;
 
 import gears.sidescroller.gui.LevelPage;
 import gears.sidescroller.util.dataStructures.VolatileLinkedList;
+import gears.sidescroller.world.areas.Area;
 import gears.sidescroller.world.items.AbstractItem;
 import gears.sidescroller.world.tiles.AbstractTile;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  *
  * @author Matt
  */
 public class Player extends AbstractEntity {
-    private final VolatileLinkedList<AbstractItem> inventory;
+    private final ArrayList<AbstractItem> inventory;
     
     public Player(){
         super();
         this.setSpeed(3 * AbstractTile.TILE_SIZE / LevelPage.FPS);
-        inventory = new VolatileLinkedList<>();
+        inventory = new ArrayList<>();
+    }
+    
+    public final void pickupItem(AbstractItem item){
+        inventory.add(item);
+    }
+    
+    public final boolean useItem(int itemNum, Area inArea){
+        boolean usedItem = inventory.size() > itemNum && inventory.get(itemNum).doAction(this, inArea);
+        if(usedItem){
+            inventory.remove(itemNum); // may cause ConcurrentModificationException
+        }
+        return usedItem;
     }
     
     @Override
