@@ -5,9 +5,12 @@ import gears.sidescroller.world.levels.Level;
 import gears.sidescroller.world.levels.LevelGenerator;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.geom.AffineTransform;
 import javax.swing.AbstractAction;
+import javax.swing.JLabel;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
@@ -21,7 +24,7 @@ public final class LevelPage extends Page{
     private final Level currentLevel;
     private final Timer timer;
     private final Player focusedEntity;
-    
+    private final PlayerControls controls;
     public static final int FPS = 20;
     
     public LevelPage(GamePane pane, Level forLevel, Player thePlayer) {
@@ -29,7 +32,8 @@ public final class LevelPage extends Page{
         currentLevel = forLevel;
         currentLevel.loadPlayer(thePlayer);
         currentLevel.init();
-        new PlayerControls(thePlayer).registerTo(this);
+        controls = new PlayerControls(thePlayer);
+        controls.registerTo(this);
         focusedEntity = thePlayer;
         thePlayer.init(); // reset inventory
         
@@ -61,7 +65,7 @@ public final class LevelPage extends Page{
             }
         });
         
-        
+        add(controls);
     }
     
     /**
@@ -101,14 +105,19 @@ public final class LevelPage extends Page{
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D)g;
+        AffineTransform priorToTranslate = g2d.getTransform();
+        
         if(this.currentLevel.getCurrentArea().getTileMap().checkForCollisions(focusedEntity)){
-            //g.setColor(new Color(255, 0, 0, 127));
-            //g.fillRect(0, 0, getWidth(), getHeight());
+            //g2d.setColor(new Color(255, 0, 0, 127));
+            //g2d.fillRect(0, 0, getWidth(), getHeight());
         }
-        g.translate(
+        
+        g2d.translate(
             -(int)(focusedEntity.getX() - getWidth() / 2),
             -(int)(focusedEntity.getY() - getHeight() / 2)
         );
-        currentLevel.draw(g);
+        currentLevel.draw(g2d);
+        g2d.setTransform(priorToTranslate);
     }
 }

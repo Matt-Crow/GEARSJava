@@ -1,8 +1,5 @@
 package gears.sidescroller.world;
 
-import gears.sidescroller.world.Collidable;
-import gears.sidescroller.world.ObjectInWorld;
-
 /**
  *
  * @author Matt
@@ -67,5 +64,12 @@ public class CollisionBox {
             }
         }
         return willShoveOut;
+    }
+    
+    public static void main(String[] args){
+        CollisionBox box1 = new CollisionBox(0, 0, 100, 100);
+        CollisionBox box2 = new CollisionBox(0, 0, 100, 100);
+        System.out.printf("Is box2 outside of box1? %b\n", box1.isOtherObjectOutside(box2.getWorldObject()));
+        System.out.printf("Is box2 colliding with box1? %b\n", box1.isCollidingWith(box2.getWorldObject()));
     }
 }

@@ -2,16 +2,28 @@ package gears.sidescroller.gui;
 
 import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.util.Direction;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
  * @author Matt
  */
-public class EntityControls {
+public class EntityControls extends JPanel {
     private final AbstractEntity controlledEntity;
     
     public EntityControls(AbstractEntity controlledEntity){
+        super();
+        this.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        add(new JLabel(String.format("Controlling Entity %s", controlledEntity.toString())), gbc.clone());
+        
         this.controlledEntity = controlledEntity;
     }
     
