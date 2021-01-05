@@ -1,7 +1,12 @@
 package gears.sidescroller.gui;
 
 import gears.sidescroller.world.entities.Player;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 /**
  *
@@ -11,6 +16,13 @@ public class PlayerControls extends EntityControls {
 
     public PlayerControls(Player controlledEntity) {
         super(controlledEntity);
+        
+        JPanel leftSide = new JPanel();
+        leftSide.setLayout(new BoxLayout(leftSide, BoxLayout.Y_AXIS));
+        JButton inventoryButton = new JButton("Inventory");
+        
+        leftSide.add(inventoryButton);
+        add(leftSide, BorderLayout.LINE_START);
     }
     
     @Override

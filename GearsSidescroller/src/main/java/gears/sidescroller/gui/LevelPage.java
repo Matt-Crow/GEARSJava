@@ -3,14 +3,17 @@ package gears.sidescroller.gui;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.levels.Level;
 import gears.sidescroller.world.levels.LevelGenerator;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 import javax.swing.AbstractAction;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
@@ -29,6 +32,8 @@ public final class LevelPage extends Page{
     
     public LevelPage(GamePane pane, Level forLevel, Player thePlayer) {
         super(pane);
+        setLayout(new BorderLayout());
+        
         currentLevel = forLevel;
         currentLevel.loadPlayer(thePlayer);
         currentLevel.init();
@@ -65,7 +70,7 @@ public final class LevelPage extends Page{
             }
         });
         
-        add(controls);
+        //add(controls, BorderLayout.CENTER);
     }
     
     /**
