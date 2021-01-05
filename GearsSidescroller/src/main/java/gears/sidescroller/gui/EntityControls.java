@@ -20,6 +20,7 @@ public class EntityControls extends JPanel {
         this.setLayout(new BorderLayout());
         setBackground(new Color(0, 0, 0, 0));
         setForeground(new Color(0, 0, 0, 0));
+        this.setOpaque(false); // allows components beneath this to render
         add(new JLabel(String.format("Controlling Entity %s", controlledEntity.toString())), BorderLayout.PAGE_START);
         
         this.controlledEntity = controlledEntity;

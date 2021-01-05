@@ -70,7 +70,7 @@ public final class LevelPage extends Page{
             }
         });
         
-        //add(controls, BorderLayout.CENTER);
+        add(controls, BorderLayout.CENTER);
     }
     
     /**
