@@ -1,6 +1,6 @@
 package gears.sidescroller.gui;
 
-import gears.sidescroller.entities.AbstractEntity;
+import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.util.Direction;
 import java.awt.event.KeyEvent;
 

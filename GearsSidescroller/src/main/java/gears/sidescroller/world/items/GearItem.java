@@ -1,6 +1,6 @@
 package gears.sidescroller.world.items;
 
-import gears.sidescroller.entities.Player;
+import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.util.UnrotatedGearSprite;
 import gears.sidescroller.world.areas.Area;
 import gears.sidescroller.world.machines.GearMachine;

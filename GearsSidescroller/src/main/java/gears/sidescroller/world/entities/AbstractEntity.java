@@ -1,4 +1,4 @@
-package gears.sidescroller.entities;
+package gears.sidescroller.world.entities;
 
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.world.ObjectInWorld;

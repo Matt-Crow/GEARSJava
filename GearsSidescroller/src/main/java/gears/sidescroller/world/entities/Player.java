@@ -1,4 +1,4 @@
-package gears.sidescroller.entities;
+package gears.sidescroller.world.entities;
 
 import gears.sidescroller.gui.LevelPage;
 import gears.sidescroller.util.dataStructures.VolatileLinkedList;
@@ -33,6 +33,10 @@ public class Player extends AbstractEntity {
             inventory.remove(itemNum); // may cause ConcurrentModificationException
         }
         return usedItem;
+    }
+    
+    public void init(){
+        inventory.clear();
     }
     
     @Override

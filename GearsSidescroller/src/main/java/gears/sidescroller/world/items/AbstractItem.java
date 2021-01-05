@@ -1,7 +1,7 @@
 package gears.sidescroller.world.items;
 
-import gears.sidescroller.entities.AbstractEntity;
-import gears.sidescroller.entities.Player;
+import gears.sidescroller.world.entities.AbstractEntity;
+import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.util.dataStructures.Removable;
 import gears.sidescroller.util.dataStructures.RemovalListener;
 import gears.sidescroller.world.ObjectInWorld;

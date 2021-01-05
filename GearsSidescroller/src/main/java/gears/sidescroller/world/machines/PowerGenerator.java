@@ -1,6 +1,6 @@
 package gears.sidescroller.world.machines;
 
-import gears.sidescroller.entities.AbstractEntity;
+import gears.sidescroller.world.entities.AbstractEntity;
 import java.awt.Color;
 import java.awt.Graphics;
 

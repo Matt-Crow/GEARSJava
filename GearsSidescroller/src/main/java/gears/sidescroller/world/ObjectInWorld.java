@@ -1,7 +1,5 @@
 package gears.sidescroller.world;
 
-import gears.sidescroller.util.Collidable;
-import gears.sidescroller.util.CollisionBox;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 
 /**

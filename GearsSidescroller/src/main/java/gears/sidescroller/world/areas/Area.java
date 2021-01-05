@@ -1,6 +1,6 @@
 package gears.sidescroller.world.areas;
 
-import gears.sidescroller.entities.AbstractEntity;
+import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.util.dataStructures.VolatileLinkedList;
 import gears.sidescroller.world.items.AbstractItem;
 import gears.sidescroller.world.machines.AbstractMachine;

@@ -1,6 +1,6 @@
 package gears.sidescroller.gui;
 
-import gears.sidescroller.entities.Player;
+import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.levels.Level;
 import gears.sidescroller.world.levels.LevelGenerator;
 import java.awt.Color;
@@ -31,6 +31,7 @@ public final class LevelPage extends Page{
         currentLevel.init();
         new PlayerControls(thePlayer).registerTo(this);
         focusedEntity = thePlayer;
+        thePlayer.init(); // reset inventory
         
         setBackground(Color.black);
         setFocusable(true); //I might need this for controls

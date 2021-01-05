@@ -1,7 +1,7 @@
 package gears.sidescroller.world.levels;
 
 import gears.sidescroller.world.areas.Area;
-import gears.sidescroller.entities.Player;
+import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.world.tileMaps.MapBoundsReachedListener;
 import gears.sidescroller.world.tileMaps.OutOfBoundsEvent;

@@ -1,5 +1,6 @@
-package gears.sidescroller.util;
+package gears.sidescroller.world;
 
+import gears.sidescroller.world.Collidable;
 import gears.sidescroller.world.ObjectInWorld;
 
 /**

@@ -1,6 +1,6 @@
 package gears.sidescroller.gui;
 
-import gears.sidescroller.entities.Player;
+import gears.sidescroller.world.entities.Player;
 import java.awt.event.KeyEvent;
 
 /**

@@ -2,7 +2,7 @@ package gears.sidescroller.gui;
 
 import gears.sidescroller.world.areas.Area;
 import gears.sidescroller.world.tileMaps.TileMap;
-import gears.sidescroller.entities.Player;
+import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.world.items.GearItem;
 import gears.sidescroller.world.machines.PowerGenerator;
