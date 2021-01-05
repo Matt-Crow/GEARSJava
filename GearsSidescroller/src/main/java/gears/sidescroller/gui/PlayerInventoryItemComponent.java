@@ -18,8 +18,7 @@ class PlayerInventoryItemComponent extends JMenuItem {
         this.forPlayer = forPlayer;
         this.forItem = forItem;
         this.addActionListener((e)->{
-            
+            forPlayer.useItem(forItem);
         });
-        this.setBackground(Color.red);
     }
 }

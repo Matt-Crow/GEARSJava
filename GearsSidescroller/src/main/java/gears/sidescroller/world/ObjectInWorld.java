@@ -1,5 +1,6 @@
 package gears.sidescroller.world;
 
+import gears.sidescroller.world.areas.Area;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 
 /**
@@ -16,12 +17,14 @@ public class ObjectInWorld implements Collidable {
     private int y;
     private final int width;
     private final int height;
+    private Area inArea;
     
     public ObjectInWorld(int x, int y, int w, int h){
         this.x = x;
         this.y = y;
         width = w;
         height = h;
+        inArea = null;
     }
     
     public final ObjectInWorld setX(int x){
@@ -103,6 +106,15 @@ public class ObjectInWorld implements Collidable {
         return height / TILE_SIZE;
     }
 
+    public final ObjectInWorld setArea(Area a){
+        this.inArea = a;
+        return this;
+    }
+    
+    public final Area getArea(){
+        return inArea;
+    }
+    
     @Override
     public CollisionBox getCollisionBox() {
         return new CollisionBox(this);

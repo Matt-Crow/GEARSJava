@@ -18,14 +18,4 @@ public class PlayerControls extends EntityControls {
         bar.add(new PlayerInventoryMenu(controlledEntity));
         add(bar, BorderLayout.PAGE_END);
     }
-    
-    @Override
-    public void registerTo(LevelPage p){
-        super.registerTo(p);
-        p.registerKey(KeyEvent.VK_I, true, ()->{
-            if(!((Player)this.getContolledEntity()).useItem(0, p.getCurrentLevel().getCurrentArea())){
-                System.out.println("From PlayerControls: Cannot use item here");
-            }
-        });
-    }
 }

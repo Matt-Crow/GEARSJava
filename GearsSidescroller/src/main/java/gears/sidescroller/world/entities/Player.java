@@ -1,14 +1,11 @@
 package gears.sidescroller.world.entities;
 
 import gears.sidescroller.gui.LevelPage;
-import gears.sidescroller.util.dataStructures.VolatileLinkedList;
-import gears.sidescroller.world.areas.Area;
 import gears.sidescroller.world.items.AbstractItem;
 import gears.sidescroller.world.tiles.AbstractTile;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.function.Consumer;
 
 /**
@@ -35,10 +32,11 @@ public class Player extends AbstractEntity {
         fireInventoryChanged();
     }
     
-    public final boolean useItem(int itemNum, Area inArea){
-        boolean usedItem = inventory.size() > itemNum && inventory.get(itemNum).doAction(this, inArea);
+    public final boolean useItem(AbstractItem item){
+        //           needs to be this Player's Area, not that of the item: See? V
+        boolean usedItem = inventory.contains(item) && item.doAction(this, getArea());
         if(usedItem){
-            inventory.remove(itemNum); // may cause ConcurrentModificationException
+            inventory.remove(item); // may cause ConcurrentModificationException
             fireInventoryChanged();
         }
         return usedItem;

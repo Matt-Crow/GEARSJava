@@ -31,16 +31,19 @@ public class Area {
     
     public Area addEntity(AbstractEntity e){
         entities.add(e);
+        e.setArea(this);
         return this;
     }
     
     public Area addMachine(AbstractMachine m){
         machines.add(m);
+        m.setArea(this);
         return this;
     }
     
     public Area addItem(AbstractItem i){
         items.add(i);
+        i.setArea(this);
         return this;
     }
     
