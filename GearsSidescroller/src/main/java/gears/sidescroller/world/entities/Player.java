@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.function.Consumer;
 
 /**
  *
@@ -16,27 +17,44 @@ import java.util.LinkedList;
  */
 public class Player extends AbstractEntity {
     private final ArrayList<AbstractItem> inventory;
+    private final ArrayList<InventoryListener> inventoryListeners;
     
     public Player(){
         super();
         this.setSpeed(3 * AbstractTile.TILE_SIZE / LevelPage.FPS);
         inventory = new ArrayList<>();
+        inventoryListeners = new ArrayList<>();
+    }
+    
+    public final void addInventoryListener(InventoryListener listener){
+        this.inventoryListeners.add(listener);
     }
     
     public final void pickupItem(AbstractItem item){
         inventory.add(item);
+        fireInventoryChanged();
     }
     
     public final boolean useItem(int itemNum, Area inArea){
         boolean usedItem = inventory.size() > itemNum && inventory.get(itemNum).doAction(this, inArea);
         if(usedItem){
             inventory.remove(itemNum); // may cause ConcurrentModificationException
+            fireInventoryChanged();
         }
         return usedItem;
     }
     
+    public final void forEachInventoryItem(Consumer<AbstractItem> doThis){
+        inventory.forEach(doThis);
+    }
+    
+    private void fireInventoryChanged(){
+        this.inventoryListeners.forEach((listener)->listener.inventoryChanged(this));
+    }
+    
     public void init(){
         inventory.clear();
+        fireInventoryChanged();
     }
     
     @Override
