@@ -1,6 +1,5 @@
 package gears.sidescroller.util.dataStructures;
 
-import java.util.ArrayList;
 import java.util.function.Consumer;
 
 /**

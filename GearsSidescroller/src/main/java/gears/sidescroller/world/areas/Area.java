@@ -8,7 +8,6 @@ import gears.sidescroller.world.items.AbstractItem;
 import gears.sidescroller.world.machines.AbstractMachine;
 import gears.sidescroller.world.tileMaps.TileMap;
 import java.awt.Graphics;
-import java.util.Arrays;
 
 /**
  * this will be used to store a tileMap,
