@@ -29,6 +29,14 @@ public class GearItem extends AbstractItem {
     public boolean doAction(Player whoUsedItem, Area inArea) {
         GearMachine thisAsMachine = new GearMachine(whoUsedItem.getXIdx() * TILE_SIZE, whoUsedItem.getYIdx() * TILE_SIZE);
         inArea.addMachine(thisAsMachine);
+        inArea.addInteractable((p)->{
+            boolean playerInteracts = thisAsMachine.getCollisionBox().isCollidingWith(p);
+            if(playerInteracts){
+                p.pickupItem(this);
+                thisAsMachine.remove();
+            }
+            return playerInteracts;
+        });
         this.remove(); // ... from whoUsedItem's inventory (currently does nothing, as this is stored in an ArrayList)
         return true; // gear was placed
     }

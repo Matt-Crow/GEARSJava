@@ -18,4 +18,12 @@ public class PlayerControls extends EntityControls {
         bar.add(new PlayerInventoryMenu(controlledEntity));
         add(bar, BorderLayout.PAGE_END);
     }
+    
+    @Override
+    public void registerTo(LevelPage p){
+        super.registerTo(p);
+        p.registerKey(KeyEvent.VK_Q, true, ()->{
+            ((Player)getContolledEntity()).grab();
+        });
+    }
 }

@@ -2,10 +2,13 @@ package gears.sidescroller.world.areas;
 
 import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.util.dataStructures.VolatileLinkedList;
+import gears.sidescroller.world.Interactable;
+import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.items.AbstractItem;
 import gears.sidescroller.world.machines.AbstractMachine;
 import gears.sidescroller.world.tileMaps.TileMap;
 import java.awt.Graphics;
+import java.util.Arrays;
 
 /**
  * this will be used to store a tileMap,
@@ -20,6 +23,7 @@ public class Area {
     private final VolatileLinkedList<AbstractEntity> entities;
     private final VolatileLinkedList<AbstractMachine> machines;
     private final VolatileLinkedList<AbstractItem> items;
+    private final VolatileLinkedList<Interactable> interactables;
     
     public Area(TileMap t){
         tileMap = t;
@@ -27,6 +31,7 @@ public class Area {
         entities = new VolatileLinkedList<>();
         machines = new VolatileLinkedList<>();
         items = new VolatileLinkedList<>();
+        interactables = new VolatileLinkedList<>();
     }
     
     public Area addEntity(AbstractEntity e){
@@ -47,8 +52,17 @@ public class Area {
         return this;
     }
     
+    public Area addInteractable(Interactable i){
+        interactables.add(i);
+        return this;
+    }
+    
+    public final void playerInteracted(Player p){
+        interactables.forEach((i)->i.interactWith(p));
+    }
+    
     public Area init(){
-        //entities.values().forEach((e)->e.init());
+        //entities.forEach((e)->e.init());
         return this;
     }
     

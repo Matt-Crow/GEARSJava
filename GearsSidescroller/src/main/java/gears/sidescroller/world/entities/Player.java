@@ -27,6 +27,10 @@ public class Player extends AbstractEntity {
         this.inventoryListeners.add(listener);
     }
     
+    public final void grab(){
+        getArea().playerInteracted(this);
+    }
+    
     public final void pickupItem(AbstractItem item){
         inventory.add(item);
         fireInventoryChanged();
