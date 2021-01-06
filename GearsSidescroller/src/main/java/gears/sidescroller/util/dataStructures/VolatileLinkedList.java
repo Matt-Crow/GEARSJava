@@ -8,6 +8,8 @@ import java.util.function.Consumer;
  * Items are inserted in backwards order, so items added during iteration are not iterated over during that iteration.
  * Items may be removed from this list during iteration without interrupting the iteration.
  * 
+ * Currently, this is O(1) for both insertions and in-place-deletions, but only O(n) for searching and invoking the delete() method. 
+ * 
  * @author Matt Crow
  * @param <T> the type of element which will be stored in each node
  */
@@ -33,6 +35,14 @@ public class VolatileLinkedList<T> {
         // insert before head to prevent issues while iterating
     }
     
+    /**
+     * Deletes the given item from the list,
+     * if this contains it. Note this method
+     * is O(n). While I'd prefer it to be O(1),
+     * that isn't possible with a linked list.
+     * 
+     * @param value the value to remove from the list. 
+     */
     public final void delete(T value){
         VolatileNode<T> curr = head;
         while(curr != null){

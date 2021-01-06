@@ -2,7 +2,7 @@ package gears.sidescroller.util.dataStructures;
 
 /**
  * VolatileNodes are used by a VolatileLinkedList to store its contents.
- * @author Matt
+ * @author Matt Crow
  */
 class VolatileNode<T> {
     private final VolatileLinkedList<T> parent;

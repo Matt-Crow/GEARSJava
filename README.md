@@ -15,9 +15,8 @@ Current Plan:
 * add serialization for each
 
 Need sprite loader
-Add ability to pick up gears the player placed
 
 WASD to move,
-I to use current item (placeholder until I have an inventory), 
 R to regenerate randomly generated world
 L to log the world to System.out
+Q to interact with your current tile (such as picking up placed gears)
