@@ -13,8 +13,9 @@ public interface Removable {
     
     /**
      * You shouldn't need to override this method, as VolatileNode handles the actual removal.
+     * @param listener the list to remove from
      */
-    public default void remove(){
-        forEachRemovalListener((l)->l.itemRemoved(this));
+    public default void removeFrom(RemovalListener listener){
+        listener.itemRemoved(this);
     }
 }

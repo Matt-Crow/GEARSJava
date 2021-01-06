@@ -33,6 +33,18 @@ public class VolatileLinkedList<T> {
         // insert before head to prevent issues while iterating
     }
     
+    public final void delete(T value){
+        VolatileNode<T> curr = head;
+        while(curr != null){
+            if(curr.getValue().equals(value)){
+                curr.delete();
+                curr = null;
+            } else {
+                curr = curr.getNext();
+            }
+        }
+    }
+    
     public final void forEach(Consumer<T> doThis){
         VolatileNode<T> curr = head;
         while(curr != null){

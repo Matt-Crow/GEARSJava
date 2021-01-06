@@ -33,11 +33,11 @@ public class GearItem extends AbstractItem {
             boolean playerInteracts = thisAsMachine.getCollisionBox().isCollidingWith(p);
             if(playerInteracts){
                 p.pickupItem(this);
-                thisAsMachine.remove();
+                thisAsMachine.removeFrom(inArea);
             }
             return playerInteracts;
         });
-        this.remove(); // ... from whoUsedItem's inventory (currently does nothing, as this is stored in an ArrayList)
+        this.removeFrom(whoUsedItem); // ... from whoUsedItem's inventory (currently does nothing, as this is stored in an ArrayList)
         return true; // gear was placed
     }
 

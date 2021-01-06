@@ -105,7 +105,7 @@ public class Level implements MapBoundsReachedListener {
             } else {
                 boolean canSpawn = areas[newYIdx][newXIdx].getTileMap().spawnEntityFromDir(event.getOutOfBoundsEntity(), Direction.rotateCounterClockWise(Direction.rotateCounterClockWise(event.getDirection())));
                 if(canSpawn){
-                    event.getOutOfBoundsEntity().remove(); // remove from old area
+                    event.getOutOfBoundsEntity().removeFrom(event.getOutOfBoundsEntity().getArea()); // remove from old area
                     areas[newYIdx][newXIdx].addEntity(event.getOutOfBoundsEntity());
                     
                     if(event.getOutOfBoundsEntity().equals(player)){

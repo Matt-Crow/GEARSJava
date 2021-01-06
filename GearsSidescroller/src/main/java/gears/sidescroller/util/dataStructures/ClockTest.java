@@ -35,7 +35,7 @@ public class ClockTest implements Removable {
         timeLeft--;
         if(timeLeft == 0){
             System.out.printf("Clock#%d is ringing!%n", this.hashCode());
-            remove();
+            this.removalListeners.forEach((l)->this.removeFrom(l));
         }
     }
     

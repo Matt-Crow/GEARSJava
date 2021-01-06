@@ -1,6 +1,8 @@
 package gears.sidescroller.world.entities;
 
 import gears.sidescroller.gui.LevelPage;
+import gears.sidescroller.util.dataStructures.Removable;
+import gears.sidescroller.util.dataStructures.RemovalListener;
 import gears.sidescroller.world.items.AbstractItem;
 import gears.sidescroller.world.tiles.AbstractTile;
 import java.awt.Color;
@@ -12,7 +14,7 @@ import java.util.function.Consumer;
  *
  * @author Matt
  */
-public class Player extends AbstractEntity {
+public class Player extends AbstractEntity implements RemovalListener {
     private final ArrayList<AbstractItem> inventory;
     private final ArrayList<InventoryListener> inventoryListeners;
     
@@ -70,5 +72,12 @@ public class Player extends AbstractEntity {
         int t = AbstractTile.TILE_SIZE;
         g.setColor(Color.gray);
         g.fillRect(getX(), getY(), t, t);
+    }
+
+    @Override
+    public void itemRemoved(Removable item) {
+        if(item instanceof AbstractItem && this.inventory.contains((AbstractItem)item)){
+            this.inventory.remove((AbstractItem)item);
+        }
     }
 }

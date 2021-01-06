@@ -1,5 +1,7 @@
 package gears.sidescroller.world.areas;
 
+import gears.sidescroller.util.dataStructures.Removable;
+import gears.sidescroller.util.dataStructures.RemovalListener;
 import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.util.dataStructures.VolatileLinkedList;
 import gears.sidescroller.world.Interactable;
@@ -16,7 +18,7 @@ import java.awt.Graphics;
  * 
  * @author Matt Crow
  */
-public class Area {
+public class Area implements RemovalListener {
     private final TileMap tileMap;
     private final PowerGrid powerGrid;
     private final VolatileLinkedList<AbstractEntity> entities;
@@ -54,6 +56,23 @@ public class Area {
     public Area addInteractable(Interactable i){
         interactables.add(i);
         return this;
+    }
+    
+    
+    @Override // don't really like this
+    public void itemRemoved(Removable item) {
+        if(item instanceof AbstractEntity){
+            entities.delete((AbstractEntity) item);
+        }
+        if(item instanceof AbstractMachine){
+            machines.delete((AbstractMachine) item);
+        }
+        if(item instanceof AbstractItem){
+            items.delete((AbstractItem) item);
+        }
+        if(item instanceof Interactable){
+            interactables.delete((Interactable) item);
+        }
     }
     
     public final void playerInteracted(Player p){

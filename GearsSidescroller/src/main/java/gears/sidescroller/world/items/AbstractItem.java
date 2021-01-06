@@ -26,7 +26,7 @@ public abstract class AbstractItem extends ObjectInWorld implements Removable {
     public final boolean checkForCollisions(AbstractEntity e){
         boolean collided = this.getCollisionBox().isCollidingWith(e);
         if(collided && e instanceof Player){
-            this.remove();
+            this.removeFrom(getArea());
             ((Player)e).pickupItem(this);
         }
         return collided;
