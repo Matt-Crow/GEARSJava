@@ -2,8 +2,10 @@ package gears.sidescroller.world.items;
 
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.util.UnrotatedGearSprite;
+import gears.sidescroller.world.Interactable;
 import gears.sidescroller.world.areas.Area;
 import gears.sidescroller.world.machines.GearMachine;
+import gears.sidescroller.world.machines.PlacedGearMachine;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -27,17 +29,10 @@ public class GearItem extends AbstractItem {
 
     @Override
     public boolean doAction(Player whoUsedItem, Area inArea) {
-        GearMachine thisAsMachine = new GearMachine(whoUsedItem.getXIdx() * TILE_SIZE, whoUsedItem.getYIdx() * TILE_SIZE);
+        PlacedGearMachine thisAsMachine = new PlacedGearMachine(whoUsedItem.getXIdx() * TILE_SIZE, whoUsedItem.getYIdx() * TILE_SIZE, this);
         inArea.addMachine(thisAsMachine);
-        inArea.addInteractable((p)->{
-            boolean playerInteracts = thisAsMachine.getCollisionBox().isCollidingWith(p);
-            if(playerInteracts){
-                p.pickupItem(this);
-                thisAsMachine.removeFrom(inArea);
-            }
-            return playerInteracts;
-        });
-        this.removeFrom(whoUsedItem); // ... from whoUsedItem's inventory (currently does nothing, as this is stored in an ArrayList)
+        inArea.addInteractable(thisAsMachine);
+        whoUsedItem.removeItem(this);
         return true; // gear was placed
     }
 

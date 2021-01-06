@@ -9,22 +9,12 @@ class VolatileNode<T> {
     private VolatileNode<T> prev;
     private VolatileNode<T> next;
     private final T value;
-    private boolean hasBeenDeleted;
     
     VolatileNode(VolatileLinkedList<T> parent, T value){
         this.parent = parent;
         this.value = value;
         prev = null;
         next = null;
-        hasBeenDeleted = false;
-        
-        if(value instanceof Removable){
-            ((Removable)value).addRemovalListener((i)->{
-                if(i.equals(value)){
-                    delete();
-                }
-            });
-        }
     }
     
     public final T getValue(){
@@ -44,7 +34,10 @@ class VolatileNode<T> {
         return prev;
     }
     
-    private void doDelete(){
+    /**
+     * In-place deletion from the list
+     */
+    protected final void delete(){
         if(prev == null){
             // has no previous, so this is the head.
             parent.notifyHeadDelete();
@@ -57,19 +50,6 @@ class VolatileNode<T> {
             parent.notifyTailDelete();
         } else {
             next.setPrev(prev);
-        }
-        
-        hasBeenDeleted = true;
-    }
-    
-    /**
-     * In-place deletion from the list. Generally speaking, this will be invoked by the RemovalListener in this constructor
-     */
-    protected final void delete(){
-        if(hasBeenDeleted){
-            System.err.println("Trying to re-delete an object in VolatileNode");
-        } else {
-            doDelete();
         }
     }
 }

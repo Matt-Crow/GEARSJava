@@ -3,6 +3,7 @@ package gears.sidescroller.world.levels;
 import gears.sidescroller.world.areas.Area;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.util.Direction;
+import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.world.tileMaps.MapBoundsReachedListener;
 import gears.sidescroller.world.tileMaps.OutOfBoundsEvent;
 import java.awt.Graphics;
@@ -105,10 +106,10 @@ public class Level implements MapBoundsReachedListener {
             } else {
                 boolean canSpawn = areas[newYIdx][newXIdx].getTileMap().spawnEntityFromDir(event.getOutOfBoundsEntity(), Direction.rotateCounterClockWise(Direction.rotateCounterClockWise(event.getDirection())));
                 if(canSpawn){
-                    event.getOutOfBoundsEntity().removeFrom(event.getOutOfBoundsEntity().getArea()); // remove from old area
-                    areas[newYIdx][newXIdx].addEntity(event.getOutOfBoundsEntity());
-                    
-                    if(event.getOutOfBoundsEntity().equals(player)){
+                    AbstractEntity e = event.getOutOfBoundsEntity();
+                    e.getArea().removeEntity(e);
+                    areas[newYIdx][newXIdx].addEntity(e);
+                    if(e.equals(player)){
                         currentAreaX = newXIdx;
                         currentAreaY = newYIdx;
                         System.out.printf("Moved player to area (%d, %d)\n", newXIdx, newYIdx);

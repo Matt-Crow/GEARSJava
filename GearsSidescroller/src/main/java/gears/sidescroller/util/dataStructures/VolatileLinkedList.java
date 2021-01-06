@@ -116,18 +116,24 @@ public class VolatileLinkedList<T> {
     }
     
     public static void main(String[] args){
-        VolatileLinkedList<ClockTest> list = new VolatileLinkedList<>();
+        VolatileLinkedList<Integer> list = new VolatileLinkedList<>();
         for(int i = 1; i < 5; i++){
-            list.add(new ClockTest(i));
+            list.add(i);
             System.out.println(list);
         }
         
-        list.forEach((i)->list.add(new ClockTest(i.getTime() * i.getTime())));
+        list.forEach((i)->list.add(i*i));
         System.out.println(list);
-        
+        /*
+        int time = 0;
         while(!list.isEmpty()){
             System.out.println(list);
-            list.forEach((clock)->clock.tick());
-        }
+            list.forEach((Integer i)->{
+                if(i < time){
+                    list.delete(i);
+                }
+            });
+            time++;
+        }*/
     }
 }
