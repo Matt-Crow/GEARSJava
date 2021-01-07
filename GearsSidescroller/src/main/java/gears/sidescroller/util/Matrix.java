@@ -23,7 +23,7 @@ public class Matrix<ElementType> {
         return xIdx >= 0 && xIdx < this.width && yIdx >= 0 && yIdx < this.height;
     }
     
-    public final Matrix<ElementType> setContents(int[][] contents){
+    public final Matrix<ElementType> setContents(Object[][] contents){
         if(!isValidIdx(contents[0].length - 1, contents.length - 1)){
             throw new IndexOutOfBoundsException("Contents are too large");
         }
@@ -50,10 +50,11 @@ public class Matrix<ElementType> {
         return this;
     }
     
+    @SuppressWarnings("unchecked")
     public final ElementType get(int xIdx, int yIdx){
         if(!isValidIdx(xIdx, yIdx)){
             throw new IndexOutOfBoundsException();
-        }        
+        }
         return (ElementType)map[yIdx][xIdx];
     }
     

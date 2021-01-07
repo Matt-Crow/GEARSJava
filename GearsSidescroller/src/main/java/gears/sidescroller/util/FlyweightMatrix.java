@@ -5,8 +5,15 @@ import java.util.HashMap;
 import java.util.function.BiConsumer;
 
 /**
- * The FlyweightMatrix class is used to store a 2D array of values.
- * It is extended by TileMap and Level, as they share similar functionality.
+ * The FlyweightMatrix class is used to store a 2D array of values while conserving
+ * space in memory. It uses the Flyweight design pattern by mapping Integer keys
+ * to single instances of each type of Object it can hold. Literally speaking,
+ * this is a matrix of integers, but functionally speaking, you can use it as though
+ * it were a matrix of T.
+ * 
+ * <b>Important note: the get(x, y) method gets the INTEGER key at the given coordinate,
+ * while getValueAt(x, y) returns the VALUE at that point. Additionally, forEachCell(...) 
+ * passes the INTEGER key, whereas forEachValueInCell(...) passes the VALUE</b>
  * 
  * @author Matt Crow
  * @param <T> the type of value each FlyweightMatrix cell encodes
