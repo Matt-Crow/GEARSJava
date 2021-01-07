@@ -1,6 +1,6 @@
 package gears.sidescroller.world.areas;
 
-import gears.sidescroller.util.Matrix;
+import gears.sidescroller.util.FlyweightMatrix;
 import gears.sidescroller.world.machines.AbstractMachine;
 import gears.sidescroller.world.machines.PowerProvidingMachine;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
@@ -14,7 +14,7 @@ import java.awt.Graphics;
  * 
  * @author Matt Crow
  */
-public class PowerGrid extends Matrix<Boolean> {
+public class PowerGrid extends FlyweightMatrix<Boolean> {
     private double alpha;
     
     public PowerGrid(int width, int height) {

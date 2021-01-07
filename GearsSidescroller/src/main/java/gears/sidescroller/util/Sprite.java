@@ -7,7 +7,7 @@ import java.awt.Graphics;
  *
  * @author Matt
  */
-public class Sprite extends Matrix<Color> {
+public class Sprite extends FlyweightMatrix<Color> {
     private final int spriteWidth;
     private final int spriteHeight;
     public Sprite(int widthInCells, int heightInCells, int widthInPixels, int heightInPixels) {

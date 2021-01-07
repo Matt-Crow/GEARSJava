@@ -3,7 +3,7 @@ package gears.sidescroller.world.tileMaps;
 import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.world.core.CollisionBox;
 import gears.sidescroller.util.Direction;
-import gears.sidescroller.util.Matrix;
+import gears.sidescroller.util.FlyweightMatrix;
 import gears.sidescroller.world.tiles.AbstractTile;
 import java.awt.Graphics;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
@@ -21,7 +21,7 @@ import java.util.LinkedList;
  * 
  * @author Matt Crow
  */
-public class TileMap extends Matrix<AbstractTile>{
+public class TileMap extends FlyweightMatrix<AbstractTile>{
     private final LinkedList<MapBoundsReachedListener> boundsReachedListeners;
     
     /**
