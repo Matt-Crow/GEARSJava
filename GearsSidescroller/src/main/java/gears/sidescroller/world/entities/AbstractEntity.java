@@ -1,7 +1,7 @@
 package gears.sidescroller.world.entities;
 
 import gears.sidescroller.util.Direction;
-import gears.sidescroller.world.core.ObjectInWorld;
+import gears.sidescroller.world.core.MobileWorldObject;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 import java.awt.Graphics;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.HashMap;
  *
  * @author Matt Crow
  */
-public abstract class AbstractEntity extends ObjectInWorld {
+public abstract class AbstractEntity extends MobileWorldObject {
     private int speed;
     private final HashMap<Direction, Boolean> isMoveInDir;
     private final long id;

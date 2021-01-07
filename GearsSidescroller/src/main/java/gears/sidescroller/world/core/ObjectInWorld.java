@@ -1,7 +1,5 @@
 package gears.sidescroller.world.core;
 
-import gears.sidescroller.world.core.CollisionBox;
-import gears.sidescroller.world.core.Collidable;
 import gears.sidescroller.world.areas.Area;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 
@@ -12,11 +10,16 @@ import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
  * It contains attributes and methods used by several
  * otherwise unrelated classes.
  * 
+ * Note that this class does not support changing the
+ * object's coordinates: a class must inherit from MobileWorldObject
+ * to do so.
+ * 
  * @author Matt Crow
+ * @see gears.sidescroller.world.core.MobileWorldObject
  */
 public class ObjectInWorld implements Collidable {
-    private int x;
-    private int y;
+    protected int x;
+    protected int y;
     private final int width;
     private final int height;
     private Area inArea;
@@ -27,23 +30,6 @@ public class ObjectInWorld implements Collidable {
         width = w;
         height = h;
         inArea = null;
-    }
-    
-    public final ObjectInWorld setX(int x){
-        this.x = x;
-        return this;
-    }
-    public final ObjectInWorld setXIdx(int xIdx){
-        this.x = xIdx * TILE_SIZE;
-        return this;
-    }
-    public final ObjectInWorld setY(int y){
-        this.y = y;
-        return this;
-    }
-    public final ObjectInWorld setYIdx(int yIdx){
-        this.y = yIdx * TILE_SIZE;
-        return this;
     }
     
     /**
@@ -117,6 +103,15 @@ public class ObjectInWorld implements Collidable {
         return inArea;
     }
     
+    /**
+     * Creates a CollisionBox for the ObjectInWorld.
+     * Note that you should not cache this CollisionBox 
+     * if the coordinates or size of this object can change,
+     * as the CollisionBox doesn't track changes to the object
+     * it represents.
+     * 
+     * @return a hitbox for this.
+     */
     @Override
     public CollisionBox getCollisionBox() {
         return new CollisionBox(this);

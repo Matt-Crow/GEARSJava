@@ -1,10 +1,16 @@
 package gears.sidescroller.world.core;
 
-import gears.sidescroller.world.core.Collidable;
-
 /**
- *
- * @author Matt
+ * A CollisionBox is used to share collision detection and reaction between
+ * rectangular things. Objects wishing to use a CollisionBox should implement
+ * the Collidable interface.
+ * 
+ * Note that the implementing object needn't be an ObjectInWorld:
+ * ObjectInWorlds need only invoke the CollisionBox constructor
+ * parametrized with an ObjectInWorld, whereas other classes can
+ * call the 4 integer parametrized constructor.
+ * 
+ * @author Matt Crow
  */
 public class CollisionBox {
     private final ObjectInWorld forObject;
@@ -34,7 +40,7 @@ public class CollisionBox {
         return otherObject instanceof Collidable && !isOtherObjectOutside(otherObject);
     }
     
-    public final boolean shoveOut(ObjectInWorld otherObject){
+    public final boolean shoveOut(MobileWorldObject otherObject){
         boolean willShoveOut = this.isCollidingWith(otherObject);
         if(willShoveOut){
             // figure out which way to shove them out

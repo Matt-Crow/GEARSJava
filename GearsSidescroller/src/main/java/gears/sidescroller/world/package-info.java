@@ -9,10 +9,9 @@
  * </ul>
  * 
  * <h2>Sub-packages</h2>
- * <table>
- * <tr>
- *  <th>Package</th> <th>summary</th> <th>status</th>
- * </tr>
+ * <table border="1">
+ * <tr><th>Package</th> <th>summary             </th> <th>status               </th> </tr>
+ * <tr><td>core   </td> <td>shared functionality</td> <td>needs more interfaces</td> </tr>
  * </table>
  */
 package gears.sidescroller.world;
