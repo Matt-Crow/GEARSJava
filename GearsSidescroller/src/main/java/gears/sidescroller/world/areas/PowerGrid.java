@@ -1,6 +1,6 @@
 package gears.sidescroller.world.areas;
 
-import gears.sidescroller.util.FlyweightMatrix;
+import gears.sidescroller.util.Matrix;
 import gears.sidescroller.world.machines.AbstractMachine;
 import gears.sidescroller.world.machines.PowerProvidingMachine;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
@@ -14,14 +14,13 @@ import java.awt.Graphics;
  * 
  * @author Matt Crow
  */
-public class PowerGrid extends FlyweightMatrix<Boolean> {
+public class PowerGrid extends Matrix<Boolean> {
     private double alpha;
     
     public PowerGrid(int width, int height) {
         super(width, height);
-        this.setKeyToVal(0, Boolean.FALSE);
-        this.setKeyToVal(1, Boolean.TRUE);
         alpha = 0;
+        setAllTo(false);
     }
     
     public final boolean applyPowerFrom(AbstractMachine machine){
@@ -39,7 +38,7 @@ public class PowerGrid extends FlyweightMatrix<Boolean> {
                     && !this.get(squareOfPowerXIdx + dx, squareOfPowerYIdx + dy) // not powered yet
                 ){
                     newPowerAdded = true;
-                    this.set(squareOfPowerXIdx + dx, squareOfPowerYIdx + dy, 1);
+                    this.set(squareOfPowerXIdx + dx, squareOfPowerYIdx + dy, true);
                 }
             }
         }

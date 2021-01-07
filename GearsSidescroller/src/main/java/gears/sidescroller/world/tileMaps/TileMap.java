@@ -60,7 +60,7 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
     }
     
     private boolean isTileOpen(byte xIdx, byte yIdx){
-        return isValidIdx(xIdx, yIdx) && !get(xIdx, yIdx).getIsTangible();
+        return isValidIdx(xIdx, yIdx) && !getValueAt(xIdx, yIdx).getIsTangible();
     }
     
     /**
@@ -72,7 +72,7 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
      * 
      * @return this, for chaining purposes
      */
-    public TileMap setTile(byte xIndex, byte yIndex, byte key){
+    public TileMap setTile(int xIndex, int yIndex, int key){
         set(xIndex, yIndex, key);
         return this;
     }
@@ -111,9 +111,9 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
         return event;
     }
     
-    private boolean handleCollisions(AbstractEntity e, byte tileXIdx, byte tileYIdx){
+    private boolean handleCollisions(AbstractEntity e, int tileXIdx, int tileYIdx){
         boolean collided = false;
-        if(isValidIdx(tileXIdx, tileYIdx) && get(tileXIdx, tileYIdx).getIsTangible()){
+        if(isValidIdx(tileXIdx, tileYIdx) && getValueAt(tileXIdx, tileYIdx).getIsTangible()){
             collided = true;
             new CollisionBox(
                 tileXIdx * TILE_SIZE,
@@ -172,7 +172,7 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
      * @return this, for chaining purposes
      */
     public final TileMap draw(Graphics g){
-        forEachCell((tile, xIdx, yIdx)->{
+        forEachValueInCell((tile, xIdx, yIdx)->{
             tile.drawAt(g, xIdx * TILE_SIZE, yIdx * TILE_SIZE);
         });
         return this;

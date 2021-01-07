@@ -1,6 +1,5 @@
 package gears.sidescroller.util;
 
-import gears.io.StreamWriterUtil;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.function.BiConsumer;
@@ -24,9 +23,7 @@ public class FlyweightMatrix<T> extends Matrix<Integer> {
     }
     
     public final void clear(){
-        this.forEachCell((k, x, y)->{
-            this.set(x, y, 0);
-        });
+        this.setAllTo(0);
     }
     
     public final void setKeyToVal(int key, T val){
@@ -36,12 +33,18 @@ public class FlyweightMatrix<T> extends Matrix<Integer> {
         keyToValue.put(key, val);
     }
     
-    public T getValueAt(int xIdx, int yIdx){
+    public final T getValueAt(int xIdx, int yIdx){
         int key = get(xIdx, yIdx);
         if(!keyToValue.containsKey(key)){
             throw new NullPointerException(String.format("Matrix does not contain the key %d", key));
         }
         return keyToValue.get(key);
+    }
+    
+    public final void forEachValueInCell(TriConsumer<T, Integer, Integer> doThis){
+        this.forEachCell((key, xIdx, yIdx)->{
+            doThis.accept(keyToValue.get(key), xIdx, yIdx);
+        });
     }
     
     public final void insertMatrix(int xIdx, int yIdx, FlyweightMatrix<T> otherMatrix){

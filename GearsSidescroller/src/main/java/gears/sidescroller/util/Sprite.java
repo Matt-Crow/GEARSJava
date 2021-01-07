@@ -19,7 +19,7 @@ public class Sprite extends FlyweightMatrix<Color> {
     public final void draw(Graphics g, int atX, int atY){
         int cellWidth = spriteWidth / this.getWidthInCells();
         int cellHeight = spriteHeight / this.getHeightInCells();
-        this.forEachCell((color, xIdx, yIdx)->{
+        this.forEachValueInCell((color, xIdx, yIdx)->{
             g.setColor(color);
             g.fillRect(atX + xIdx * cellWidth, atY + yIdx * cellHeight, cellWidth, cellHeight);
         });

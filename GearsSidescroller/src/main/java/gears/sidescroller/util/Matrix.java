@@ -43,6 +43,13 @@ public class Matrix<ElementType> {
         return this;
     }
     
+    public final Matrix<ElementType> setAllTo(ElementType value){
+        this.forEachCell((key, xIdx, yIdx)->{
+            this.set(xIdx, yIdx, value);
+        });
+        return this;
+    }
+    
     public final ElementType get(int xIdx, int yIdx){
         if(!isValidIdx(xIdx, yIdx)){
             throw new IndexOutOfBoundsException();

@@ -86,7 +86,7 @@ public class Area {
     }
     
     private void updatePowerGrid(){
-        powerGrid.clear();
+        powerGrid.setAllTo(false);
         boolean powerWasProvided = false;
         AbstractMachine asMachine = null;
         do {
