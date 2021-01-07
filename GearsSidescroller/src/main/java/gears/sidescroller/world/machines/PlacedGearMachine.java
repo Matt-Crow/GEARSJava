@@ -1,6 +1,6 @@
 package gears.sidescroller.world.machines;
 
-import gears.sidescroller.world.Interactable;
+import gears.sidescroller.world.core.Interactable;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.items.GearItem;
 

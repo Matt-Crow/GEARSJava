@@ -1,7 +1,7 @@
 package gears.sidescroller.world.machines;
 
 import gears.sidescroller.world.entities.AbstractEntity;
-import gears.sidescroller.world.ObjectInWorld;
+import gears.sidescroller.world.core.ObjectInWorld;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 import java.awt.Graphics;
 

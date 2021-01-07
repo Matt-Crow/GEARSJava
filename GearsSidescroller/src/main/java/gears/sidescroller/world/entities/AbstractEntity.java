@@ -1,7 +1,7 @@
 package gears.sidescroller.world.entities;
 
 import gears.sidescroller.util.Direction;
-import gears.sidescroller.world.ObjectInWorld;
+import gears.sidescroller.world.core.ObjectInWorld;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 import java.awt.Graphics;
 import java.util.HashMap;

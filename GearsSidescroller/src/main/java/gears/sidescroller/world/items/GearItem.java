@@ -2,7 +2,7 @@ package gears.sidescroller.world.items;
 
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.util.UnrotatedGearSprite;
-import gears.sidescroller.world.Interactable;
+import gears.sidescroller.world.core.Interactable;
 import gears.sidescroller.world.areas.Area;
 import gears.sidescroller.world.machines.GearMachine;
 import gears.sidescroller.world.machines.PlacedGearMachine;

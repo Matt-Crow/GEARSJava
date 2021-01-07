@@ -1,7 +1,7 @@
 package gears.sidescroller.world.tileMaps;
 
 import gears.sidescroller.world.entities.AbstractEntity;
-import gears.sidescroller.world.CollisionBox;
+import gears.sidescroller.world.core.CollisionBox;
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.util.Matrix;
 import gears.sidescroller.world.tiles.AbstractTile;

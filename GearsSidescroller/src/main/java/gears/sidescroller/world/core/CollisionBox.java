@@ -1,4 +1,6 @@
-package gears.sidescroller.world;
+package gears.sidescroller.world.core;
+
+import gears.sidescroller.world.core.Collidable;
 
 /**
  *
