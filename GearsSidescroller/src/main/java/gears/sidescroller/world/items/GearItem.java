@@ -28,10 +28,10 @@ public class GearItem extends AbstractItem {
     }
 
     @Override
-    public boolean doAction(Player whoUsedItem, Area inArea) {
+    public boolean doAction(Player whoUsedItem) {
         PlacedGearMachine thisAsMachine = new PlacedGearMachine(whoUsedItem.getXIdx() * TILE_SIZE, whoUsedItem.getYIdx() * TILE_SIZE, this);
-        inArea.addMachine(thisAsMachine);
-        inArea.addInteractable(thisAsMachine);
+        whoUsedItem.getArea().addMachine(thisAsMachine);
+        whoUsedItem.getArea().addInteractable(thisAsMachine);
         whoUsedItem.removeItem(this);
         return true; // gear was placed
     }

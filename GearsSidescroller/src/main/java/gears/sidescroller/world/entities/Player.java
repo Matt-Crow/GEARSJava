@@ -37,8 +37,7 @@ public class Player extends AbstractEntity {
     }
     
     public final boolean useItem(AbstractItem item){
-        //           needs to be this Player's Area, not that of the item: See? V
-        boolean usedItem = inventory.contains(item) && item.doAction(this, getArea());
+        boolean usedItem = inventory.contains(item) && item.doAction(this);
         if(usedItem){
             inventory.remove(item); // may cause ConcurrentModificationException
             fireInventoryChanged();
@@ -74,5 +73,6 @@ public class Player extends AbstractEntity {
 
     public void removeItem(AbstractItem item) {
         this.inventory.remove((AbstractItem)item);
+        this.fireInventoryChanged();
     }
 }

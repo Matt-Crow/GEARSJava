@@ -3,20 +3,35 @@ package gears.sidescroller.world.items;
 import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.core.ObjectInWorld;
-import gears.sidescroller.world.areas.Area;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 import java.awt.Graphics;
 
 /**
- *
- * @author Matt
+ * An AbstractItem represents any pick-up-able item in the 
+ * game world which a Player can obtain. An AbstractItem is
+ * collected by the Player upon colliding, which removes the
+ * AbstractItem from its Area. A Player may then use the AbstractItem
+ * through their inventory.
+ * 
+ * @author Matt Crow
  */
 public abstract class AbstractItem extends ObjectInWorld {
-    
+    /**
+     * Creates a new AbstarctItem at the given coordinates,
+     * <b>measured in pixel-space</b>
+     * @param x the x-coordinate of the item
+     * @param y the y-coordinate of the item
+     */
     public AbstractItem(int x, int y) {
         super(x, y, TILE_SIZE, TILE_SIZE);
     }
     
+    /**
+     * Checks to see if a Player collects this.
+     * 
+     * @param e the entity to check for collisions with.
+     * @return whether or not the given entity collided with this.
+     */
     public final boolean checkForCollisions(AbstractEntity e){
         boolean collided = this.getCollisionBox().isCollidingWith(e);
         if(collided && e instanceof Player){
@@ -26,7 +41,26 @@ public abstract class AbstractItem extends ObjectInWorld {
         return collided;
     }
 
-    public abstract boolean doAction(Player whoUsedItem, Area inArea);
+    /**
+     * This method is invoked whenever the user selects this AbstractItem
+     * from their inventory. Subclasses should override this method to implement
+     * behavior which should happen when the Player uses this AbstractItem.
+     * Note that an AbstractItem may be used in an Area different from its own,
+     * so use {@code whoUsedItem.getArea()} to reference the Area it is used in,
+     * note {@code this.getArea()}.
+     * 
+     * @param whoUsedItem
+     * @return whether or not this could perform its action, and should thus be 
+     * removed from the Player's inventory.
+     */
+    public abstract boolean doAction(Player whoUsedItem);
     
+    /**
+     * Subclasses should override this method
+     * to render this AbstractItem on the given
+     * Graphics context.
+     * 
+     * @param g the Graphics context to render on. 
+     */
     public abstract void draw(Graphics g);
 }
