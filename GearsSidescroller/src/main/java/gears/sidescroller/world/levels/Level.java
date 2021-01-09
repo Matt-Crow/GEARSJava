@@ -10,6 +10,10 @@ import gears.sidescroller.world.tileMaps.OutOfBoundsEvent;
 import java.awt.Graphics;
 
 /**
+ * A Level represents a grid of Areas where the Player can move around. Upon
+ * reaching the edge of an Area, an AbstractEntity will be moved to the appropriate
+ * next Area, if such an Area exists.
+ * 
  * @author Matt Crow
  */
 public class Level extends Matrix<Area> implements MapBoundsReachedListener {
@@ -32,15 +36,28 @@ public class Level extends Matrix<Area> implements MapBoundsReachedListener {
         player = null;
     }
     
-    public Level loadPlayer(Player p){
+    /**
+     * Loads a Player into this Level,
+     * adding them to the current Area.
+     * 
+     * @param p the Player to load.
+     * @return this, for chaining purposes
+     */
+    public final Level loadPlayer(Player p){
         player = p;
+        p.init();
         Area currArea = getCurrentArea();
         currArea.addEntity(p); //don't forget to remove the player when changing areas
         currArea.getTileMap().spawnEntityCenter(p);
         return this;
     }
     
-    public Level init(){
+    /**
+     * Initializes the Level and all its subcomponents.
+     * 
+     * @return this, for chaining purposes. 
+     */
+    public final Level init(){
         this.forEachCell((area, xIdx, yIdx)->{
             if(area != null){
                 area.init();
@@ -48,22 +65,39 @@ public class Level extends Matrix<Area> implements MapBoundsReachedListener {
         });
         
         if(player != null){
-            //player.init();
+            player.init();
         }
         
         return this;
     }
     
-    public Area getCurrentArea(){
+    /**
+     * 
+     * @return the Area the Player is currently occupying.
+     */
+    public final Area getCurrentArea(){
         return this.get(currentAreaX, currentAreaY);
     }
     
-    public Level update(){
+    /**
+     * Updates the current Area. Note that 
+     * this means all other Areas are suspended,
+     * and are not updated.
+     * 
+     * @return this, for chaining purposes. 
+     */
+    public final Level update(){
         getCurrentArea().update();
         return this;
     }
     
-    public Level draw(Graphics g){
+    /**
+     * Renders this Level on the current Graphics context.
+     * 
+     * @param g the Graphics to render on.
+     * @return this, for chaining purposes.
+     */
+    public final Level draw(Graphics g){
         getCurrentArea().draw(g);
         if(player != null){
             player.draw(g);
@@ -71,18 +105,17 @@ public class Level extends Matrix<Area> implements MapBoundsReachedListener {
         return this;
     }
     
-    @Override
-    public String toString(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("TODO: better loggin in Level::toString\n");
-        sb.append("AREAS:\n");
-        this.forEachCell((area, xIdx, yIdx)->{
-            sb.append(String.format("Area #%d,%d:\n", xIdx, yIdx));
-            sb.append((area == null) ? "NULL" : area.toString());
-        });
-        return sb.toString();
-    }
-
+    /**
+     * This is fired by an instance of TileMap whenever an AbstractEntity passes beyond its borders.
+     * If the offending AbstractEntity is the Player, this will transition them to the appropriate new
+     * Area (passing the lefternmost bounds of an Area attempts to move the Player one Area to the left, 
+     * for example). Note that this method assumes the entity is passing the bounds of the current Area.
+     * Therefore, if this method is invoked for an Area besides the current one, this method will behave 
+     * erroneously. However, this shouldn't be a problem, as only the current Area is updated, and therefore
+     * is the only one which can invoke this method.
+     * 
+     * @param event an event detailing how something went out of bounds.
+     */
     @Override
     public void boundReached(OutOfBoundsEvent event) {
         int newXIdx = this.currentAreaX + event.getDirection().getXMod();
@@ -103,9 +136,22 @@ public class Level extends Matrix<Area> implements MapBoundsReachedListener {
                         System.out.printf("Moved player to area (%d, %d)\n", newXIdx, newYIdx);
                     }
                 } else {
-                    System.out.printf("Cannot spawn entity in area:\n %s \n", get(newXIdx, newYIdx).toString());
+                    System.err.printf("Cannot spawn entity in area:\n %s \n", get(newXIdx, newYIdx).toString());
                 }
             }
         }
+    }
+    
+    
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("TODO: better logging in Level::toString\n");
+        sb.append("AREAS:\n");
+        this.forEachCell((area, xIdx, yIdx)->{
+            sb.append(String.format("Area #%d,%d:\n", xIdx, yIdx));
+            sb.append((area == null) ? "NULL" : area.toString());
+        });
+        return sb.toString();
     }
 }
