@@ -12,6 +12,7 @@
  * <table border="1">
  * <tr><th>Package</th> <th>summary             </th> <th>status               </th> </tr>
  * <tr><td>core   </td> <td>shared functionality</td> <td>needs more interfaces</td> </tr>
+ * <tr><td>levels </td> <td>levels to play      </td> <td>needs serialization  </td> </tr>
  * </table>
  */
 package gears.sidescroller.world;
