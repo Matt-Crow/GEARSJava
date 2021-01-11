@@ -42,7 +42,7 @@ public enum Direction {
         };
     }
     
-    public static final Direction rotateCounterClockWise(Direction d){
+    private static Direction rotate(Direction d, int rotation){
         Direction[] dirs = new Direction[]{RIGHT, UP, LEFT, DOWN};
         int currIdx = -1;
         for(int i = 0; currIdx == -1 && i < dirs.length; i++){
@@ -50,6 +50,19 @@ public enum Direction {
                 currIdx = i;
             }
         }
-        return dirs[(currIdx + 1) % dirs.length];
+        int newIdx = (currIdx + rotation >= 0) ? (currIdx + rotation) % dirs.length : dirs.length + rotation + currIdx; 
+        return dirs[newIdx];
+    }
+    
+    public static final Direction rotateCounterClockWise(Direction d){
+        return rotate(d, 1);
+    }
+    
+    public static final Direction rotateClockWise(Direction d){
+        return rotate(d, -1);
+    }
+    
+    public static void main(String[] args){
+        Direction.rotateClockWise(RIGHT);
     }
 }

@@ -59,7 +59,7 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
         return this;
     }
     
-    private boolean isTileOpen(int xIdx, int yIdx){
+    public final boolean isTileOpen(int xIdx, int yIdx){
         return isValidIdx(xIdx, yIdx) && !getValueAt(xIdx, yIdx).getIsTangible();
     }
     
