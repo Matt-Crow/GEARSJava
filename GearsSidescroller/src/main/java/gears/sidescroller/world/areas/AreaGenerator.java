@@ -1,9 +1,13 @@
 package gears.sidescroller.world.areas;
 
+import gears.sidescroller.world.items.AbstractItem;
+import gears.sidescroller.world.items.ItemGenerator;
 import gears.sidescroller.world.structures.Structure;
 import gears.sidescroller.world.structures.StructureGenerator;
 import gears.sidescroller.world.tileMaps.TileMap;
 import gears.sidescroller.world.tileMaps.TileMapGenerator;
+import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
+import java.awt.Point;
 import java.util.Random;
 
 /**
@@ -11,6 +15,15 @@ import java.util.Random;
  * @author Matt
  */
 public class AreaGenerator {
+    private final ItemGenerator itemGenerator;
+    
+    public AreaGenerator(ItemGenerator itemGenerator){
+        this.itemGenerator = itemGenerator;
+    }
+    public AreaGenerator(){
+        this(new ItemGenerator());
+    }
+    
     public final Area generateRandom(){
         Random rng = new Random();
         int max = 10;
@@ -34,6 +47,23 @@ public class AreaGenerator {
         }
         
         Area ret = new Area(map);
+        
+        // choose number of items
+        int numItems = rng.nextInt(5);
+        AbstractItem newItem = null;
+        for(int i = 0; i < numItems; i++){
+            Point openTile = map.searchForOpenTileAround(
+                rng.nextInt(map.getWidthInCells()), 
+                rng.nextInt(map.getHeightInCells())
+            );
+            if(openTile != null){
+                newItem = itemGenerator.generateRandomAt(
+                    (int)(openTile.getX()*TILE_SIZE), 
+                    (int)(openTile.getY()*TILE_SIZE)
+                );
+                ret.addItem(newItem);
+            }
+        }
         
         return ret;
     }

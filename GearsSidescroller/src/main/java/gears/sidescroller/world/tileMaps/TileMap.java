@@ -54,12 +54,12 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
      * @param tile
      * @return this, for chaining purposes
      */
-    public TileMap addToTileSet(byte key, AbstractTile tile){
+    public TileMap addToTileSet(int key, AbstractTile tile){
         setKeyToVal(key, tile);
         return this;
     }
     
-    private boolean isTileOpen(byte xIdx, byte yIdx){
+    private boolean isTileOpen(int xIdx, int yIdx){
         return isValidIdx(xIdx, yIdx) && !getValueAt(xIdx, yIdx).getIsTangible();
     }
     
@@ -144,13 +144,13 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
         possibly be colliding with.
         */
         
-        byte yIdx = (byte)(e.getY() / AbstractTile.TILE_SIZE);
-        byte xIdx = (byte)(e.getX() / AbstractTile.TILE_SIZE);
+        int yIdx = (int)(e.getY() / AbstractTile.TILE_SIZE);
+        int xIdx = (int)(e.getX() / AbstractTile.TILE_SIZE);
         
         boolean collUpperLeft = handleCollisions(e, xIdx, yIdx);
-        boolean collUpperRight = handleCollisions(e, (byte)(xIdx+1), yIdx);
-        boolean collLowerLeft = handleCollisions(e, xIdx, (byte)(yIdx+1));
-        boolean collLowerRight = handleCollisions(e, (byte)(xIdx+1), (byte)(yIdx+1));
+        boolean collUpperRight = handleCollisions(e, (int)(xIdx+1), yIdx);
+        boolean collLowerLeft = handleCollisions(e, xIdx, (int)(yIdx+1));
+        boolean collLowerRight = handleCollisions(e, (int)(xIdx+1), (int)(yIdx+1));
         
         // AFTER handling collisions with this map, notify listeners if the entity left the area
         if(boundChecking != null){
@@ -198,16 +198,16 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
      * 
      * @return the indeces of an intangible tile around the given tile, or null if no open tiles exist
      */
-    private Point searchForValidSpawnTile(byte initialXIdx, byte initialYIdx){
+    public final Point searchForOpenTileAround(int initialXIdx, int initialYIdx){
         Point ret = null;
-        byte xIdx = initialXIdx;
-        byte yIdx = initialYIdx;
+        int xIdx = initialXIdx;
+        int yIdx = initialYIdx;
         if(isTileOpen(xIdx, yIdx)){
             ret = new Point(xIdx, yIdx);
         }        
         Direction spiralDir = Direction.UP;
-        byte spiralLength = 1;
-        byte spiralLengthThusFar = 0;
+        int spiralLength = 1;
+        int spiralLengthThusFar = 0;
         int numTilesChecked = 0;
         boolean justTurned = true;
         while(ret == null && numTilesChecked < this.getHeightInCells() * this.getWidthInCells()){
@@ -245,8 +245,8 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
      * @param yIdx the tile y index to check around
      * @return this, for chaining purposes
      */
-    private TileMap spawnEntityFromPoint(AbstractEntity e, byte xIdx, byte yIdx){
-        Point spawnTile = searchForValidSpawnTile(xIdx, yIdx);
+    private TileMap spawnEntityFromPoint(AbstractEntity e, int xIdx, int yIdx){
+        Point spawnTile = searchForOpenTileAround(xIdx, yIdx);
         if(spawnTile == null){
             throw new RuntimeException("No valid spawn tiles");
         } else {
@@ -264,7 +264,7 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
      * @return this, for chaining purposes
      */
     public final TileMap spawnEntityCenter(AbstractEntity e){
-        return spawnEntityFromPoint(e, (byte) (getWidthInCells() / 2), (byte)(getHeightInCells() / 2));
+        return spawnEntityFromPoint(e, (int) (getWidthInCells() / 2), (int)(getHeightInCells() / 2));
     }
     
     public final boolean spawnEntityFromDir(AbstractEntity e, Direction dir){
@@ -274,24 +274,24 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
     private boolean linearOpenSpawnTileSearch(AbstractEntity e, Direction fromDir){
         boolean isValidSpawn = false;
         Direction lineDirection = Direction.rotateCounterClockWise(fromDir);
-        byte initialXIdx = 0;
-        byte initialYIdx = 0;
+        int initialXIdx = 0;
+        int initialYIdx = 0;
         switch(fromDir){
             case UP:
-                initialXIdx = (byte)e.getXIdx();
+                initialXIdx = (int)e.getXIdx();
                 initialYIdx = 0;
                 break;
             case DOWN:
-                initialXIdx = (byte)e.getXIdx();
-                initialYIdx = (byte) (this.getHeightInCells() - 1);
+                initialXIdx = (int)e.getXIdx();
+                initialYIdx = (int) (this.getHeightInCells() - 1);
                 break;
             case LEFT:
                 initialXIdx = 0;
-                initialYIdx = (byte)e.getYIdx();
+                initialYIdx = (int)e.getYIdx();
                 break;
             case RIGHT:
-                initialXIdx = (byte) (this.getWidthInCells() - 1);
-                initialYIdx = (byte)e.getYIdx();
+                initialXIdx = (int) (this.getWidthInCells() - 1);
+                initialYIdx = (int)e.getYIdx();
                 break;
             default:
                 throw new UnsupportedOperationException(String.format("Cannot do linear tile search with direction \"%s\"", fromDir.getName()));
@@ -299,12 +299,12 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
         
         boolean posRadValid = true;
         boolean negRadValid = true;
-        byte currXIdx = initialXIdx;
-        byte currYIdx = initialYIdx;
-        for(byte searchRadius = 0; !isValidSpawn && (posRadValid || negRadValid); searchRadius++){
+        int currXIdx = initialXIdx;
+        int currYIdx = initialYIdx;
+        for(int searchRadius = 0; !isValidSpawn && (posRadValid || negRadValid); searchRadius++){
             // check positive radius direction
-            currXIdx = (byte) (initialXIdx + lineDirection.getXMod() * searchRadius);
-            currYIdx = (byte) (initialYIdx + lineDirection.getYMod() * searchRadius);
+            currXIdx = (int) (initialXIdx + lineDirection.getXMod() * searchRadius);
+            currYIdx = (int) (initialYIdx + lineDirection.getYMod() * searchRadius);
             posRadValid = this.isValidIdx(currXIdx, currYIdx);
             if(posRadValid){
                 // check if the positive tile is open
@@ -313,8 +313,8 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
             
             // check negative radius direction
             if(!isValidSpawn){
-                currXIdx = (byte) (initialXIdx - lineDirection.getXMod() * searchRadius);
-                currYIdx = (byte) (initialYIdx - lineDirection.getYMod() * searchRadius);
+                currXIdx = (int) (initialXIdx - lineDirection.getXMod() * searchRadius);
+                currYIdx = (int) (initialYIdx - lineDirection.getYMod() * searchRadius);
                 negRadValid = this.isValidIdx(currXIdx, currYIdx);
                 if(negRadValid){
                     // check if the negative tile is open
