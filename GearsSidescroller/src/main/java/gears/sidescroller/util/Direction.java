@@ -32,6 +32,16 @@ public enum Direction {
         return yMod;
     }
     
+    // in case I ever add more, non-cardinal directions, so I don't need to use Direction.values()
+    public static final Direction[] getCardinalDirections(){
+        return new Direction[]{
+            UP,
+            DOWN,
+            LEFT,
+            RIGHT
+        };
+    }
+    
     public static final Direction rotateCounterClockWise(Direction d){
         Direction[] dirs = new Direction[]{RIGHT, UP, LEFT, DOWN};
         int currIdx = -1;

@@ -2,6 +2,7 @@ package gears.sidescroller.world.areas;
 
 import gears.sidescroller.world.items.AbstractItem;
 import gears.sidescroller.world.items.ItemGenerator;
+import gears.sidescroller.world.machines.MachineGenerator;
 import gears.sidescroller.world.structures.Structure;
 import gears.sidescroller.world.structures.StructureGenerator;
 import gears.sidescroller.world.tileMaps.TileMap;
@@ -16,17 +17,20 @@ import java.util.Random;
  */
 public class AreaGenerator {
     private final ItemGenerator itemGenerator;
+    private final MachineGenerator machineGenerator;
     
-    public AreaGenerator(ItemGenerator itemGenerator){
+    public AreaGenerator(ItemGenerator itemGenerator, MachineGenerator machineGenerator){
         this.itemGenerator = itemGenerator;
+        this.machineGenerator = machineGenerator;
     }
     public AreaGenerator(){
-        this(new ItemGenerator());
+        this(new ItemGenerator(), new MachineGenerator());
     }
     
     public final Area generateRandom(){
         Random rng = new Random();
         int max = 10;
+        Point openTile = null;
         
         TileMap map = new TileMapGenerator(
             rng.nextInt(max - 1) + 1, // from 1-max 
@@ -52,7 +56,7 @@ public class AreaGenerator {
         int numItems = rng.nextInt(5);
         AbstractItem newItem = null;
         for(int i = 0; i < numItems; i++){
-            Point openTile = map.searchForOpenTileAround(
+            openTile = map.searchForOpenTileAround(
                 rng.nextInt(map.getWidthInCells()), 
                 rng.nextInt(map.getHeightInCells())
             );
@@ -62,6 +66,18 @@ public class AreaGenerator {
                     (int)(openTile.getY()*TILE_SIZE)
                 );
                 ret.addItem(newItem);
+            }
+        }
+        
+        // generate machines
+        int numMachines = rng.nextInt(5);
+        for(int i = 0; i < numMachines; i++){
+            openTile = map.searchForOpenTileAround(
+                rng.nextInt(map.getWidthInCells()), 
+                rng.nextInt(map.getHeightInCells())
+            );
+            if(openTile != null){
+                ret.addMachine(machineGenerator.createRandomMachineAt(ret, (int) openTile.getX(), (int) openTile.getY()));
             }
         }
         

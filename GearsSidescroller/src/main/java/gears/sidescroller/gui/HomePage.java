@@ -5,11 +5,11 @@ import gears.sidescroller.world.tileMaps.TileMap;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.world.items.GearItem;
-import gears.sidescroller.world.machines.PowerGenerator;
+import gears.sidescroller.world.machines.PowerPlant;
 import gears.sidescroller.world.levels.Level;
 import gears.sidescroller.world.tiles.TileGenerator;
 import gears.sidescroller.world.levels.LevelGenerator;
-import gears.sidescroller.world.machines.ConveyorBelt;
+import gears.sidescroller.world.machines.ConveyorBeltSegment;
 import gears.sidescroller.world.machines.GearMachine;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 import java.awt.BorderLayout;
@@ -72,8 +72,8 @@ public class HomePage extends Page{
         t.addToTileSet((byte)0, new TileGenerator().generateRandom(false));
         t.addToTileSet((byte)1, new TileGenerator().generateRandom(true));
         t.setTile((byte)5, (byte)5, (byte)1);
-        PowerGenerator gen = new PowerGenerator(300, 300);
-        ConveyorBelt belt = new ConveyorBelt(600, 300, false, TILE_SIZE / 10, Direction.LEFT);
+        PowerPlant gen = new PowerPlant(300, 300);
+        ConveyorBeltSegment belt = new ConveyorBeltSegment(600, 300, false, TILE_SIZE / 10, Direction.LEFT);
         GearMachine gear = new GearMachine(700, 400);
         
         Area testArea = new Area(t);

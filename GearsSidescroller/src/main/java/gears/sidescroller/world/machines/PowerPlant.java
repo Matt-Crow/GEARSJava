@@ -8,9 +8,9 @@ import java.awt.Graphics;
  *
  * @author Matt
  */
-public class PowerGenerator extends AbstractMachine implements PowerProvidingMachine {
+public class PowerPlant extends AbstractMachine implements PowerProvidingMachine {
 
-    public PowerGenerator(int x, int y) {
+    public PowerPlant(int x, int y) {
         super(x, y, true);
     }
 

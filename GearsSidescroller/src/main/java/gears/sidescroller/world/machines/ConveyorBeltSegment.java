@@ -10,7 +10,7 @@ import java.awt.Graphics;
  *
  * @author Matt
  */
-public class ConveyorBelt extends AbstractMachine {
+public class ConveyorBeltSegment extends AbstractMachine {
     private final Direction movesStuffInThisDirection;
     private final int speed;
     private int lineXOffset;
@@ -20,7 +20,7 @@ public class ConveyorBelt extends AbstractMachine {
     private final int lineWidth;
     private final int lineHeight;
     
-    public ConveyorBelt(int x, int y, boolean selfPowering, int speed, Direction movesStuffInThisDirection) {
+    public ConveyorBeltSegment(int x, int y, boolean selfPowering, int speed, Direction movesStuffInThisDirection) {
         super(x, y, selfPowering);
         this.speed = speed;
         this.movesStuffInThisDirection = movesStuffInThisDirection;
