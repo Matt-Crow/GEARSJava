@@ -23,6 +23,7 @@ Current Plan:
 * add serialization for each
 
 Need sprite loader
+Make most classes have a "sprite" attribute that is 1x1 tile
 
 WASD to move,
 R to regenerate randomly generated world

@@ -1,25 +1,37 @@
 package gears.sidescroller.world.structures;
 
 import gears.sidescroller.util.Direction;
-import gears.sidescroller.world.tiles.ImageTile;
 import gears.sidescroller.world.tiles.TileGenerator;
-import java.io.IOException;
 import java.util.Random;
-import javax.imageio.ImageIO;
 
 /**
- *
- * @author Matt
+ * The StructureGenerator is used to randomly generate Structures for random Area
+ * generation. Currently, this just generates simple rectangular rooms. Future
+ * versions will be able to generate more complex Structures, such as ones loaded
+ * from files.
+ * 
+ * @author Matt Crow
  */
 public class StructureGenerator {
     private final int maxWidth;
     private final int maxHeight;
     
+    /**
+     * Creates a new StructureGenerator.
+     * 
+     * @param maxWidth the maximum width of rooms this can generate, measured in tiles
+     * @param maxHeight the maximum height of rooms this can generate, measured in tiles
+     */
     public StructureGenerator(int maxWidth, int maxHeight){
         this.maxWidth = maxWidth;
         this.maxHeight = maxHeight;
     }
     
+    /**
+     * Creates a new hovel based on the specifications provided to the constructor.
+     * 
+     * @return a rectangular Structure; not the best place to live in. 
+     */
     public final Structure generateRoom(){
         Random rng = new Random();
         int width = rng.nextInt(maxWidth) + 1;
@@ -30,12 +42,7 @@ public class StructureGenerator {
         );
         newStruct.setKeyToVal(0, new TileGenerator().generateRandom(false));
         newStruct.setKeyToVal(1, new TileGenerator().generateRandom(true));
-        try {
-            System.out.println("TODO: change StructureGenerator to not use image tiles");
-            newStruct.setKeyToVal(1, new ImageTile(0, 0, true, ImageIO.read(StructureGenerator.class.getResourceAsStream("/images/jarLogo.png"))));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        
         // build the room's walls
         // top & bottom walls
         for(int x = 0; x < width; x++){
