@@ -14,6 +14,7 @@
  * <tr><td>core       </td> <td>shared functionality</td> <td>needs more interfaces                  </td> </tr>
  * <tr><td>levels     </td> <td>levels to play      </td> <td>needs serialization                    </td> </tr>
  * <tr><td>structures </td> <td>buildings in an Area</td> <td>needs serialization and more attributes</td> </tr>
+ * <tr><td>machines   </td> <td>interactive elements</td> <td>needs serialization                    </td> </tr>
  * <tr><td>items      </td> <td>items to collect    </td> <td>needs serialization                    </td> </tr>
  * </table>
  */
