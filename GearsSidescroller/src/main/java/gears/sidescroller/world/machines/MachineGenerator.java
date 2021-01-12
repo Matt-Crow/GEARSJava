@@ -3,6 +3,7 @@ package gears.sidescroller.world.machines;
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.world.areas.Area;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
+import java.util.LinkedList;
 import java.util.Random;
 
 /**
@@ -10,10 +11,10 @@ import java.util.Random;
  * @author Matt
  */
 public class MachineGenerator {
-    private ConveyorBeltComposite createConveyorBelt(Area inThisArea, int startXIdx, int startYIdx){
+    private LinkedList<ConveyorBeltSegment> createConveyorBelt(Area inThisArea, int startXIdx, int startYIdx){
         int maxLength = 20;
         int currLength = 0;
-        ConveyorBeltComposite ret = new ConveyorBeltComposite(startXIdx, startYIdx);
+        LinkedList<ConveyorBeltSegment> ret = new LinkedList<>();
         Random rng = new Random();
         int currXIdx = startXIdx;
         int currYIdx = startYIdx;
@@ -22,7 +23,7 @@ public class MachineGenerator {
         int speed = rng.nextInt(TILE_SIZE / 5);
         int shouldTurnLeftRightOrGoStrait = -1;
         while(currLength < maxLength && inThisArea.getTileMap().isTileOpen(currXIdx, currYIdx)){
-            ret.addSegment(new ConveyorBeltSegment(
+            ret.add(new ConveyorBeltSegment(
                 currXIdx * TILE_SIZE,
                 currYIdx * TILE_SIZE,
                 true,
@@ -45,18 +46,18 @@ public class MachineGenerator {
         return ret;
     }
     
-    public final AbstractMachine createRandomMachineAt(Area inThisArea, int xIdx, int yIdx){
-        AbstractMachine ret = null;
+    public final LinkedList<AbstractMachine> createRandomMachineAt(Area inThisArea, int xIdx, int yIdx){
+        LinkedList<AbstractMachine> ret = new LinkedList<>();
         Random rng = new Random();
         switch(rng.nextInt(3)){
             case 0:
-                ret = new PowerPlant(xIdx * TILE_SIZE, yIdx * TILE_SIZE);
+                ret.add(new PowerPlant(xIdx * TILE_SIZE, yIdx * TILE_SIZE));
                 break;
             case 1:
-                ret = new GearMachine(xIdx * TILE_SIZE, yIdx * TILE_SIZE);
+                ret.add(new GearMachine(xIdx * TILE_SIZE, yIdx * TILE_SIZE));
                 break;
             case 2:
-                ret = createConveyorBelt(inThisArea, xIdx, yIdx);
+                ret.addAll(createConveyorBelt(inThisArea, xIdx, yIdx));
                 break;
         }
         
