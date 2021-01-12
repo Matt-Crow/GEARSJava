@@ -5,19 +5,26 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 /**
- *
- * @author Matt
+ * A PowerPlant is simply a machine which provides power.
+ * 
+ * @author Matt Crow
  */
 public class PowerPlant extends AbstractMachine implements PowerProvidingMachine {
 
+    /**
+     * 
+     * @param x the x-coordinate of this PowerPlant, measured in pixel-space
+     * @param y the y-coordinate of this PowerPlant, measured in pixel-space
+     */
     public PowerPlant(int x, int y) {
         super(x, y, true);
     }
 
+    /**
+     * GNDN (that's a Star Trek reference)
+     */
     @Override
-    public void update() {
-        
-    }
+    public void update() {}
 
     @Override
     public void draw(Graphics g) {

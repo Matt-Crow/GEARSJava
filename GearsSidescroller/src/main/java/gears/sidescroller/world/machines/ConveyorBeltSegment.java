@@ -7,12 +7,20 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 /**
- *
- * @author Matt
+ * A ConveryorBeltSegment is a machine which will move AbstractEntities
+ * in a given direction, assuming it is powered.
+ * 
+ * @author Matt Crow
  */
 public class ConveyorBeltSegment extends AbstractMachine {
     private final Direction movesStuffInThisDirection;
     private final int speed;
+    
+    /*
+    These 6 fields are used in rendering
+    the animated line that zooms down this
+    ConveryorBeltSegment.
+    */
     private int lineXOffset;
     private int lineYOffset;
     private final int lineStartX;
@@ -20,6 +28,13 @@ public class ConveyorBeltSegment extends AbstractMachine {
     private final int lineWidth;
     private final int lineHeight;
     
+    /**
+     * @param x the x-coordinate of this conveyor belt, measured in pixel-space
+     * @param y the y-coordinate of this conveyor belt, measured in pixel-space
+     * @param selfPowering whether or not this should automatically provide power to itself
+     * @param speed how fast this moves AbstractEntities that collide with it, measured in pixel-space
+     * @param movesStuffInThisDirection what direction this moves AbstractEntities in
+     */
     public ConveyorBeltSegment(int x, int y, boolean selfPowering, int speed, Direction movesStuffInThisDirection) {
         super(x, y, selfPowering);
         this.speed = speed;
@@ -72,6 +87,14 @@ public class ConveyorBeltSegment extends AbstractMachine {
         g.fillRect(lineStartX + xOffset + lineXOffset, lineStartY + yOffset + lineYOffset, lineWidth, lineHeight);
     }
 
+    /**
+     * Checks for collisions with the given AbstractEntity,
+     * and moves them if appropriate.
+     * 
+     * @param e the AbstractEntity to check for collisions with.
+     * 
+     * @return whether or not the given AbstractEntity collided with this. 
+     */
     @Override
     public boolean checkForCollisions(AbstractEntity e) {
         boolean collided = this.getCollisionBox().isCollidingWith(e);
