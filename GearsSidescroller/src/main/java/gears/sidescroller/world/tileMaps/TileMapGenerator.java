@@ -1,6 +1,7 @@
 package gears.sidescroller.world.tileMaps;
 
 import gears.sidescroller.world.tiles.TileGenerator;
+import java.util.function.BiFunction;
 
 /**
  * Use this class to randomly
@@ -9,38 +10,47 @@ import gears.sidescroller.world.tiles.TileGenerator;
  * @author Matt Crow
  */
 public class TileMapGenerator {
-    private final int cosAmplitude;
-    private final int sinAmplitude;
-    private final int cosPeriod;
-    private final int sinPeriod;
+    private final TileGenerator tileGenerator;
+    private final BiFunction<Integer, Integer, Integer> function;
+    
+    /**
+     * 
+     * @param tileGenerator the TileGenerator to use in randomly generating tile designs
+     * @param function a function which maps x- and y-coordinates in index-space to keys in the FlyweightMatrix
+     * of tile designs in the Areas this generates. Note that the output of this function is automatically 
+     * capped at 0 at the minimum. Level curves produced by this function will each contain a single tile type.
+     */
+    public TileMapGenerator(TileGenerator tileGenerator, BiFunction<Integer, Integer, Integer> function){
+        this.tileGenerator = tileGenerator;
+        this.function = function;
+    }
+    
+    public TileMapGenerator(TileGenerator tileGenerator, int cosAmplitude, int sinAmplitude, int cosPeriod, int sinPeriod){
+        this.tileGenerator = tileGenerator;
+        this.function = (x, y)->{
+            return (int)(cosAmplitude * Math.cos(x / cosPeriod) + sinAmplitude * Math.sin(y / sinPeriod));
+        };
+    }
     
     public TileMapGenerator(int cosAmplitude, int sinAmplitude, int cosPeriod, int sinPeriod){
-        this.cosAmplitude = cosAmplitude;
-        this.sinAmplitude = sinAmplitude;
-        this.cosPeriod = cosPeriod;
-        this.sinPeriod = sinPeriod;
+        this(new TileGenerator(), cosAmplitude, sinAmplitude, cosPeriod, sinPeriod);
     }
     
-    private byte f(byte x, byte y){
-        return (byte)(cosAmplitude * Math.cos(x / cosPeriod) + sinAmplitude * Math.sin(y / sinPeriod));
-    }
-    
-    public TileMap generateTileMap(byte w, byte h){
+    public TileMap generateTileMap(int w, int h){
         TileMap ret = new TileMap(w, h);
         
-        // first, generate the tile set
-        TileGenerator tileGen = new TileGenerator();
-        ret.addToTileSet((byte)0, tileGen.generateRandom(false)); // should be able to walk on 0
+        ret.addToTileSet(0, tileGenerator.generateRandom(false)); // should be able to walk on 0
         // since 0 will be the most common tile
-        int maxZ = cosAmplitude + sinAmplitude; // highest tile index we can have
-        for(byte i = 1; i < maxZ + 1; i++){ // skip index 0, as it is already set, but make sure to account for maxZ
-            ret.addToTileSet(i, tileGen.generateRandom(true));
-        }
         
-        // second, set the tile map
-        for(byte i = 0; i < w; i++){
-            for(byte j = 0; j < h; j++){
-                ret.setTile(i, j, (byte)Math.max(0, f(i, j)));
+        int newKey = -1;
+        for(int i = 0; i < w; i++){
+            for(int j = 0; j < h; j++){
+                newKey = Math.max(0, function.apply(i, j));
+                if(!ret.isKeySet(newKey)){
+                    // only add to the tile set if a new key appears
+                    ret.addToTileSet(newKey, tileGenerator.generateRandom(true));
+                }
+                ret.setTile(i, j, newKey);
             }
         }
         
@@ -52,7 +62,7 @@ public class TileMapGenerator {
         
         TileMap map;
         for(int i = 0; i < 20; i++){
-            map = gen.generateTileMap((byte)20, (byte)20);
+            map = gen.generateTileMap(20, 20);
             System.out.println(map.getAsCsv());
         }
     }

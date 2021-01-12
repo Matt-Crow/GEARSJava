@@ -1,6 +1,5 @@
 package gears.sidescroller.world.tileMaps;
 
-import gears.sidescroller.world.tileMaps.TileMap;
 import gears.io.StreamReaderUtil;
 import gears.io.StreamWriterUtil;
 import java.io.IOException;
@@ -8,17 +7,18 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- *
- * @author Matt
+ * A rough prototype of TileMap serialization.
+ * 
+ * @author Matt Crow
  */
 public class TileMapIO {
     /**
      * Writes the tile map of the given TileMap to a csv file. Note that this does not
      * include the TileMap's tile set.
      * 
-     * @param csvFile
-     * @param tileMap
-     * @throws IOException 
+     * @param csvFile the CSV file to write to.
+     * @param tileMap the TileMap to write to the given file.
+     * @throws IOException if any errors occur while writing to the file.
      */
     public static void writeTileMapCsv(OutputStream csvFile, TileMap tileMap) throws IOException{
         StreamWriterUtil.writeStream(csvFile, tileMap.getAsCsv());

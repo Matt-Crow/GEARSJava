@@ -39,6 +39,9 @@ public class FlyweightMatrix<T> extends Matrix<Integer> {
         }
         keyToValue.put(key, val);
     }
+    public final boolean isKeySet(int key){
+        return keyToValue.containsKey(key);
+    }
     
     public final T getValueAt(int xIdx, int yIdx){
         int key = get(xIdx, yIdx);
