@@ -1,5 +1,6 @@
 package gears.sidescroller.world.items;
 
+import gears.sidescroller.world.core.MobileWorldObject;
 import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.core.ObjectInWorld;
@@ -29,13 +30,13 @@ public abstract class AbstractItem extends ObjectInWorld {
     /**
      * Checks to see if a Player collects this.
      * 
-     * @param e the entity to check for collisions with.
+     * @param e the MobileWorldObject to check for collisions with.
      * @return whether or not the given entity collided with this.
      */
-    public final boolean checkForCollisions(AbstractEntity e){
+    public final boolean checkForCollisions(MobileWorldObject e){
         boolean collided = this.getCollisionBox().isCollidingWith(e);
         if(collided && e instanceof Player){
-            getArea().removeItem(this);
+            getArea().removeFromWorld(this);
             ((Player)e).pickupItem(this);
         }
         return collided;

@@ -1,6 +1,7 @@
 package gears.sidescroller.world.entities;
 
 import gears.sidescroller.gui.LevelPage;
+import gears.sidescroller.world.core.MobileWorldObject;
 import gears.sidescroller.world.items.AbstractItem;
 import gears.sidescroller.world.tiles.AbstractTile;
 import java.awt.Color;
@@ -74,5 +75,10 @@ public class Player extends AbstractEntity {
     public void removeItem(AbstractItem item) {
         this.inventory.remove((AbstractItem)item);
         this.fireInventoryChanged();
+    }
+
+    @Override
+    public boolean checkForCollisions(MobileWorldObject obj) {
+        return this.getCollisionBox().isCollidingWith(obj);
     }
 }

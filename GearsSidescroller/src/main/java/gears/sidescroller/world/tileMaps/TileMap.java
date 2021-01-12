@@ -4,6 +4,7 @@ import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.world.core.CollisionBox;
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.util.FlyweightMatrix;
+import gears.sidescroller.world.core.MobileWorldObject;
 import gears.sidescroller.world.tiles.AbstractTile;
 import java.awt.Graphics;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
@@ -77,7 +78,7 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
         return this;
     }
     
-    private OutOfBoundsEvent checkIfOutsideBounds(AbstractEntity e){
+    private OutOfBoundsEvent checkIfOutsideBounds(MobileWorldObject e){
         OutOfBoundsEvent lrEvent = null; // left-right
         OutOfBoundsEvent udEvent = null; // up-down
         if(e.getX() < 0){
@@ -111,7 +112,7 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
         return event;
     }
     
-    private boolean handleCollisions(AbstractEntity e, int tileXIdx, int tileYIdx){
+    private boolean handleCollisions(MobileWorldObject e, int tileXIdx, int tileYIdx){
         boolean collided = false;
         if(isValidIdx(tileXIdx, tileYIdx) && getValueAt(tileXIdx, tileYIdx).getIsTangible()){
             collided = true;
@@ -126,13 +127,13 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
     }
     
     /**
-     * Checks to see if the given entity is inside a block,
+     * Checks to see if the given MobileWorldObject is inside a block,
      * and shoves them out if that block is tangible.
      * 
-     * @param e the entitiy to check for collisions with
+     * @param e the MobileWorldObject to check for collisions with
      * @return whether or not a collision was detected
      */
-    public final boolean checkForCollisions(AbstractEntity e){
+    public final boolean checkForCollisions(MobileWorldObject e){
         OutOfBoundsEvent boundChecking = checkIfOutsideBounds(e);
         
         /*
@@ -238,14 +239,14 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
     }
     
     /**
-     * Sets an entity's coordinates to those of an open tile around the given tile.
+     * Sets a MobileWorldObject's coordinates to those of an open tile around the given tile.
      * 
-     * @param e the entity to set coordinates for
+     * @param e the MobileWorldObject to set coordinates for
      * @param xIdx the tile x index to check around
      * @param yIdx the tile y index to check around
      * @return this, for chaining purposes
      */
-    private TileMap spawnEntityFromPoint(AbstractEntity e, int xIdx, int yIdx){
+    private TileMap spawnEntityFromPoint(MobileWorldObject e, int xIdx, int yIdx){
         Point spawnTile = searchForOpenTileAround(xIdx, yIdx);
         if(spawnTile == null){
             throw new RuntimeException("No valid spawn tiles");
@@ -263,15 +264,15 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
      * @param e the Entity to set coordinates for
      * @return this, for chaining purposes
      */
-    public final TileMap spawnEntityCenter(AbstractEntity e){
+    public final TileMap spawnEntityCenter(MobileWorldObject e){
         return spawnEntityFromPoint(e, (int) (getWidthInCells() / 2), (int)(getHeightInCells() / 2));
     }
     
-    public final boolean spawnEntityFromDir(AbstractEntity e, Direction dir){
+    public final boolean spawnEntityFromDir(MobileWorldObject e, Direction dir){
         return linearOpenSpawnTileSearch(e, dir);
     }
     
-    private boolean linearOpenSpawnTileSearch(AbstractEntity e, Direction fromDir){
+    private boolean linearOpenSpawnTileSearch(MobileWorldObject e, Direction fromDir){
         boolean isValidSpawn = false;
         Direction lineDirection = Direction.rotateCounterClockWise(fromDir);
         int initialXIdx = 0;

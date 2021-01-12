@@ -65,7 +65,7 @@ public class AreaGenerator {
                     (int)(openTile.getX()*TILE_SIZE), 
                     (int)(openTile.getY()*TILE_SIZE)
                 );
-                ret.addItem(newItem);
+                ret.addToWorld(newItem);
             }
         }
         
@@ -77,7 +77,7 @@ public class AreaGenerator {
                 rng.nextInt(map.getHeightInCells())
             );
             if(openTile != null){
-                machineGenerator.createRandomMachineAt(ret, (int) openTile.getX(), (int) openTile.getY()).forEach(ret::addMachine);
+                machineGenerator.createRandomMachineAt(ret, (int) openTile.getX(), (int) openTile.getY()).forEach(ret::addToWorld);
             }
         }
         

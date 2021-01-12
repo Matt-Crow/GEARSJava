@@ -17,7 +17,7 @@ import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
  * @author Matt Crow
  * @see gears.sidescroller.world.core.MobileWorldObject
  */
-public class ObjectInWorld implements Collidable {
+public abstract class ObjectInWorld implements Collidable {
     protected int x;
     protected int y;
     private final int width;

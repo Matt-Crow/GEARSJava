@@ -77,9 +77,9 @@ public class HomePage extends Page{
         GearMachine gear = new GearMachine(700, 400);
         
         Area testArea = new Area(t);
-        testArea.addMachine(gen);
-        testArea.addMachine(belt);
-        testArea.addMachine(gear);
+        testArea.addToWorld(gen);
+        testArea.addToWorld(belt);
+        testArea.addToWorld(gear);
         
         GearItem[] items = new GearItem[]{
             new GearItem(100, 100, Color.CYAN),
@@ -87,7 +87,7 @@ public class HomePage extends Page{
             new GearItem(100, 200, Color.CYAN)
         };
         for(int i = 0; i < items.length; i++){
-            testArea.addItem(items[i]);
+            testArea.addToWorld(items[i]);
         }
         
         Level l = new Level(new Area[][]{{testArea}}, 0, 0);

@@ -53,7 +53,7 @@ public class GearMachine extends AbstractMachine implements PowerProvidingMachin
     }
 
     @Override
-    public boolean checkForCollisions(AbstractEntity e) {
+    public boolean checkForCollisions(gears.sidescroller.world.core.MobileWorldObject e) {
         // don't shove out
         return this.getCollisionBox().isCollidingWith(e);
     }

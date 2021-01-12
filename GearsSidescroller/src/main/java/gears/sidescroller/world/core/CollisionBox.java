@@ -17,7 +17,12 @@ public class CollisionBox {
     
     // need this for tiles
     public CollisionBox(int x, int y, int w, int h){
-        forObject = new ObjectInWorld(x, y, w, h);
+        forObject = new ObjectInWorld(x, y, w, h) {
+            @Override
+            public boolean checkForCollisions(MobileWorldObject obj) {
+                return this.getCollisionBox().isCollidingWith(obj);
+            }
+        };
     }
     
     public CollisionBox(ObjectInWorld forObject){

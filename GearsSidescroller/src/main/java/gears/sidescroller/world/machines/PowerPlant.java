@@ -45,7 +45,7 @@ public class PowerPlant extends AbstractMachine implements PowerProvidingMachine
     }
 
     @Override
-    public boolean checkForCollisions(AbstractEntity e) {
+    public boolean checkForCollisions(gears.sidescroller.world.core.MobileWorldObject e) {
         return this.getCollisionBox().shoveOut(e);
     }
 

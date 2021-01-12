@@ -93,10 +93,10 @@ public class ConveyorBeltSegment extends AbstractMachine {
      * 
      * @param e the AbstractEntity to check for collisions with.
      * 
-     * @return whether or not the given AbstractEntity collided with this. 
+     * @return the boolean 
      */
     @Override
-    public boolean checkForCollisions(AbstractEntity e) {
+    public boolean checkForCollisions(gears.sidescroller.world.core.MobileWorldObject e) {
         boolean collided = this.getCollisionBox().isCollidingWith(e);
         if(collided && isPowered()){
             e.setX(e.getX() + this.movesStuffInThisDirection.getXMod() * this.speed);

@@ -1,6 +1,6 @@
 package gears.sidescroller.world.machines;
 
-import gears.sidescroller.world.entities.AbstractEntity;
+import gears.sidescroller.world.core.MobileWorldObject;
 import gears.sidescroller.world.core.ObjectInWorld;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
 import java.awt.Graphics;
@@ -93,7 +93,7 @@ public abstract class AbstractMachine extends ObjectInWorld {
      * 
      * @param e the AbstractEntity to check for collisions with
      * 
-     * @return whether or not the given AbstractEntity collided with this 
+     * @return the boolean 
      */
-    public abstract boolean checkForCollisions(AbstractEntity e);
+    public abstract boolean checkForCollisions(MobileWorldObject e);
 }

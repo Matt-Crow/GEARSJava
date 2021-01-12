@@ -39,8 +39,7 @@ public class PlacedGearMachine extends GearMachine implements Interactable {
         boolean playerInteracts = getCollisionBox().isCollidingWith(p);
         if(playerInteracts){
             p.pickupItem(asItem);
-            getArea().removeMachine(this);
-            getArea().removeInteractable(this);
+            getArea().removeFromWorld(this);
         }
         return playerInteracts;
      }

@@ -2,6 +2,7 @@ package gears.sidescroller.world.tileMaps;
 
 import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.util.Direction;
+import gears.sidescroller.world.core.MobileWorldObject;
 
 /**
  *
@@ -9,10 +10,10 @@ import gears.sidescroller.util.Direction;
  */
 public class OutOfBoundsEvent {
     private final TileMap map;
-    private final AbstractEntity outOfBoundsEntity;
+    private final MobileWorldObject outOfBoundsEntity;
     private final Direction fromDir;
     
-    public OutOfBoundsEvent(TileMap map, AbstractEntity outOfBoundsEntity, Direction fromDir){
+    public OutOfBoundsEvent(TileMap map, MobileWorldObject outOfBoundsEntity, Direction fromDir){
         this.map = map;
         this.outOfBoundsEntity = outOfBoundsEntity;
         this.fromDir = fromDir;
@@ -22,7 +23,7 @@ public class OutOfBoundsEvent {
         return map;
     }
     
-    public final AbstractEntity getOutOfBoundsEntity(){
+    public final MobileWorldObject getOutOfBoundsEntity(){
         return outOfBoundsEntity;
     }
     

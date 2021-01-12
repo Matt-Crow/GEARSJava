@@ -52,7 +52,7 @@ public final class LevelPage extends Page{
             //regenerate random. Debugging tool
             this.getInputMap().clear(); // un-register controls
             this.getActionMap().clear();
-            currentLevel.getCurrentArea().removeEntity(focusedEntity);
+            currentLevel.getCurrentArea().removeFromWorld(focusedEntity);
             Level newLevel = new LevelGenerator().generateRandom(3);
             this.getParentGamePane().switchToPage(new LevelPage(
                 getParentGamePane(),

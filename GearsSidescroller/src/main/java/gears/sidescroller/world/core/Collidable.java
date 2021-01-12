@@ -8,5 +8,6 @@ package gears.sidescroller.world.core;
  * @author Matt Crow
  */
 public interface Collidable {
+    public boolean checkForCollisions(MobileWorldObject obj);
     public CollisionBox getCollisionBox();
 }

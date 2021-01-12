@@ -2,7 +2,10 @@ package gears.sidescroller.world.areas;
 
 import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.util.dataStructures.VolatileLinkedList;
+import gears.sidescroller.world.core.Collidable;
 import gears.sidescroller.world.core.Interactable;
+import gears.sidescroller.world.core.MobileWorldObject;
+import gears.sidescroller.world.core.ObjectInWorld;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.items.AbstractItem;
 import gears.sidescroller.world.machines.AbstractMachine;
@@ -19,7 +22,9 @@ import java.awt.Graphics;
 public class Area {
     private final TileMap tileMap;
     private final PowerGrid powerGrid;
-    private final VolatileLinkedList<AbstractEntity> entities;
+    private final VolatileLinkedList<MobileWorldObject> stuffThatCanBumpIntoOtherStuff;
+    private final VolatileLinkedList<Collidable> stuffThatOtherStuffCanBumpInto;
+    
     private final VolatileLinkedList<AbstractMachine> machines;
     private final VolatileLinkedList<AbstractItem> items;
     private final VolatileLinkedList<Interactable> interactables;
@@ -27,48 +32,50 @@ public class Area {
     public Area(TileMap t){
         tileMap = t;
         powerGrid = new PowerGrid(t.getWidthInCells(), t.getHeightInCells());
-        entities = new VolatileLinkedList<>();
+        stuffThatCanBumpIntoOtherStuff = new VolatileLinkedList<>();
+        stuffThatOtherStuffCanBumpInto = new VolatileLinkedList<>();
+        
         machines = new VolatileLinkedList<>();
         items = new VolatileLinkedList<>();
         interactables = new VolatileLinkedList<>();
     }
     
-    public Area addEntity(AbstractEntity e){
-        entities.add(e);
-        e.setArea(this);
+    public Area addToWorld(ObjectInWorld obj){
+        if(obj instanceof MobileWorldObject){
+            this.stuffThatCanBumpIntoOtherStuff.add((MobileWorldObject)obj);
+        }
+        if(obj instanceof Collidable){
+            this.stuffThatOtherStuffCanBumpInto.add((Collidable)obj);
+        }
+        if(obj instanceof AbstractMachine){
+            this.machines.add((AbstractMachine) obj);
+        }
+        if(obj instanceof AbstractItem){
+            this.items.add((AbstractItem) obj);
+        }
+        if(obj instanceof Interactable){
+            this.interactables.add((Interactable) obj);
+        }
+        obj.setArea(this);
+        
         return this;
     }
-    public Area removeEntity(AbstractEntity e){
-        entities.delete(e);
-        return this;
-    }
-    
-    public Area addMachine(AbstractMachine m){
-        machines.add(m);
-        m.setArea(this);
-        return this;
-    }
-    public Area removeMachine(AbstractMachine m){
-        machines.delete(m);
-        return this;
-    }
-    
-    public Area addItem(AbstractItem i){
-        items.add(i);
-        i.setArea(this);
-        return this;
-    }
-    public Area removeItem(AbstractItem i){
-        items.delete(i);
-        return this;
-    }
-    
-    public Area addInteractable(Interactable i){
-        interactables.add(i);
-        return this;
-    }
-    public Area removeInteractable(Interactable i){
-        interactables.delete(i);
+    public Area removeFromWorld(ObjectInWorld obj){
+        if(obj instanceof MobileWorldObject){
+            this.stuffThatCanBumpIntoOtherStuff.delete((MobileWorldObject)obj);
+        }
+        if(obj instanceof Collidable){
+            this.stuffThatOtherStuffCanBumpInto.delete((Collidable)obj);
+        }
+        if(obj instanceof AbstractMachine){
+            this.machines.delete((AbstractMachine) obj);
+        }
+        if(obj instanceof AbstractItem){
+            this.items.delete((AbstractItem) obj);
+        }
+        if(obj instanceof Interactable){
+            this.interactables.delete((Interactable) obj);
+        }
         return this;
     }
     
@@ -113,15 +120,23 @@ public class Area {
     
     public Area update(){
         updatePowerGrid();
-        entities.forEach((e)->{
-            e.update();
+        this.stuffThatCanBumpIntoOtherStuff.forEach((e)->{
+            if(e instanceof AbstractEntity){
+                ((AbstractEntity)e).update();
+            }
             tileMap.checkForCollisions(e); 
+            this.stuffThatOtherStuffCanBumpInto.forEach((c)->{
+                if(!c.equals(e)){ // don't collide with self
+                    c.checkForCollisions(e);
+                }
+            });
+            /*
             machines.forEach((machine)->{
                 machine.checkForCollisions(e);
             });
             items.forEach((item)->{
                 item.checkForCollisions(e);
-            });
+            });*/
         });
         machines.forEach((m)->{
             if(m.isPowered()){

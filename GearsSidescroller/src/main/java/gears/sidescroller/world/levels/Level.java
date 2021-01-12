@@ -4,7 +4,7 @@ import gears.sidescroller.world.areas.Area;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.util.Matrix;
-import gears.sidescroller.world.entities.AbstractEntity;
+import gears.sidescroller.world.core.MobileWorldObject;
 import gears.sidescroller.world.tileMaps.MapBoundsReachedListener;
 import gears.sidescroller.world.tileMaps.OutOfBoundsEvent;
 import java.awt.Graphics;
@@ -47,7 +47,7 @@ public class Level extends Matrix<Area> implements MapBoundsReachedListener {
         player = p;
         p.init();
         Area currArea = getCurrentArea();
-        currArea.addEntity(p); //don't forget to remove the player when changing areas
+        currArea.addToWorld(p); //don't forget to remove the player when changing areas
         currArea.getTileMap().spawnEntityCenter(p);
         return this;
     }
@@ -127,9 +127,9 @@ public class Level extends Matrix<Area> implements MapBoundsReachedListener {
             } else {
                 boolean canSpawn = get(newXIdx, newYIdx).getTileMap().spawnEntityFromDir(event.getOutOfBoundsEntity(), Direction.rotateCounterClockWise(Direction.rotateCounterClockWise(event.getDirection())));
                 if(canSpawn){
-                    AbstractEntity e = event.getOutOfBoundsEntity();
-                    e.getArea().removeEntity(e);
-                    get(newXIdx, newYIdx).addEntity(e);
+                    MobileWorldObject e = event.getOutOfBoundsEntity();
+                    e.getArea().removeFromWorld(e);
+                    get(newXIdx, newYIdx).addToWorld(e);
                     if(e.equals(player)){
                         currentAreaX = newXIdx;
                         currentAreaY = newYIdx;

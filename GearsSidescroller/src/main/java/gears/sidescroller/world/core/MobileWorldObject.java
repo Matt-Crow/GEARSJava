@@ -10,7 +10,7 @@ import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
  * 
  * @author Matt Crow
  */
-public class MobileWorldObject extends ObjectInWorld {
+public abstract class MobileWorldObject extends ObjectInWorld {
 
     public MobileWorldObject(int x, int y, int w, int h) {
         super(x, y, w, h);
