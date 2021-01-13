@@ -1,6 +1,5 @@
 package gears.sidescroller.world.tileMaps;
 
-import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.world.core.CollisionBox;
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.util.FlyweightMatrix;
@@ -36,6 +35,32 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
         boundsReachedListeners = new LinkedList<>();
     }
     
+    /**
+     * Adds a MapBoundsReachedListener to the TileMap. The listener will be notified
+     * whenever a MobileWorldObject passes the bounds of this TileMap.
+     * 
+     * @param listener the listener to register.
+     * 
+     * @return this, for chaining purposes
+     */
+    public final TileMap addMapBoundsReachListener(MapBoundsReachedListener listener){
+        this.boundsReachedListeners.add(listener);
+        return this;
+    }
+    
+    /**
+     * Notifies each attached MapBoundsReachedListener that a MobileWorldObject
+     * has passed this TileMap's bounds.
+     * 
+     * @param event an event detailing who went out of bounds, and how.
+     * 
+     * @return this, for chaining purposes.
+     */
+    private TileMap fireMapBoundsReached(OutOfBoundsEvent event){
+        this.boundsReachedListeners.forEach((listener)->listener.boundReached(event));
+        return this;
+    }
+    
     public final int getWidthInPixels(){
         return getWidthInCells() * TILE_SIZE;
     }
@@ -51,17 +76,13 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
      * the given key will represent a copy
      * of the given tile.
      * 
-     * @param key
-     * @param tile
+     * @param key the integer key to map to the given tile
+     * @param tile the tile the given integer key represents
      * @return this, for chaining purposes
      */
     public TileMap addToTileSet(int key, AbstractTile tile){
         setKeyToVal(key, tile);
         return this;
-    }
-    
-    public final boolean isTileOpen(int xIdx, int yIdx){
-        return isValidIdx(xIdx, yIdx) && !getValueAt(xIdx, yIdx).getIsTangible();
     }
     
     /**
@@ -78,117 +99,16 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
         return this;
     }
     
-    private OutOfBoundsEvent checkIfOutsideBounds(MobileWorldObject e){
-        OutOfBoundsEvent lrEvent = null; // left-right
-        OutOfBoundsEvent udEvent = null; // up-down
-        if(e.getX() < 0){
-            e.setX(0);
-            lrEvent = new OutOfBoundsEvent(this, e, Direction.LEFT);
-        } else if(e.getX() > getWidthInPixels() - e.getWidth()){
-            e.setX(getWidthInPixels() - e.getWidth());
-            lrEvent = new OutOfBoundsEvent(this, e, Direction.RIGHT);
-        }
-        
-        if(e.getY() < 0){
-            e.setY(0);
-            udEvent = new OutOfBoundsEvent(this, e, Direction.UP);
-        } else if(e.getY() > getHeightInPixels() - e.getHeight()){
-            e.setY(getHeightInPixels() - e.getHeight());
-            udEvent = new OutOfBoundsEvent(this, e, Direction.DOWN);
-        }
-        
-        OutOfBoundsEvent event = null;
-        if(lrEvent == null){
-            event = udEvent;
-        } else if(udEvent == null){
-            event = lrEvent;
-        } else {
-            // neither is null, so favor the direction more out of bounds
-            double dx = Math.abs(e.getX() - getWidthInPixels() / 2); // distance from center
-            double dy = Math.abs(e.getY() - getHeightInPixels() / 2);
-            event = (dx < dy) ? udEvent : lrEvent;
-        }
-        
-        return event;
-    }
-    
-    private boolean handleCollisions(MobileWorldObject e, int tileXIdx, int tileYIdx){
-        boolean collided = false;
-        if(isValidIdx(tileXIdx, tileYIdx) && getValueAt(tileXIdx, tileYIdx).getIsTangible()){
-            collided = true;
-            new CollisionBox(
-                tileXIdx * TILE_SIZE,
-                tileYIdx * TILE_SIZE,
-                TILE_SIZE,
-                TILE_SIZE
-            ).shoveOut(e);
-        }
-        return collided;
-    }
-    
     /**
-     * Checks to see if the given MobileWorldObject is inside a block,
-     * and shoves them out if that block is tangible.
+     * Checks to see if the tile at the given indeces is open for MobileWorldObjects
+     * to occupy.
      * 
-     * @param e the MobileWorldObject to check for collisions with
-     * @return whether or not a collision was detected
+     * @param xIdx the x-coordinate of the tile to check, measured in index-space
+     * @param yIdx the y-coordinate of the tile to check, measured in index-space
+     * @return whether or not a valid open tile exists at the given coordinates
      */
-    public final boolean checkForCollisions(MobileWorldObject e){
-        OutOfBoundsEvent boundChecking = checkIfOutsideBounds(e);
-        
-        /*
-        This gets the tile index for the UPPER LEFT corner of e
-        becuase of how integer division rounds down.
-        
-        Therefore, need to check for collisions with four tiles
-        in a 2x2 tile square to catch all the tiles they could
-        possibly be colliding with.
-        */
-        
-        int yIdx = (int)(e.getY() / AbstractTile.TILE_SIZE);
-        int xIdx = (int)(e.getX() / AbstractTile.TILE_SIZE);
-        
-        boolean collUpperLeft = handleCollisions(e, xIdx, yIdx);
-        boolean collUpperRight = handleCollisions(e, (int)(xIdx+1), yIdx);
-        boolean collLowerLeft = handleCollisions(e, xIdx, (int)(yIdx+1));
-        boolean collLowerRight = handleCollisions(e, (int)(xIdx+1), (int)(yIdx+1));
-        
-        // AFTER handling collisions with this map, notify listeners if the entity left the area
-        if(boundChecking != null){
-            this.fireMapBoundsReached(boundChecking);
-        }        
-        
-        // do this to avoid short-circuit evaluation
-        return collUpperLeft
-            || collUpperRight
-            || collLowerLeft
-            || collLowerRight;
-    }
-    
-    /**
-     * Renders each tile in this' builtMap
-     * on the given graphics.
-     * 
-     * @param g the Graphics to render tiles on.
-     * @return this, for chaining purposes
-     */
-    public final TileMap draw(Graphics g){
-        forEachValueInCell((tile, xIdx, yIdx)->{
-            tile.drawAt(g, xIdx * TILE_SIZE, yIdx * TILE_SIZE);
-        });
-        return this;
-    }
-    
-    @Override
-    public String toString(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("TODO: better TileMap::toString\n");
-        sb.append("TILE MAP\n");
-        forEachKeyToValue((i, tile)->{
-            sb.append(String.format("%d : %s\n", i, tile.toString()));
-        });
-        sb.append(getAsCsv());
-        return sb.toString();
+    public final boolean isTileOpen(int xIdx, int yIdx){
+        return isValidIdx(xIdx, yIdx) && !getValueAt(xIdx, yIdx).getIsTangible();
     }
     
     /**
@@ -333,12 +253,138 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
         return isValidSpawn;
     }
     
-    public final TileMap addMapBoundsReachListener(MapBoundsReachedListener listener){
-        this.boundsReachedListeners.add(listener);
+    /**
+     * Checks to see if the given MobileWorldObject is outside the bounds
+     * of this TileMap. If so, returns how it is outside the TileMap.
+     * 
+     * @param e the MobileWorldObject to check if it is out of bounds.
+     * 
+     * @return how the given MobileWorldObject is out of bounds, <b>or null if 
+     * it is within the TileMap bounds</b>. 
+     */
+    private OutOfBoundsEvent checkIfOutsideBounds(MobileWorldObject e){
+        OutOfBoundsEvent lrEvent = null; // left-right
+        OutOfBoundsEvent udEvent = null; // up-down
+        if(e.getX() < 0){
+            e.setX(0);
+            lrEvent = new OutOfBoundsEvent(this, e, Direction.LEFT);
+        } else if(e.getX() > getWidthInPixels() - e.getWidth()){
+            e.setX(getWidthInPixels() - e.getWidth());
+            lrEvent = new OutOfBoundsEvent(this, e, Direction.RIGHT);
+        }
+        
+        if(e.getY() < 0){
+            e.setY(0);
+            udEvent = new OutOfBoundsEvent(this, e, Direction.UP);
+        } else if(e.getY() > getHeightInPixels() - e.getHeight()){
+            e.setY(getHeightInPixels() - e.getHeight());
+            udEvent = new OutOfBoundsEvent(this, e, Direction.DOWN);
+        }
+        
+        OutOfBoundsEvent event = null;
+        if(lrEvent == null){
+            event = udEvent;
+        } else if(udEvent == null){
+            event = lrEvent;
+        } else {
+            // neither is null, so favor the direction more out of bounds
+            double dx = Math.abs(e.getX() - getWidthInPixels() / 2); // distance from center
+            double dy = Math.abs(e.getY() - getHeightInPixels() / 2);
+            event = (dx < dy) ? udEvent : lrEvent;
+        }
+        
+        return event;
+    }
+    
+    /**
+     * Handles collisions between the given MobileWorldObject and the tile at the given index.
+     * 
+     * @param e the MobileWorldObject to handle collisions with
+     * @param tileXIdx the x-coordinate of the tile to handle collisions with, measured in index-space
+     * @param tileYIdx the y-coordinate of the tile to handle collisions with, measured in index-space
+     * 
+     * @return whether or not collisions were handles 
+     */
+    private boolean handleCollisions(MobileWorldObject e, int tileXIdx, int tileYIdx){
+        boolean collided = false;
+        if(isValidIdx(tileXIdx, tileYIdx) && getValueAt(tileXIdx, tileYIdx).getIsTangible()){
+            collided = true;
+            new CollisionBox(
+                tileXIdx * TILE_SIZE,
+                tileYIdx * TILE_SIZE,
+                TILE_SIZE,
+                TILE_SIZE
+            ).shoveOut(e);
+        }
+        return collided;
+    }
+    
+    /**
+     * Checks to see if the given MobileWorldObject is inside a tile,
+     * and shoves them out if that tile is tangible.
+     * 
+     * This collision checking is O(1) thanks to integer division,
+     * which is pretty cool.
+     * 
+     * @param e the MobileWorldObject to check for collisions with
+     * 
+     * @return whether or not a collision was detected
+     */
+    public final boolean checkForCollisions(MobileWorldObject e){
+        OutOfBoundsEvent boundChecking = checkIfOutsideBounds(e);
+        
+        /*
+        This gets the tile index for the UPPER LEFT corner of e
+        becuase of how integer division rounds down.
+        
+        Therefore, need to check for collisions with four tiles
+        in a 2x2 tile square to catch all the tiles they could
+        possibly be colliding with.
+        */
+        
+        int yIdx = (int)(e.getY() / AbstractTile.TILE_SIZE);
+        int xIdx = (int)(e.getX() / AbstractTile.TILE_SIZE);
+        
+        boolean collUpperLeft  = handleCollisions(e, xIdx  , yIdx  );
+        boolean collUpperRight = handleCollisions(e, xIdx+1, yIdx  );
+        boolean collLowerLeft  = handleCollisions(e, xIdx  , yIdx+1);
+        boolean collLowerRight = handleCollisions(e, xIdx+1, yIdx+1);
+        
+        // AFTER handling collisions with this map, notify listeners if the entity left the area
+        if(boundChecking != null){
+            this.fireMapBoundsReached(boundChecking);
+        }        
+        
+        // do this to avoid short-circuit evaluation of the handleCollisions method
+        return collUpperLeft
+            || collUpperRight
+            || collLowerLeft
+            || collLowerRight;
+    }
+    
+    /**
+     * Renders each tile in this TileMap
+     * on the given graphics.
+     * 
+     * @param g the Graphics to render tiles on.
+     * @return this, for chaining purposes
+     */
+    public final TileMap draw(Graphics g){
+        forEachValueInCell((tile, xIdx, yIdx)->{
+            tile.drawAt(g, xIdx * TILE_SIZE, yIdx * TILE_SIZE);
+        });
         return this;
     }
-    private TileMap fireMapBoundsReached(OutOfBoundsEvent event){
-        this.boundsReachedListeners.forEach((listener)->listener.boundReached(event));
-        return this;
+    
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("TODO: better TileMap::toString\n");
+        sb.append("TILE MAP\n");
+        forEachKeyToValue((i, tile)->{
+            sb.append(String.format("%d : %s\n", i, tile.toString()));
+        });
+        sb.append(getAsCsv());
+        return sb.toString();
     }
 }
