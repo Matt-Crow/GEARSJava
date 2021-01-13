@@ -48,11 +48,13 @@ public abstract class AbstractItem extends ObjectInWorld {
      * behavior which should happen when the Player uses this AbstractItem.
      * Note that an AbstractItem may be used in an Area different from its own,
      * so use {@code whoUsedItem.getArea()} to reference the Area it is used in,
-     * note {@code this.getArea()}.
+     * not {@code this.getArea()}.
      * 
-     * @param whoUsedItem
-     * @return whether or not this could perform its action, and should thus be 
-     * removed from the Player's inventory.
+     * Note that the AbstractItem is responsible for removing itself from the
+     * Player's inventory, if appropriate.
+     * 
+     * @param whoUsedItem the Player who used this AbstractItem
+     * @return whether or not this could perform its action
      */
     public abstract boolean doAction(Player whoUsedItem);
     

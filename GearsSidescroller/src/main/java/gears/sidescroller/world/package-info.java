@@ -17,6 +17,7 @@
  * <tr><td>structures </td> <td>buildings in an Area</td> <td>needs serialization and more attributes</td> </tr>
  * <tr><td>machines   </td> <td>interactive elements</td> <td>needs serialization                    </td> </tr>
  * <tr><td>items      </td> <td>items to collect    </td> <td>needs serialization                    </td> </tr>
+ * <tr><td>entities   </td> <td>sentient beings     </td> <td>needs NPCs, AI, and serialization      </td> </tr>
  * </table>
  */
 package gears.sidescroller.world;

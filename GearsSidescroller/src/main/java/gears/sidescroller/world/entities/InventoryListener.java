@@ -1,14 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gears.sidescroller.world.entities;
 
 /**
- *
- * @author Matt
+ * The InventoryListener is used to listen for changes to a Player's inventory,
+ * firing whenever they pick up or lost an AbstractItem.
+ * 
+ * Use {@code player.addInventoryListener(...)} to register a listener to receive
+ * updates about inventory changes.
+ * 
+ * @author Matt Crow
  */
 public interface InventoryListener {
+    /**
+     * Fired whenever the inventory of a Player this is listening to changes.
+     * 
+     * @param whoseInventory the Player whose inventory changed. 
+     */
     public void inventoryChanged(Player whoseInventory);
 }

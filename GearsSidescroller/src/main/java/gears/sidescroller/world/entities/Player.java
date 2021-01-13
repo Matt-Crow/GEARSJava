@@ -10,8 +10,9 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 
 /**
- *
- * @author Matt
+ * A Player is an AbstractEntity which can pick up and use AbstractItems.
+ * 
+ * @author Matt Crow
  */
 public class Player extends AbstractEntity {
     private final ArrayList<AbstractItem> inventory;
@@ -24,57 +25,104 @@ public class Player extends AbstractEntity {
         inventoryListeners = new ArrayList<>();
     }
     
+    /**
+     * Registers and InventoryListener to receive notifications when this'
+     * inventory changes.
+     * 
+     * @param listener the listener to register. 
+     */
     public final void addInventoryListener(InventoryListener listener){
         this.inventoryListeners.add(listener);
     }
     
+    /**
+     * Causes this Player to interact with its current Area, which handles
+     * interactions appropriately.
+     */
     public final void grab(){
         getArea().playerInteracted(this);
     }
     
+    /**
+     * Gives this Player the given item. Note that this does not remove the item
+     * from its Area.
+     * 
+     * @param item the item to pick up 
+     */
     public final void pickupItem(AbstractItem item){
         inventory.add(item);
         fireInventoryChanged();
     }
     
-    public final boolean useItem(AbstractItem item){
-        boolean usedItem = inventory.contains(item) && item.doAction(this);
-        if(usedItem){
-            inventory.remove(item); // may cause ConcurrentModificationException
+    /**
+     * Removes the given item from this' inventory, notifying listeners if 
+     * successful
+     * .
+     * @param item the item to remove from this' inventory 
+     */
+    public final void removeItem(AbstractItem item){
+        if(inventory.remove(item)){
             fireInventoryChanged();
         }
-        return usedItem;
     }
     
+    /**
+     * Attempts to use the given AbstractItem in this' Area. If this successfully
+     * uses the item, removes it from this' inventory.
+     * 
+     * @param item the item to use.
+     * @return 
+     */
+    public final boolean useItem(AbstractItem item){
+        return inventory.contains(item) && item.doAction(this);
+    }
+    
+    /**
+     * Performs the given action on each item in this' inventory
+     * 
+     * @param doThis what to do with each item
+     */
     public final void forEachInventoryItem(Consumer<AbstractItem> doThis){
         inventory.forEach(doThis);
     }
     
+    /**
+     * Notifies all attached listeners that this' inventory has changed
+     */
     private void fireInventoryChanged(){
         this.inventoryListeners.forEach((listener)->listener.inventoryChanged(this));
     }
     
+    /**
+     * Prepares this Player for a new Level
+     */
     public void init(){
         inventory.clear();
         fireInventoryChanged();
     }
     
+    /**
+     * GNDN
+     * @return this, for chaining purposes 
+     */
     @Override
     public AbstractEntity doUpdate() {
         return this;
     }
 
+    /**
+     * Renders this Player beautifully as a masterpiece of modern art, the likes
+     * of which even the most esteemed artists of the yesteryear yearn to achieve.
+     * 
+     * @param g the canvas which this method should grace the surface with a
+     * magnificent rendition of this Player.
+     */
     @Override
     public void draw(Graphics g) {
         //temporary until I have player sprites
         int t = AbstractTile.TILE_SIZE;
         g.setColor(Color.gray);
         g.fillRect(getX(), getY(), t, t);
-    }
-
-    public void removeItem(AbstractItem item) {
-        this.inventory.remove((AbstractItem)item);
-        this.fireInventoryChanged();
     }
 
     @Override
