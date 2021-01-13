@@ -5,6 +5,7 @@ import gears.sidescroller.world.items.ItemGenerator;
 import gears.sidescroller.world.machines.MachineGenerator;
 import gears.sidescroller.world.structures.Structure;
 import gears.sidescroller.world.structures.StructureGenerator;
+import gears.sidescroller.world.tileMaps.OpenTileSearch;
 import gears.sidescroller.world.tileMaps.TileMap;
 import gears.sidescroller.world.tileMaps.TileMapGenerator;
 import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
@@ -29,6 +30,7 @@ public class AreaGenerator {
     
     public final Area generateRandom(){
         Random rng = new Random();
+        OpenTileSearch search = new OpenTileSearch();
         int max = 10;
         Point openTile = null;
         
@@ -56,7 +58,8 @@ public class AreaGenerator {
         int numItems = rng.nextInt(5);
         AbstractItem newItem = null;
         for(int i = 0; i < numItems; i++){
-            openTile = map.searchForOpenTileAround(
+            openTile = search.searchForOpenTileAround(
+                map,
                 rng.nextInt(map.getWidthInCells()), 
                 rng.nextInt(map.getHeightInCells())
             );
@@ -72,7 +75,8 @@ public class AreaGenerator {
         // generate machines
         int numMachines = rng.nextInt(5);
         for(int i = 0; i < numMachines; i++){
-            openTile = map.searchForOpenTileAround(
+            openTile = search.searchForOpenTileAround(
+                map,
                 rng.nextInt(map.getWidthInCells()), 
                 rng.nextInt(map.getHeightInCells())
             );

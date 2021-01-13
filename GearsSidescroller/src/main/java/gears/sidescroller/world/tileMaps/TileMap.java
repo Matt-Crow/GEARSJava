@@ -112,54 +112,8 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
     }
     
     /**
-     * Searches for an intangible tile index around the given tile map coordinates.
-     * 
-     * @param initialXIdx the tile x index to check for intangible tiles around
-     * @param initialYIdx the tile y index to check fro intangible tiles around
-     * 
-     * @return the indeces of an intangible tile around the given tile, or null if no open tiles exist
-     */
-    public final Point searchForOpenTileAround(int initialXIdx, int initialYIdx){
-        Point ret = null;
-        int xIdx = initialXIdx;
-        int yIdx = initialYIdx;
-        if(isTileOpen(xIdx, yIdx)){
-            ret = new Point(xIdx, yIdx);
-        }        
-        Direction spiralDir = Direction.UP;
-        int spiralLength = 1;
-        int spiralLengthThusFar = 0;
-        int numTilesChecked = 0;
-        boolean justTurned = true;
-        while(ret == null && numTilesChecked < this.getHeightInCells() * this.getWidthInCells()){
-            if(this.isValidIdx(xIdx, yIdx)){
-                numTilesChecked++; // doesn't run if checking a point outside the map
-            }
-            // search in a spiralling pattern
-            xIdx += spiralDir.getXMod();
-            yIdx += spiralDir.getYMod();
-            spiralLengthThusFar++;
-            if(spiralLengthThusFar >= spiralLength){ // time to turn
-                spiralDir = Direction.rotateCounterClockWise(spiralDir);
-                spiralLengthThusFar = 0;
-                if(justTurned){
-                    justTurned = false;
-                } else { // need to increase spiral length every other turn
-                    // completed one loop
-                    spiralLength += 1; // search in a wider spiral
-                    justTurned = true;
-                }
-            }
-            //System.out.println(spiralDir.getName());
-            if(isTileOpen(xIdx, yIdx)){
-                ret = new Point(xIdx, yIdx);
-            }
-        }
-        return ret;
-    }
-    
-    /**
      * Sets a MobileWorldObject's coordinates to those of an open tile around the given tile.
+     * <b>Remember: this doesn't set the MobileWorldObject's Area, so don't forget to call {@code area.addToWorld()}!</b>
      * 
      * @param e the MobileWorldObject to set coordinates for
      * @param xIdx the tile x index to check around
@@ -167,7 +121,7 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
      * @return this, for chaining purposes
      */
     private TileMap spawnEntityFromPoint(MobileWorldObject e, int xIdx, int yIdx){
-        Point spawnTile = searchForOpenTileAround(xIdx, yIdx);
+        Point spawnTile = new OpenTileSearch().searchForOpenTileAround(this, xIdx, yIdx);
         if(spawnTile == null){
             throw new RuntimeException("No valid spawn tiles");
         } else {
