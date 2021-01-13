@@ -24,20 +24,20 @@ public class Area {
     private final PowerGrid powerGrid;
     private final VolatileLinkedList<MobileWorldObject> stuffThatCanBumpIntoOtherStuff;
     private final VolatileLinkedList<Collidable> stuffThatOtherStuffCanBumpInto;
+    private final VolatileLinkedList<Interactable> interactables;
     
     private final VolatileLinkedList<AbstractMachine> machines;
     private final VolatileLinkedList<AbstractItem> items;
-    private final VolatileLinkedList<Interactable> interactables;
     
     public Area(TileMap t){
         tileMap = t;
         powerGrid = new PowerGrid(t.getWidthInCells(), t.getHeightInCells());
         stuffThatCanBumpIntoOtherStuff = new VolatileLinkedList<>();
         stuffThatOtherStuffCanBumpInto = new VolatileLinkedList<>();
+        interactables = new VolatileLinkedList<>();
         
         machines = new VolatileLinkedList<>();
         items = new VolatileLinkedList<>();
-        interactables = new VolatileLinkedList<>();
     }
     
     public Area addToWorld(ObjectInWorld obj){
