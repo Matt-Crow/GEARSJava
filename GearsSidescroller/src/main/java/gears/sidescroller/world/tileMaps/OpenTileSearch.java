@@ -60,4 +60,53 @@ public class OpenTileSearch {
         }
         return ret;
     }
+    
+    /**
+     * Searches for an open tile along one side of the given map. It attempts to
+     * find a point as close the the given initial indeces as possible.
+     * 
+     * @param map the map to search for an open tile in 
+     * @param initialXIdx the x-coordinate this should find a point close to,
+     * measured in index-space.
+     * @param initialYIdx the y-coordinate this should find a point close to,
+     * measured in index-space.
+     * @param whatSide the side of the TileMap to check for open tiles along.
+     * 
+     * @return the index of an open tile, or null if no such tile exists 
+     */
+    public final Point searchForOpenTileAlongSide(TileMap map, int initialXIdx, int initialYIdx, Direction whatSide){
+        Point ret = null;
+        
+        Direction lineDirection = Direction.rotateCounterClockWise(whatSide);
+        
+        boolean posRadValid = true;
+        boolean negRadValid = true;
+        int currXIdx = initialXIdx;
+        int currYIdx = initialYIdx;
+        for(int searchRadius = 0; ret == null && (posRadValid || negRadValid); searchRadius++){
+            // check positive radius direction
+            currXIdx = (int) (initialXIdx + lineDirection.getXMod() * searchRadius);
+            currYIdx = (int) (initialYIdx + lineDirection.getYMod() * searchRadius);
+            posRadValid = map.isValidIdx(currXIdx, currYIdx);
+            if(posRadValid){
+                // check if the positive tile is open
+                if(map.isTileOpen(currXIdx, currYIdx)){
+                    ret = new Point(currXIdx, currYIdx);
+                }
+            }
+            
+            // check negative radius direction
+            if(ret == null){
+                currXIdx = (int) (initialXIdx - lineDirection.getXMod() * searchRadius);
+                currYIdx = (int) (initialYIdx - lineDirection.getYMod() * searchRadius);
+                negRadValid = map.isValidIdx(currXIdx, currYIdx);
+                if(negRadValid && map.isTileOpen(currXIdx, currYIdx)){
+                    // check if the negative tile is open
+                    ret = new Point(currXIdx, currYIdx);
+                }
+            }
+        }
+        
+        return ret;
+    }
 }

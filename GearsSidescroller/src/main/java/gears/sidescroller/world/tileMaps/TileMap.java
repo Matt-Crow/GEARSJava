@@ -132,79 +132,59 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
     }    
     
     /**
-     * Attempts to set an Entity's coordinates around the center
+     * Attempts to set an MobileWorldObject's coordinates around the center
      * of this TileMap.
      * 
-     * @param e the Entity to set coordinates for
+     * @param e the MobileWorldObject to set coordinates for
      * @return this, for chaining purposes
      */
     public final TileMap spawnEntityCenter(MobileWorldObject e){
         return spawnEntityFromPoint(e, (int) (getWidthInCells() / 2), (int)(getHeightInCells() / 2));
     }
     
-    public final boolean spawnEntityFromDir(MobileWorldObject e, Direction dir){
-        return linearOpenSpawnTileSearch(e, dir);
-    }
-    
-    private boolean linearOpenSpawnTileSearch(MobileWorldObject e, Direction fromDir){
-        boolean isValidSpawn = false;
-        Direction lineDirection = Direction.rotateCounterClockWise(fromDir);
+    /**
+     * Attempts to set a MobileWorldObject's coordinates along the given side
+     * of this TileMap.
+     * 
+     * @param e the MobileWorldObject to attempt to set coordinates for
+     * @param fromDir the side of this to set the MobileWorldObject's coordinates
+     * along.
+     * 
+     * @return whether or not an open tile exists along the given side. 
+     */
+    public final boolean spawnEntityFromDir(MobileWorldObject e, Direction fromDir){
         int initialXIdx = 0;
         int initialYIdx = 0;
+        // I'd love it if I could move this to Direction, but how?
         switch(fromDir){
             case UP:
-                initialXIdx = (int)e.getXIdx();
+                initialXIdx = e.getXIdx();
                 initialYIdx = 0;
                 break;
             case DOWN:
-                initialXIdx = (int)e.getXIdx();
-                initialYIdx = (int) (this.getHeightInCells() - 1);
+                initialXIdx = e.getXIdx();
+                initialYIdx = this.getHeightInCells() - 1;
                 break;
             case LEFT:
                 initialXIdx = 0;
-                initialYIdx = (int)e.getYIdx();
+                initialYIdx = e.getYIdx();
                 break;
             case RIGHT:
-                initialXIdx = (int) (this.getWidthInCells() - 1);
-                initialYIdx = (int)e.getYIdx();
+                initialXIdx = this.getWidthInCells() - 1;
+                initialYIdx = e.getYIdx();
                 break;
             default:
                 throw new UnsupportedOperationException(String.format("Cannot do linear tile search with direction \"%s\"", fromDir.getName()));
         }
         
-        boolean posRadValid = true;
-        boolean negRadValid = true;
-        int currXIdx = initialXIdx;
-        int currYIdx = initialYIdx;
-        for(int searchRadius = 0; !isValidSpawn && (posRadValid || negRadValid); searchRadius++){
-            // check positive radius direction
-            currXIdx = (int) (initialXIdx + lineDirection.getXMod() * searchRadius);
-            currYIdx = (int) (initialYIdx + lineDirection.getYMod() * searchRadius);
-            posRadValid = this.isValidIdx(currXIdx, currYIdx);
-            if(posRadValid){
-                // check if the positive tile is open
-                isValidSpawn = this.isTileOpen(currXIdx, currYIdx);
-            }
-            
-            // check negative radius direction
-            if(!isValidSpawn){
-                currXIdx = (int) (initialXIdx - lineDirection.getXMod() * searchRadius);
-                currYIdx = (int) (initialYIdx - lineDirection.getYMod() * searchRadius);
-                negRadValid = this.isValidIdx(currXIdx, currYIdx);
-                if(negRadValid){
-                    // check if the negative tile is open
-                    isValidSpawn = this.isTileOpen(currXIdx, currYIdx);
-                }
-            }
-            
-            // set entity coordinates if either spawn is valid
-            if(isValidSpawn){
-                e.setXIdx(currXIdx);
-                e.setYIdx(currYIdx);
-            }
+        Point spawnHere = new OpenTileSearch().searchForOpenTileAlongSide(this, initialXIdx, initialYIdx, fromDir);
+        
+        if(spawnHere != null){
+            e.setXIdx(spawnHere.x);
+            e.setYIdx(spawnHere.y);
         }
         
-        return isValidSpawn;
+        return spawnHere != null;
     }
     
     /**
