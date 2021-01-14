@@ -133,6 +133,12 @@ public class Area {
         interactables.forEach((i)->i.interactWith(p));
     }
     
+    /**
+     * Updates this Area and everything within it. This method
+     * is invoked once per frame by Level.
+     * 
+     * @return this, for chaining purposes. 
+     */
     public Area update(){
         powerGrid.update(machines);
         this.stuffThatCanBumpIntoOtherStuff.forEach((e)->{
@@ -157,6 +163,13 @@ public class Area {
         return this;
     }
     
+    /**
+     * Renders this Area and everything within it.
+     * 
+     * @param g the Graphics to render this on.
+     * 
+     * @return this, for chaining purposes.
+     */
     public Area draw(Graphics g){
         tileMap.draw(g);
         machines.forEach((m)->{

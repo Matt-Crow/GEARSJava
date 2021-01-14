@@ -7,6 +7,9 @@ import java.util.function.BiFunction;
  * Use this class to randomly
  * generate tile maps.
  * 
+ * Currently, subsequent invocations of generateRandom will produce the same
+ * shape of TileMap, though the colors will be different
+ * 
  * @author Matt Crow
  */
 public class TileMapGenerator {
@@ -34,6 +37,10 @@ public class TileMapGenerator {
     
     public TileMapGenerator(int cosAmplitude, int sinAmplitude, int cosPeriod, int sinPeriod){
         this(new TileGenerator(), cosAmplitude, sinAmplitude, cosPeriod, sinPeriod);
+    }
+    
+    public TileMapGenerator(){
+        this(5, 5, 5, 5);
     }
     
     public TileMap generateTileMap(int w, int h){

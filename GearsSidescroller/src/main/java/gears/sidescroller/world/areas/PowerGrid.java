@@ -19,20 +19,43 @@ import java.util.LinkedList;
 public class PowerGrid extends Matrix<Boolean> {
     private double alpha;
     
+    /**
+     * 
+     * @param width the width of this PowerGrid, measured in tiles
+     * @param height the height of this PowerGrid, measured in tiles
+     */
     public PowerGrid(int width, int height) {
         super(width, height);
         alpha = 0;
         setAllTo(false);
     }
     
-    public final boolean applyPowerFrom(AbstractMachine machine){
+    /**
+     * Applies power from the given machine to the PowerGrid, if it provides any power.
+     * 
+     * @param machine the machine to apply power from
+     * 
+     * @return whether new power was provided by the given machine 
+     */
+    private boolean applyPowerFrom(AbstractMachine machine){
         boolean machineProvidesPower = machine instanceof PowerProvidingMachine && machine.isPowered();
-        return machineProvidesPower && generateSquareOfPower(machine.getCenterXIdx(), machine.getCenterYIdx(), ((PowerProvidingMachine)machine).getPowerAreaRadiusInTiles());
+        return machineProvidesPower && generateSquareOfPower(machine);
     }
-    private boolean generateSquareOfPower(int centerXIdx, int centerYIdx, int radius){
+    
+    /**
+     * Updates this PowerGrid by creating a square of powered tiles centered on
+     * the given machine, assuming it is a PowerProvidingMachine.
+     * 
+     * @param machine the machine which will produce a square of power
+     * 
+     * @return whether new powered tiles were added by the machine's square of
+     * power.
+     */
+    private boolean generateSquareOfPower(AbstractMachine machine){
         boolean newPowerAdded = false;
-        int squareOfPowerXIdx = centerXIdx - radius;
-        int squareOfPowerYIdx = centerYIdx - radius;
+        int radius = (machine instanceof PowerProvidingMachine) ? ((PowerProvidingMachine)machine).getPowerAreaRadiusInTiles() : 0;
+        int squareOfPowerXIdx = machine.getCenterXIdx() - radius;
+        int squareOfPowerYIdx = machine.getCenterYIdx() - radius;
         for(int dx = 0; dx <= radius * 2; dx++){
             for(int dy = 0; dy <= radius * 2; dy++){
                 if(
@@ -47,6 +70,13 @@ public class PowerGrid extends Matrix<Boolean> {
         return newPowerAdded;
     }
     
+    /**
+     * Updates the PowerGrid with the given list of machines, supplying external
+     * power where relevant, and updating which of this' indeces are powered.
+     * 
+     * @param machines the list of machines to apply power from and apply external
+     * power to.
+     */
     public final void update(VolatileLinkedList<AbstractMachine> machines){
         setAllTo(false);
         LinkedList<AbstractMachine> currentSet = new LinkedList<>();
