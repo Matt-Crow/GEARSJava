@@ -1,11 +1,13 @@
 package gears.sidescroller.world.areas;
 
 import gears.sidescroller.util.Matrix;
+import gears.sidescroller.util.dataStructures.VolatileLinkedList;
 import gears.sidescroller.world.machines.AbstractMachine;
 import gears.sidescroller.world.machines.PowerProvidingMachine;
 import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.LinkedList;
 
 /**
  * The PowerGrid is used by an Area to denote which
@@ -43,6 +45,44 @@ public class PowerGrid extends Matrix<Boolean> {
             }
         }
         return newPowerAdded;
+    }
+    
+    public final void update(VolatileLinkedList<AbstractMachine> machines){
+        setAllTo(false);
+        LinkedList<AbstractMachine> currentSet = new LinkedList<>();
+        LinkedList<AbstractMachine> nextSet = new LinkedList<>();
+        machines.forEach((m)->{
+            if(m instanceof PowerProvidingMachine){
+                currentSet.add(m);
+            }
+        });
+        boolean newPowerWasProvided = false;
+        do {
+            newPowerWasProvided = false;
+            for(AbstractMachine m : currentSet){
+                m.setExternallyPowered(get(m.getXIdx(), m.getYIdx()));
+                if(m.isPowered()){
+                    newPowerWasProvided |= applyPowerFrom(m);
+                    // "Or equals" prevents true from being replaced with false
+                } else {
+                    nextSet.add(m);
+                }
+            }
+            currentSet.clear();
+            currentSet.addAll(nextSet);
+            nextSet.clear();
+        } while(newPowerWasProvided);
+        
+        /*
+        keep updating until no new PowerProvidingMachines are powered
+        This helps catch cases where a machine earlier in the list is originally unpowered,
+        but gets power by a later machine in the list.
+        */
+        
+        // lastly, set all Machine's powered status
+        machines.forEach((machine)->{
+            machine.setExternallyPowered(get(machine.getXIdx(), machine.getYIdx()));
+        });
     }
     
     public final void draw(Graphics g){

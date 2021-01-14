@@ -13,33 +13,49 @@ import gears.sidescroller.world.tileMaps.TileMap;
 import java.awt.Graphics;
 
 /**
- * this will be used to store a tileMap,
- * list of Entities,
- * and Machines.
+ * An Area is a complete, playable world where a Player can explore. Areas are
+ * contained within a Level, and contain many things to interact with.
  * 
  * @author Matt Crow
  */
 public class Area {
     private final TileMap tileMap;
     private final PowerGrid powerGrid;
+    
+    /*
+    Once I have more behavioral interfaces (Renderable, Interactable, Initializable, etc) 
+    I'll want to categorize by behavior instead of type.
+    */
     private final VolatileLinkedList<MobileWorldObject> stuffThatCanBumpIntoOtherStuff;
     private final VolatileLinkedList<Collidable> stuffThatOtherStuffCanBumpInto;
     private final VolatileLinkedList<Interactable> interactables;
-    
     private final VolatileLinkedList<AbstractMachine> machines;
     private final VolatileLinkedList<AbstractItem> items;
     
+    /**
+     * Creates a new Area with the given TileMap
+     * 
+     * @param t the TileMap for this Area 
+     */
     public Area(TileMap t){
         tileMap = t;
         powerGrid = new PowerGrid(t.getWidthInCells(), t.getHeightInCells());
         stuffThatCanBumpIntoOtherStuff = new VolatileLinkedList<>();
         stuffThatOtherStuffCanBumpInto = new VolatileLinkedList<>();
         interactables = new VolatileLinkedList<>();
-        
         machines = new VolatileLinkedList<>();
         items = new VolatileLinkedList<>();
     }
     
+    /**
+     * Adds the given ObjectInWorld to this Area. Note that this method does not
+     * alter the object's coordinates. This automatically invokes 
+     * {@code obj.setArea(this)}, so you needn't worry about that.
+     * 
+     * @param obj the ObjectInWorld to add to this Area.
+     * 
+     * @return this, for chaining purposes 
+     */
     public Area addToWorld(ObjectInWorld obj){
         if(obj instanceof MobileWorldObject){
             this.stuffThatCanBumpIntoOtherStuff.add((MobileWorldObject)obj);
@@ -60,6 +76,14 @@ public class Area {
         
         return this;
     }
+    
+    /**
+     * Removes the given ObjectInWorld from this Area, if it is present.
+     * 
+     * @param obj the ObjectInWorld to remove from this Area.
+     * 
+     * @return this, for chaining purposes. 
+     */
     public Area removeFromWorld(ObjectInWorld obj){
         if(obj instanceof MobileWorldObject){
             this.stuffThatCanBumpIntoOtherStuff.delete((MobileWorldObject)obj);
@@ -79,47 +103,38 @@ public class Area {
         return this;
     }
     
-    public final void playerInteracted(Player p){
-        interactables.forEach((i)->i.interactWith(p));
+    /**
+     * Use this method if you need to check for open tiles or other static
+     * environment information.
+     * 
+     * @return this Area's TileMap. 
+     */
+    public final TileMap getTileMap(){
+        return tileMap;
     }
     
+    /**
+     * DNGN
+     * 
+     * @return this, for chaining purposes
+     */
     public Area init(){
         //entities.forEach((e)->e.init());
         return this;
     }
     
-    public TileMap getTileMap(){
-        return tileMap;
-    }
-    
-    private void updatePowerGrid(){
-        powerGrid.setAllTo(false);
-        boolean powerWasProvided = false;
-        AbstractMachine asMachine = null;
-        do {
-            powerWasProvided = false;
-            for(Object machine : machines.toArray()){
-                asMachine = (AbstractMachine)machine;
-                asMachine.setExternallyPowered(powerGrid.get(asMachine.getXIdx(), asMachine.getYIdx()));
-                if(asMachine.isPowered()){
-                    powerWasProvided |= powerGrid.applyPowerFrom(asMachine); // "Or equals" prevents true from being replaced with false
-                }
-            }
-        } while(powerWasProvided);
-        /*
-        keep updating until no new PowerProvidingMachines are powered
-        This helps catch cases where a machine earlier in the list is originally unpowered,
-        but gets power by a later machine in the list.
-        */
-        
-        // lastly, set all Machine's powered status
-        machines.forEach((machine)->{
-            machine.setExternallyPowered(powerGrid.get(machine.getXIdx(), machine.getYIdx()));
-        });
+    /**
+     * Notifies all the interactable objects in the Area that a Player has
+     * interacted, causing them to act as appropriate.
+     * 
+     * @param p the Player who interacted with this Area
+     */
+    public final void playerInteracted(Player p){
+        interactables.forEach((i)->i.interactWith(p));
     }
     
     public Area update(){
-        updatePowerGrid();
+        powerGrid.update(machines);
         this.stuffThatCanBumpIntoOtherStuff.forEach((e)->{
             if(e instanceof AbstractEntity){
                 ((AbstractEntity)e).update();
@@ -130,13 +145,6 @@ public class Area {
                     c.checkForCollisions(e);
                 }
             });
-            /*
-            machines.forEach((machine)->{
-                machine.checkForCollisions(e);
-            });
-            items.forEach((item)->{
-                item.checkForCollisions(e);
-            });*/
         });
         machines.forEach((m)->{
             if(m.isPowered()){
