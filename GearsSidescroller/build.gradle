@@ -15,7 +15,7 @@ plugins {
 }
 
 project.mainClassName = "gears.sidescroller.start.GameMain"
-project.version = "0.5"
+project.version = "0.9"
 
 if (!hasProperty('mainClass')) {
     ext.mainClass = project.mainClassName
