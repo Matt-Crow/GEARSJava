@@ -28,5 +28,11 @@ R to regenerate randomly generated world
 L to log the world to System.out
 Q to interact with your current tile (such as picking up placed gears)
 
+## Some Screenshots
+Here are just a few examples of the kind of worlds this program can generate:
+![A square of conveyor belts all leading into each other](./readmeResources/gears1.png)
+![A very long train of conveyor belts](./readmeResources/gears2.png)
+![A very pink house](./readmeResources/gears3.png)
+
 In case I can't find it: Remember Matt, the TempTestLevel is in the "start" package,
 and you set the Level to play in HomePage!
