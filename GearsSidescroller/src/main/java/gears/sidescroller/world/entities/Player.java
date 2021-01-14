@@ -3,7 +3,7 @@ package gears.sidescroller.world.entities;
 import gears.sidescroller.gui.LevelPage;
 import gears.sidescroller.world.core.MobileWorldObject;
 import gears.sidescroller.world.items.AbstractItem;
-import gears.sidescroller.world.tiles.AbstractTile;
+import gears.sidescroller.world.tiles.AbstractTileTemplate;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class Player extends AbstractEntity {
     
     public Player(){
         super();
-        this.setSpeed(3 * AbstractTile.TILE_SIZE / LevelPage.FPS);
+        this.setSpeed(3 * AbstractTileTemplate.TILE_SIZE / LevelPage.FPS);
         inventory = new ArrayList<>();
         inventoryListeners = new ArrayList<>();
     }
@@ -120,7 +120,7 @@ public class Player extends AbstractEntity {
     @Override
     public void draw(Graphics g) {
         //temporary until I have player sprites
-        int t = AbstractTile.TILE_SIZE;
+        int t = AbstractTileTemplate.TILE_SIZE;
         g.setColor(Color.gray);
         g.fillRect(getX(), getY(), t, t);
     }

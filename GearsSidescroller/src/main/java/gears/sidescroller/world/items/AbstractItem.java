@@ -4,7 +4,7 @@ import gears.sidescroller.world.core.MobileWorldObject;
 import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.core.ObjectInWorld;
-import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
+import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 import java.awt.Graphics;
 
 /**

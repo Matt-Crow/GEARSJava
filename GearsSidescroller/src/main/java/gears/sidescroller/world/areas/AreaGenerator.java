@@ -8,7 +8,7 @@ import gears.sidescroller.world.structures.StructureGenerator;
 import gears.sidescroller.world.tileMaps.OpenTileSearch;
 import gears.sidescroller.world.tileMaps.TileMap;
 import gears.sidescroller.world.tileMaps.TileMapGenerator;
-import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
+import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 import java.awt.Point;
 import java.util.Random;
 

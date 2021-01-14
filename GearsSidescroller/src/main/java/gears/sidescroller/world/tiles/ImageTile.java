@@ -10,11 +10,11 @@ import java.awt.image.BufferedImage;
  * 
  * @author Matt Crow
  */
-public class ImageTile extends AbstractTile{
+public class ImageTile extends AbstractTileTemplate{
     private final BufferedImage image;
     
-    public ImageTile(int xIndex, int yIndex, boolean tangible, BufferedImage img) {
-        super(xIndex, yIndex, tangible);
+    public ImageTile(boolean tangible, BufferedImage img) {
+        super(tangible);
         
         //create a new, transparent image to guarantee the image is the correct size
         //and copy the image over it
@@ -35,13 +35,8 @@ public class ImageTile extends AbstractTile{
     }
 
     @Override
-    public AbstractTile drawAt(Graphics g, int x, int y) {
+    public AbstractTileTemplate drawAt(Graphics g, int x, int y) {
         g.drawImage(image, x, y, null);
         return this;
-    }
-
-    @Override
-    public AbstractTile copyTo(int xIndex, int yIndex) {
-        return new ImageTile(xIndex, yIndex, getIsTangible(), image);
     }
 }

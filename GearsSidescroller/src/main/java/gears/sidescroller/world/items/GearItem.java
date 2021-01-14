@@ -3,7 +3,7 @@ package gears.sidescroller.world.items;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.util.UnrotatedGearSprite;
 import gears.sidescroller.world.machines.PlacedGearMachine;
-import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
+import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 import java.awt.Color;
 import java.awt.Graphics;
 

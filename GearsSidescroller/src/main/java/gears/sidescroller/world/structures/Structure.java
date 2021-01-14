@@ -1,7 +1,7 @@
 package gears.sidescroller.world.structures;
 
 import gears.sidescroller.util.FlyweightMatrix;
-import gears.sidescroller.world.tiles.AbstractTile;
+import gears.sidescroller.world.tiles.AbstractTileTemplate;
 
 /**
  * A Structure is currently simply a Matrix which gets inserted
@@ -10,7 +10,7 @@ import gears.sidescroller.world.tiles.AbstractTile;
  * 
  * @author Matt Crow
  */
-public class Structure extends FlyweightMatrix<AbstractTile> {
+public class Structure extends FlyweightMatrix<AbstractTileTemplate> {
     /**
      * Creates a new Structure of the given size.
      * @param width the width of the Structure, measured in tiles

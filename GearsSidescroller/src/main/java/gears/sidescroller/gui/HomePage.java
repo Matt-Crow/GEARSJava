@@ -11,7 +11,7 @@ import gears.sidescroller.world.tiles.TileGenerator;
 import gears.sidescroller.world.levels.LevelGenerator;
 import gears.sidescroller.world.machines.ConveyorBeltSegment;
 import gears.sidescroller.world.machines.GearMachine;
-import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
+import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;

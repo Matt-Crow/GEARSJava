@@ -1,6 +1,6 @@
 package gears.sidescroller.world.core;
 
-import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
+import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 
 /**
  * The MobileWorldObject class adds support for changing

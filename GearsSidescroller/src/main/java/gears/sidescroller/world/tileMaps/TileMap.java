@@ -4,9 +4,9 @@ import gears.sidescroller.world.core.CollisionBox;
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.util.FlyweightMatrix;
 import gears.sidescroller.world.core.MobileWorldObject;
-import gears.sidescroller.world.tiles.AbstractTile;
+import gears.sidescroller.world.tiles.AbstractTileTemplate;
 import java.awt.Graphics;
-import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
+import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 import java.awt.Point;
 import java.util.LinkedList;
 
@@ -21,7 +21,7 @@ import java.util.LinkedList;
  * 
  * @author Matt Crow
  */
-public class TileMap extends FlyweightMatrix<AbstractTile>{
+public class TileMap extends FlyweightMatrix<AbstractTileTemplate>{
     private final LinkedList<MapBoundsReachedListener> boundsReachedListeners;
     
     /**
@@ -80,7 +80,7 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
      * @param tile the tile the given integer key represents
      * @return this, for chaining purposes
      */
-    public TileMap addToTileSet(int key, AbstractTile tile){
+    public TileMap addToTileSet(int key, AbstractTileTemplate tile){
         setKeyToVal(key, tile);
         return this;
     }
@@ -276,8 +276,8 @@ public class TileMap extends FlyweightMatrix<AbstractTile>{
         possibly be colliding with.
         */
         
-        int yIdx = (int)(e.getY() / AbstractTile.TILE_SIZE);
-        int xIdx = (int)(e.getX() / AbstractTile.TILE_SIZE);
+        int yIdx = (int)(e.getY() / AbstractTileTemplate.TILE_SIZE);
+        int xIdx = (int)(e.getX() / AbstractTileTemplate.TILE_SIZE);
         
         boolean collUpperLeft  = handleCollisions(e, xIdx  , yIdx  );
         boolean collUpperRight = handleCollisions(e, xIdx+1, yIdx  );

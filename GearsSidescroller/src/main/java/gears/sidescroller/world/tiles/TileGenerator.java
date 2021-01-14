@@ -4,11 +4,20 @@ import java.awt.Color;
 import java.util.Random;
 
 /**
- *
- * @author Matt
+ * The TileGenerator class is used to create randomly colored BasicColorTiles.
+ * This is used in random TileMap generation.
+ * 
+ * @author Matt Crow
  */
 public class TileGenerator {
-    public BasicColorTile generateRandom(boolean isTangible){
+    /**
+     * Creates a new, randomly colored BasicColorTile.
+     * 
+     * @param isTangible whether or not the tile this produces should be tangible.
+     * 
+     * @return the randomly generated tile. 
+     */
+    public final BasicColorTile generateRandom(boolean isTangible){
         Random rng = new Random();
         int r = rng.nextInt(256);
         int g = rng.nextInt(256);
@@ -19,6 +28,6 @@ public class TileGenerator {
         b = rng.nextInt(256);
         Color outer = new Color(r, g, b);
         
-        return new BasicColorTile(0, 0, isTangible, outer, inner);
+        return new BasicColorTile(isTangible, outer, inner);
     }
 }

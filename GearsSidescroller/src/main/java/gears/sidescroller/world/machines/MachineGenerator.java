@@ -2,7 +2,7 @@ package gears.sidescroller.world.machines;
 
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.world.areas.Area;
-import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
+import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 import java.util.LinkedList;
 import java.util.Random;
 

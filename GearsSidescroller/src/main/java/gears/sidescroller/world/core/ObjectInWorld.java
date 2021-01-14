@@ -1,7 +1,7 @@
 package gears.sidescroller.world.core;
 
 import gears.sidescroller.world.areas.Area;
-import static gears.sidescroller.world.tiles.AbstractTile.TILE_SIZE;
+import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 
 /**
  * The ObjectInWorld class represents an object
