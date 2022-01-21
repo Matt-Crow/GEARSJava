@@ -9,8 +9,15 @@
 // Note however, that you may define your own "run" and "debug" task if you
 // prefer. In this case NetBeans will not add these tasks but you may rely on
 // your own implementation.
+
+plugins {
+    id 'application'
+}
+
+project.mainClassName = 'start.ImageEditorMain'
+
 if (!hasProperty('mainClass')) {
-    ext.mainClass = 'start.ImageEditorMain'
+    ext.mainClass = project.mainClassName
 }
 
 jar {
