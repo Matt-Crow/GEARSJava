@@ -1,5 +1,6 @@
 package gears.sidescroller.gui;
 
+import gears.sidescroller.gui.level.LevelPage;
 import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.util.Direction;
 import java.awt.BorderLayout;

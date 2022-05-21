@@ -1,5 +1,8 @@
-package gears.sidescroller.gui;
+package gears.sidescroller.gui.level;
 
+import gears.sidescroller.gui.GamePane;
+import gears.sidescroller.gui.Page;
+import gears.sidescroller.gui.PlayerControls;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.levels.Level;
 import gears.sidescroller.world.levels.LevelGenerator;
@@ -20,8 +23,8 @@ import javax.swing.Timer;
  * 
  * @author Matt Crow
  */
-public final class LevelPage extends Page{
-    private final Level currentLevel;
+public class LevelPage extends Page{
+    private Level currentLevel;
     private final Timer timer;
     private final Player focusedEntity;
     private final PlayerControls controls;
@@ -30,6 +33,7 @@ public final class LevelPage extends Page{
     public LevelPage(GamePane pane, Level forLevel, Player thePlayer) {
         super(pane);
         setLayout(new BorderLayout());
+        add(new LevelMenuBar(this), BorderLayout.PAGE_START);
         
         currentLevel = forLevel;
         currentLevel.loadPlayer(thePlayer);
@@ -47,25 +51,6 @@ public final class LevelPage extends Page{
         timer.setRepeats(true);
         timer.start();
         setFocusable(true);
-        
-        registerKey(KeyEvent.VK_R, true, ()->{
-            //regenerate random. Debugging tool
-            this.getInputMap().clear(); // un-register controls
-            this.getActionMap().clear();
-            currentLevel.getCurrentArea().removeFromWorld(focusedEntity);
-            Level newLevel = new LevelGenerator().generateRandom(3);
-            this.getParentGamePane().switchToPage(new LevelPage(
-                getParentGamePane(),
-                newLevel,
-                focusedEntity
-            ));
-        });
-        registerKey(KeyEvent.VK_L, true, ()->{
-            // save world. placeholder
-            if(currentLevel != null){
-                System.out.println(currentLevel.toString()); //todo actually save it somehow
-            }
-        });
         
         add(controls, BorderLayout.CENTER);
     }
@@ -95,8 +80,19 @@ public final class LevelPage extends Page{
         });
     }
     
-    public final Level getCurrentLevel(){
+    public Level getCurrentLevel(){
         return currentLevel;
+    }
+    
+    public void setLevel(Level newLevel) {
+        getInputMap().clear(); // un-register controls
+        getActionMap().clear();
+        currentLevel.getCurrentArea().removeFromWorld(focusedEntity);
+        getParentGamePane().switchToPage(new LevelPage(
+            getParentGamePane(),
+            newLevel,
+            focusedEntity
+        ));
     }
     
     private void update(){

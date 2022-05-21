@@ -1,6 +1,6 @@
 package gears.sidescroller.world.machines;
 
-import gears.sidescroller.gui.LevelPage;
+import gears.sidescroller.gui.level.LevelPage;
 import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.util.RotatedGearSprite;
 import gears.sidescroller.util.Sprite;

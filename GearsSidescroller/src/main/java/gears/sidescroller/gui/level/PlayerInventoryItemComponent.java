@@ -1,4 +1,4 @@
-package gears.sidescroller.gui;
+package gears.sidescroller.gui.level;
 
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.items.AbstractItem;

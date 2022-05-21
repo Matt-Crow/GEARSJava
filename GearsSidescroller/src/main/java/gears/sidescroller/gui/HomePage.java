@@ -1,5 +1,6 @@
 package gears.sidescroller.gui;
 
+import gears.sidescroller.gui.level.LevelPage;
 import gears.sidescroller.start.TempTestLevel;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.levels.Level;

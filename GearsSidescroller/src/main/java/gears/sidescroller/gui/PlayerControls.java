@@ -1,5 +1,7 @@
 package gears.sidescroller.gui;
 
+import gears.sidescroller.gui.level.PlayerInventoryMenu;
+import gears.sidescroller.gui.level.LevelPage;
 import gears.sidescroller.world.entities.Player;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;

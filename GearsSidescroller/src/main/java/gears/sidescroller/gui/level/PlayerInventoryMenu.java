@@ -1,4 +1,4 @@
-package gears.sidescroller.gui;
+package gears.sidescroller.gui.level;
 
 import gears.sidescroller.world.entities.InventoryListener;
 import gears.sidescroller.world.entities.Player;

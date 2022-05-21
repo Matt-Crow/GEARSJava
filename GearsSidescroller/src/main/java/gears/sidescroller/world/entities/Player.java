@@ -1,6 +1,6 @@
 package gears.sidescroller.world.entities;
 
-import gears.sidescroller.gui.LevelPage;
+import gears.sidescroller.gui.level.LevelPage;
 import gears.sidescroller.world.core.MobileWorldObject;
 import gears.sidescroller.world.items.AbstractItem;
 import gears.sidescroller.world.tiles.AbstractTileTemplate;
