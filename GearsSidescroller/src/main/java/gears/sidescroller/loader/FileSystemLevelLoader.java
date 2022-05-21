@@ -6,7 +6,7 @@ import gears.sidescroller.world.levels.Level;
  *
  * @author Matt Crow <mattcrow19@gmail.com>
  */
-public class DefaultLevelLoader implements LevelLoader {
+public class FileSystemLevelLoader implements LevelLoader {
 
     @Override
     public Level load(String identifier) throws LevelLoadingException {

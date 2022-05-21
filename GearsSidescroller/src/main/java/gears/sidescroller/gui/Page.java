@@ -3,43 +3,36 @@ package gears.sidescroller.gui;
 import javax.swing.JPanel;
 
 /**
- * Page serves as the base class
- * for the different views of the
- * application. Pages are hosted by
- * GamePane, which flips between its
- * Pages using a CardLayout.
+ * Page serves as the base class for the different views of the application. 
+ * Pages are managed by a PageController
  * 
  * @author Matt Crow
- * @see gears.sidescroller.gui.GamePane
  */
 public class Page extends JPanel{
-    private final GamePane parent;
+    private final PageController controller;
     
-    /**
-     * 
-     * @param pane the GamePane hosting this Page
-     */
-    public Page(GamePane pane){
+    
+    public Page(PageController controller){
         super();
-        parent = pane;
+        this.controller = controller;
+    }
+    
+    
+    public final PageController getController(){
+        return controller;
     }
     
     /**
-     * 
-     * @return the GamePane hosting this page
+     * called whenever the controller is leaving this page
      */
-    public final GamePane getParentGamePane(){
-        return parent;
+    public void switchingFrom(){
+        
     }
     
     /**
-     * Called whenever the hosting
-     * GamePane switches between Pages.
-     * Subclasses which render
-     * data should use this method
-     * to refresh their data.
+     * called whenever the controller is entering this page
      */
-    public void refresh(){
+    public void switchingTo(){
         
     }
 }

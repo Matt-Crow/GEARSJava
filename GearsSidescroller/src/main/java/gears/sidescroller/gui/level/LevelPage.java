@@ -1,17 +1,15 @@
 package gears.sidescroller.gui.level;
 
-import gears.sidescroller.gui.GamePane;
 import gears.sidescroller.gui.Page;
+import gears.sidescroller.gui.PageController;
 import gears.sidescroller.gui.PlayerControls;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.levels.Level;
-import gears.sidescroller.world.levels.LevelGenerator;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
@@ -30,8 +28,8 @@ public class LevelPage extends Page{
     private final PlayerControls controls;
     public static final int FPS = 20;
     
-    public LevelPage(GamePane pane, Level forLevel, Player thePlayer) {
-        super(pane);
+    public LevelPage(PageController controller, Level forLevel, Player thePlayer) {
+        super(controller);
         setLayout(new BorderLayout());
         add(new LevelMenuBar(this), BorderLayout.PAGE_START);
         
@@ -84,15 +82,11 @@ public class LevelPage extends Page{
         return currentLevel;
     }
     
-    public void setLevel(Level newLevel) {
+    @Override
+    public void switchingFrom(){
         getInputMap().clear(); // un-register controls
         getActionMap().clear();
         currentLevel.getCurrentArea().removeFromWorld(focusedEntity);
-        getParentGamePane().switchToPage(new LevelPage(
-            getParentGamePane(),
-            newLevel,
-            focusedEntity
-        ));
     }
     
     private void update(){
@@ -106,16 +100,16 @@ public class LevelPage extends Page{
         Graphics2D g2d = (Graphics2D)g;
         AffineTransform priorToTranslate = g2d.getTransform();
         
-        if(this.currentLevel.getCurrentArea().getTileMap().checkForCollisions(focusedEntity)){
-            //g2d.setColor(new Color(255, 0, 0, 127));
-            //g2d.fillRect(0, 0, getWidth(), getHeight());
-        }
-        
         g2d.translate(
             -(int)(focusedEntity.getX() - getWidth() / 2),
             -(int)(focusedEntity.getY() - getHeight() / 2)
         );
         currentLevel.draw(g2d);
         g2d.setTransform(priorToTranslate);
+        
+        if(this.currentLevel.getCurrentArea().getTileMap().checkForCollisions(focusedEntity)){
+            g2d.setColor(new Color(255, 0, 0, 127));
+            g2d.fillRect(0, 0, getWidth(), getHeight());
+        }
     }
 }

@@ -1,7 +1,6 @@
 package gears.sidescroller.gui.level;
 
 import gears.sidescroller.world.levels.Level;
-import gears.sidescroller.world.levels.LevelGenerator;
 import javax.swing.*;
 
 /**
@@ -20,7 +19,7 @@ public class LevelMenuBar extends JMenuBar {
         file.setMnemonic('f');
         
         JMenuItem random = new JMenuItem("play a random level");
-        random.addActionListener((e)->randomLevel());
+        random.addActionListener((e)->inPage.getController().playRandomLevel());
         file.add(random);
         
         JMenuItem open = new JMenuItem("open");
@@ -32,11 +31,6 @@ public class LevelMenuBar extends JMenuBar {
         file.add(save);
         
         add(file);
-    }
-    
-    private void randomLevel(){
-        Level newLevel = new LevelGenerator().generateRandom(3);
-        inPage.setLevel(newLevel);
     }
     
     private void open(){
