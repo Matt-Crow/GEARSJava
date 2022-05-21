@@ -2,6 +2,7 @@ package gears.sidescroller.util;
 
 import gears.io.StreamWriterUtil;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /**
  *
@@ -78,6 +79,23 @@ public class Matrix<ElementType> {
         for(int y = 0; y < height; y++){
             doThis.accept(map[y], y);
         }
+    }
+    
+    /**
+     * note: the returned object is of the form [y][x], not [x][y]!
+     * 
+     * @param mapper applied to each element of this matrix
+     * @return the result of applying the given function to each element in this
+     */
+    public final Object[][] mapToArray(Function<ElementType, Object> mapper){
+        // cannot use generic array :(
+        Object[][] result = new Object[width][height];
+        for(int y = 0; y < height; ++y){
+            for(int x = 0; x < width; ++x){
+                result[y][x] = mapper.apply(get(x, y));
+            }
+        }
+        return result;
     }
     
     /**

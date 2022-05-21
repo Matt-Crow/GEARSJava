@@ -1,5 +1,6 @@
 package gears.sidescroller.world.levels;
 
+import gears.sidescroller.loader.JsonSerializable;
 import gears.sidescroller.world.areas.Area;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.util.Direction;
@@ -8,6 +9,11 @@ import gears.sidescroller.world.core.MobileWorldObject;
 import gears.sidescroller.world.tileMaps.MapBoundsReachedListener;
 import gears.sidescroller.world.tileMaps.OutOfBoundsEvent;
 import java.awt.Graphics;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 
 /**
  * A Level represents a grid of Areas where the Player can move around. Upon
@@ -16,7 +22,7 @@ import java.awt.Graphics;
  * 
  * @author Matt Crow
  */
-public class Level extends Matrix<Area> implements MapBoundsReachedListener {
+public class Level extends Matrix<Area> implements MapBoundsReachedListener, JsonSerializable {
     private final int defaultAreaX;
     private final int defaultAreaY;
     private int currentAreaX;
@@ -142,6 +148,28 @@ public class Level extends Matrix<Area> implements MapBoundsReachedListener {
         }
     }
     
+    @Override
+    public JsonObject toJson(){
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        
+        Object[][] areaMap = mapToArray((area)->{
+            return area.toString();
+        });
+        JsonArrayBuilder areaMapBuilder = Json.createArrayBuilder();
+        JsonArrayBuilder rowBuilder;
+        for(Object[] row : areaMap){
+            rowBuilder = Json.createArrayBuilder();
+            for(Object obj : row){
+                rowBuilder.add(obj.toString()); // change this
+            }
+            areaMapBuilder.add(rowBuilder.build());
+        }
+        
+        builder.add("areas", areaMapBuilder.build());
+        builder.add("startAreaX", defaultAreaX);
+        builder.add("startAreaY", defaultAreaY);
+        return builder.build();
+    }
     
     @Override
     public String toString(){

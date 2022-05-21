@@ -32,6 +32,19 @@ jar {
     }
 }
 
-dependencies {
+/*
+for some reason, this wasn't being copied over from common.gradle
+*/
+repositories {
+    mavenCentral();
+}
 
+dependencies {
+    /*
+    JSON library
+    https://javaee.github.io/jsonp/
+    https://docs.oracle.com/javaee/7/api/javax/json/package-summary.html
+    */
+    implementation 'javax.json:javax.json-api:1.1'
+    implementation 'org.glassfish:javax.json:1.1'
 }
