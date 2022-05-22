@@ -1,5 +1,6 @@
 package gears.sidescroller.world.areas;
 
+import gears.sidescroller.loader.JsonSerializable;
 import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.util.dataStructures.VolatileLinkedList;
 import gears.sidescroller.world.core.Collidable;
@@ -11,6 +12,12 @@ import gears.sidescroller.world.items.AbstractItem;
 import gears.sidescroller.world.machines.AbstractMachine;
 import gears.sidescroller.world.tileMaps.TileMap;
 import java.awt.Graphics;
+import java.util.HashSet;
+import java.util.Set;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 
 /**
  * An Area is a complete, playable world where a Player can explore. Areas are
@@ -18,7 +25,7 @@ import java.awt.Graphics;
  * 
  * @author Matt Crow
  */
-public class Area {
+public class Area implements JsonSerializable {
     private final TileMap tileMap;
     private final PowerGrid powerGrid;
     
@@ -32,6 +39,8 @@ public class Area {
     private final VolatileLinkedList<AbstractMachine> machines;
     private final VolatileLinkedList<AbstractItem> items;
     
+    private final Set<ObjectInWorld> objects;
+    
     /**
      * Creates a new Area with the given TileMap
      * 
@@ -40,6 +49,7 @@ public class Area {
     public Area(TileMap t){
         tileMap = t;
         powerGrid = new PowerGrid(t.getWidthInCells(), t.getHeightInCells());
+        objects = new HashSet<>();
         stuffThatCanBumpIntoOtherStuff = new VolatileLinkedList<>();
         stuffThatOtherStuffCanBumpInto = new VolatileLinkedList<>();
         interactables = new VolatileLinkedList<>();
@@ -72,6 +82,7 @@ public class Area {
         if(obj instanceof Interactable){
             this.interactables.add((Interactable) obj);
         }
+        objects.add(obj);
         obj.setArea(this);
         
         return this;
@@ -100,6 +111,7 @@ public class Area {
         if(obj instanceof Interactable){
             this.interactables.delete((Interactable) obj);
         }
+        objects.remove(obj);
         return this;
     }
     
@@ -181,6 +193,18 @@ public class Area {
         powerGrid.draw(g);
         
         return this;
+    }
+    
+    @Override
+    public JsonObject toJson() {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        builder.add("tileMap", tileMap.toJson());
+        
+        JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+        objects.forEach((e)->arrayBuilder.add(e.toJson()));
+        builder.add("objects", arrayBuilder.build());
+        
+        return builder.build();
     }
     
     @Override

@@ -1,7 +1,13 @@
 package gears.sidescroller.world.core;
 
+import gears.sidescroller.loader.JsonSerializable;
 import gears.sidescroller.world.areas.Area;
 import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
+import java.math.BigDecimal;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonValue;
 
 /**
  * The ObjectInWorld class represents an object
@@ -17,7 +23,7 @@ import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
  * @author Matt Crow
  * @see gears.sidescroller.world.core.MobileWorldObject
  */
-public abstract class ObjectInWorld implements Collidable {
+public abstract class ObjectInWorld implements Collidable, JsonSerializable {
     protected int x;
     protected int y;
     private final int width;
@@ -115,5 +121,12 @@ public abstract class ObjectInWorld implements Collidable {
     @Override
     public CollisionBox getCollisionBox() {
         return new CollisionBox(this);
+    }
+    
+    @Override
+    public JsonObject toJson(){
+        JsonObjectBuilder foo = Json.createObjectBuilder();
+        foo.add("done", false);
+        return foo.build();
     }
 }

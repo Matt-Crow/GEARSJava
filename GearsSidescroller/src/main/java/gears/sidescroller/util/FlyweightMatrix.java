@@ -76,7 +76,16 @@ public class FlyweightMatrix<T> extends Matrix<Integer> {
     
     public final void forEachKeyToValue(BiConsumer<Integer, T> doThis){
         this.keyToValue.forEach(doThis);
-    }    
+    }
+    
+    /**
+     * @return a shallow copy of this object's key-to-value map 
+     */
+    public HashMap<Integer, T> copyKeyToValue(){
+        HashMap<Integer, T> kToV = new HashMap<>();
+        forEachKeyToValue((k, v)->kToV.put(k, v));
+        return kToV;
+    }
     
     @Override
     public String toString(){

@@ -23,8 +23,6 @@ when run from the repository root.
 
 ## Controls
 * WASD to move
-* R to regenerate randomly generated world
-* L to log the world to System.out
 * Q to interact with your current tile (such as picking up placed gears)
 * select items from the "inventory" menu on the bottom of the screen to use them
 

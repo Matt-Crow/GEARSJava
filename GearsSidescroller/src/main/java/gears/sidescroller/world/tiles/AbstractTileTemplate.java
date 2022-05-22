@@ -1,5 +1,6 @@
 package gears.sidescroller.world.tiles;
 
+import gears.sidescroller.loader.JsonSerializable;
 import java.awt.Graphics;
 
 /**
@@ -11,7 +12,7 @@ import java.awt.Graphics;
  * 
  * @author Matt Crow
  */
-public abstract class AbstractTileTemplate {
+public abstract class AbstractTileTemplate implements JsonSerializable {
     private final boolean isTangible;
     
     /**

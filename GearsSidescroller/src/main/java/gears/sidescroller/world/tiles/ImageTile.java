@@ -1,8 +1,17 @@
 package gears.sidescroller.world.tiles;
 
+import gears.sidescroller.loader.LevelLoadingException;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Base64;
+import java.util.Base64.Encoder;
+import javax.imageio.ImageIO;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 
 /**
  * The ImageTile is a tile which renders an image,
@@ -38,5 +47,21 @@ public class ImageTile extends AbstractTileTemplate{
     public AbstractTileTemplate drawAt(Graphics g, int x, int y) {
         g.drawImage(image, x, y, null);
         return this;
+    }
+
+    @Override
+    public JsonObject toJson() { // untested
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        builder.add("tangible", getIsTangible());
+        ByteArrayOutputStream bout = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(image, "PNG", bout);
+        } catch (IOException ex) {
+            throw new LevelLoadingException(ex);
+        }
+        Encoder base64Encoder = Base64.getEncoder();
+        builder.add("img", base64Encoder.encodeToString(bout.toByteArray()));
+        
+        return builder.build();
     }
 }

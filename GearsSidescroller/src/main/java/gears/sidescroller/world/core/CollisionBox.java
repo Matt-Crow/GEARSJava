@@ -1,5 +1,7 @@
 package gears.sidescroller.world.core;
 
+import javax.json.JsonObject;
+
 /**
  * A CollisionBox is used to share collision detection and reaction between
  * rectangular things. Objects wishing to use a CollisionBox should implement
@@ -21,6 +23,11 @@ public class CollisionBox {
             @Override
             public boolean checkForCollisions(MobileWorldObject obj) {
                 return this.getCollisionBox().isCollidingWith(obj);
+            }
+
+            @Override
+            public JsonObject toJson() {
+                return forObject.toJson();
             }
         };
     }

@@ -10,7 +10,6 @@ import gears.sidescroller.world.tileMaps.MapBoundsReachedListener;
 import gears.sidescroller.world.tileMaps.OutOfBoundsEvent;
 import java.awt.Graphics;
 import javax.json.Json;
-import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -153,14 +152,17 @@ public class Level extends Matrix<Area> implements MapBoundsReachedListener, Jso
         JsonObjectBuilder builder = Json.createObjectBuilder();
         
         Object[][] areaMap = mapToArray((area)->{
-            return area.toString();
+            return area.toJson();
         });
         JsonArrayBuilder areaMapBuilder = Json.createArrayBuilder();
         JsonArrayBuilder rowBuilder;
         for(Object[] row : areaMap){
             rowBuilder = Json.createArrayBuilder();
             for(Object obj : row){
-                rowBuilder.add(obj.toString()); // change this
+                if(!(obj instanceof JsonObject)){
+                    throw new UnsupportedOperationException();
+                }
+                rowBuilder.add((JsonObject)obj);
             }
             areaMapBuilder.add(rowBuilder.build());
         }

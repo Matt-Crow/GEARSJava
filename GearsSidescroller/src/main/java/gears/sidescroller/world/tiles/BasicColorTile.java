@@ -2,6 +2,9 @@ package gears.sidescroller.world.tiles;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 
 /**
  * The BasicColorTile is my classic lazy tile design:
@@ -33,5 +36,16 @@ public class BasicColorTile extends AbstractTileTemplate{
             g.fillRect(x + OUTLINE_OFFSET, y + OUTLINE_OFFSET, TILE_SIZE - OUTLINE_OFFSET * 2, TILE_SIZE - OUTLINE_OFFSET * 2);
         }
         return this;
+    }
+
+    @Override
+    public JsonObject toJson() {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        
+        builder.add("tangible", getIsTangible());
+        builder.add("outlineColor", outlineColor.getRGB());
+        builder.add("bodyColor", bodyColor.getRGB());
+        
+        return builder.build();
     }
 }

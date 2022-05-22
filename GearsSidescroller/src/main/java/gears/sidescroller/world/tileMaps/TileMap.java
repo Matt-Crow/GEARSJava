@@ -1,5 +1,6 @@
 package gears.sidescroller.world.tileMaps;
 
+import gears.sidescroller.loader.JsonSerializable;
 import gears.sidescroller.world.core.CollisionBox;
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.util.FlyweightMatrix;
@@ -9,6 +10,10 @@ import java.awt.Graphics;
 import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 import java.awt.Point;
 import java.util.LinkedList;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 
 /**
  * A TileMap is used to store tiles in a two-dimensional matrix.
@@ -21,7 +26,7 @@ import java.util.LinkedList;
  * 
  * @author Matt Crow
  */
-public class TileMap extends FlyweightMatrix<AbstractTileTemplate>{
+public class TileMap extends FlyweightMatrix<AbstractTileTemplate> implements JsonSerializable {
     private final LinkedList<MapBoundsReachedListener> boundsReachedListeners;
     
     /**
@@ -320,5 +325,36 @@ public class TileMap extends FlyweightMatrix<AbstractTileTemplate>{
         });
         sb.append(getAsCsv());
         return sb.toString();
+    }
+
+    @Override
+    public JsonObject toJson() {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        
+        JsonArrayBuilder keyBuilder = Json.createArrayBuilder();
+        copyKeyToValue().forEach((k, v)->{
+            JsonObjectBuilder tempBuilder = Json.createObjectBuilder();
+            tempBuilder.add("key", k);
+            tempBuilder.add("value", v.toJson());
+            keyBuilder.add(tempBuilder.build());
+        });
+        builder.add("keys", keyBuilder.build());
+        
+        JsonArrayBuilder mapBuilder = Json.createArrayBuilder();
+        JsonArrayBuilder rowBuilder;
+        Object[][] objMap = mapToArray((key)->key);
+        for(Object[] row : objMap){
+            rowBuilder = Json.createArrayBuilder();
+            for(Object item : row){
+                if(!(item instanceof Integer)){
+                    throw new UnsupportedOperationException();
+                }
+                rowBuilder.add((Integer)item);
+            }
+            mapBuilder.add(rowBuilder.build());
+        }
+        builder.add("map", mapBuilder.build());
+        
+        return builder.build();
     }
 }
