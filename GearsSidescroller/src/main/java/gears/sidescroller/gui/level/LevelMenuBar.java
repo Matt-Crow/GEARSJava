@@ -2,27 +2,19 @@ package gears.sidescroller.gui.level;
 
 import gears.sidescroller.loader.LevelLoader;
 import gears.sidescroller.world.levels.Level;
-import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Map;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonWriter;
-import javax.json.JsonWriterFactory;
-import javax.json.stream.JsonGenerator;
 import javax.swing.*;
 
 /**
  *
  * @author Matt Crow <mattcrow19@gmail.com>
  */
-public class LevelMenuBar extends JMenuBar {
+public class LevelMenuBar extends JMenuBar { 
     private final LevelPage inPage;
-    
+    private final LevelLoader loader;
     
     public LevelMenuBar(LevelPage inPage, LevelLoader loader){
         this.inPage = inPage;
-        
+        this.loader = loader;
         
         JMenu file = new JMenu("File");
         file.setMnemonic('f');
@@ -36,31 +28,24 @@ public class LevelMenuBar extends JMenuBar {
         file.add(open);
         
         JMenuItem save = new JMenuItem("save");
-        save.addActionListener((e)->loader.save(inPage.getCurrentLevel()));
+        save.addActionListener((e)->save());
         file.add(save);
         
         add(file);
     }
     
     private void open(){
-        JOptionPane.showMessageDialog(
-                this, 
-                "LevelMenuBar::open not implemented", 
-                "Open", 
-                JOptionPane.ERROR_MESSAGE
-        );
+        String name = JOptionPane.showInputDialog(this, "enter level name: ");
+        if(name != null){
+            Level level = loader.load(name);
+            inPage.getController().playLevel(level);
+        }
     }
-
-    private void save() {
-        Level level = inPage.getCurrentLevel();
-        JsonObject asJson = level.toJson();
-        StringWriter out = new StringWriter();
-        Map<String, Boolean> options = new HashMap<>();
-        options.put(JsonGenerator.PRETTY_PRINTING, Boolean.TRUE);
-        JsonWriterFactory factory = Json.createWriterFactory(options);
-        JsonWriter writer = factory.createWriter(out);
-        writer.writeObject(asJson);
-        writer.close();
-        System.out.println(out);
+    
+    private void save(){
+        String name = JOptionPane.showInputDialog(this, "enter level name: ");
+        if(name != null){
+            loader.save(name, inPage.getCurrentLevel());
+        }
     }
 }

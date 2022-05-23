@@ -62,6 +62,23 @@ public enum Direction {
         return rotate(d, -1);
     }
     
+    public static Direction fromName(String name){
+        Direction[] dirs = values();
+        Direction d = null;
+        
+        for(int i = 0; i < dirs.length && d == null; ++i){
+            if(dirs[i].name.equals(name)){
+                d = dirs[i];
+            }
+        }
+        
+        if(d == null){
+            throw new IllegalArgumentException("no Direction for name " + name);
+        }
+        
+        return d;
+    }
+    
     public static void main(String[] args){
         Direction.rotateClockWise(RIGHT);
     }

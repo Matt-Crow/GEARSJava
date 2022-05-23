@@ -2,6 +2,7 @@ package gears.sidescroller.world.tiles;
 
 import gears.sidescroller.loader.JsonSerializable;
 import java.awt.Graphics;
+import javax.json.*;
 
 /**
  * Tiles are immobile, immutable squares
@@ -52,4 +53,17 @@ public abstract class AbstractTileTemplate implements JsonSerializable {
      * @return this, for chaining purposes.
      */
     public abstract AbstractTileTemplate drawAt(Graphics g, int x, int y);
+    
+    @Override
+    public JsonObject toJson(){
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        builder.add("type", getJsonType());
+        builder.add("isTangible", isTangible);
+        attachJsonProperties(builder);
+        return builder.build();
+    }
+    
+    public abstract String getJsonType();
+    
+    public abstract void attachJsonProperties(JsonObjectBuilder builder);
 }

@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.Base64.Encoder;
 import javax.imageio.ImageIO;
-import javax.json.Json;
-import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
 /**
@@ -50,9 +48,7 @@ public class ImageTile extends AbstractTileTemplate{
     }
 
     @Override
-    public JsonObject toJson() { // untested
-        JsonObjectBuilder builder = Json.createObjectBuilder();
-        builder.add("tangible", getIsTangible());
+    public void attachJsonProperties(JsonObjectBuilder builder) { // untested
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         try {
             ImageIO.write(image, "PNG", bout);
@@ -61,7 +57,10 @@ public class ImageTile extends AbstractTileTemplate{
         }
         Encoder base64Encoder = Base64.getEncoder();
         builder.add("img", base64Encoder.encodeToString(bout.toByteArray()));
-        
-        return builder.build();
+    }
+    
+    @Override
+    public String getJsonType(){
+        return "ImageTile";
     }
 }

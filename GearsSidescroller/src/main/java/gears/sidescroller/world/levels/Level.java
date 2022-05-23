@@ -3,16 +3,11 @@ package gears.sidescroller.world.levels;
 import gears.sidescroller.loader.JsonSerializable;
 import gears.sidescroller.world.areas.Area;
 import gears.sidescroller.world.entities.Player;
-import gears.sidescroller.util.Direction;
-import gears.sidescroller.util.Matrix;
+import gears.sidescroller.util.*;
 import gears.sidescroller.world.core.MobileWorldObject;
-import gears.sidescroller.world.tileMaps.MapBoundsReachedListener;
-import gears.sidescroller.world.tileMaps.OutOfBoundsEvent;
+import gears.sidescroller.world.tileMaps.*;
 import java.awt.Graphics;
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 
 /**
  * A Level represents a grid of Areas where the Player can move around. Upon
@@ -111,13 +106,15 @@ public class Level extends Matrix<Area> implements MapBoundsReachedListener, Jso
     }
     
     /**
-     * This is fired by an instance of TileMap whenever an AbstractEntity passes beyond its borders.
-     * If the offending AbstractEntity is the Player, this will transition them to the appropriate new
-     * Area (passing the lefternmost bounds of an Area attempts to move the Player one Area to the left, 
-     * for example). Note that this method assumes the entity is passing the bounds of the current Area.
-     * Therefore, if this method is invoked for an Area besides the current one, this method will behave 
-     * erroneously. However, this shouldn't be a problem, as only the current Area is updated, and therefore
-     * is the only one which can invoke this method.
+     * This is fired by an instance of TileMap whenever an AbstractEntity passes 
+     * beyond its borders. If the offending AbstractEntity is the Player, this 
+     * will transition them to the appropriate new Area (passing the lefternmost 
+     * bounds of an Area attempts to move the Player one Area to the left, for 
+     * example). Note that this method assumes the entity is passing the bounds 
+     * of the current Area. Therefore, if this method is invoked for an Area 
+     * besides the current one, this method will behave erroneously. However, 
+     * this shouldn't be a problem, as only the current Area is updated, and 
+     * therefore is the only one which can invoke this method.
      * 
      * @param event an event detailing how something went out of bounds.
      */
@@ -127,7 +124,7 @@ public class Level extends Matrix<Area> implements MapBoundsReachedListener, Jso
         int newYIdx = this.currentAreaY + event.getDirection().getYMod();
         if(event.getMap().equals(this.getCurrentArea().getTileMap()) && this.isValidIdx(newXIdx, newYIdx)){
             // is valid index
-            if(this.get(newXIdx, newYIdx) == null){
+            if(get(newXIdx, newYIdx) == null){
                 throw new UnsupportedOperationException("TODO: generate new area");
             } else {
                 boolean canSpawn = get(newXIdx, newYIdx).getTileMap().spawnEntityFromDir(event.getOutOfBoundsEntity(), Direction.rotateCounterClockWise(Direction.rotateCounterClockWise(event.getDirection())));
@@ -138,7 +135,6 @@ public class Level extends Matrix<Area> implements MapBoundsReachedListener, Jso
                     if(e.equals(player)){
                         currentAreaX = newXIdx;
                         currentAreaY = newYIdx;
-                        System.out.printf("Moved player to area (%d, %d)\n", newXIdx, newYIdx);
                     }
                 } else {
                     System.err.printf("Cannot spawn entity in area:\n %s \n", get(newXIdx, newYIdx).toString());
@@ -171,17 +167,5 @@ public class Level extends Matrix<Area> implements MapBoundsReachedListener, Jso
         builder.add("startAreaX", defaultAreaX);
         builder.add("startAreaY", defaultAreaY);
         return builder.build();
-    }
-    
-    @Override
-    public String toString(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("TODO: better logging in Level::toString\n");
-        sb.append("AREAS:\n");
-        this.forEachCell((area, xIdx, yIdx)->{
-            sb.append(String.format("Area #%d,%d:\n", xIdx, yIdx));
-            sb.append((area == null) ? "NULL" : area.toString());
-        });
-        return sb.toString();
     }
 }

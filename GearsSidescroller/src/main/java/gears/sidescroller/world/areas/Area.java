@@ -3,21 +3,14 @@ package gears.sidescroller.world.areas;
 import gears.sidescroller.loader.JsonSerializable;
 import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.util.dataStructures.VolatileLinkedList;
-import gears.sidescroller.world.core.Collidable;
-import gears.sidescroller.world.core.Interactable;
-import gears.sidescroller.world.core.MobileWorldObject;
-import gears.sidescroller.world.core.ObjectInWorld;
+import gears.sidescroller.world.core.*;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.items.AbstractItem;
 import gears.sidescroller.world.machines.AbstractMachine;
 import gears.sidescroller.world.tileMaps.TileMap;
 import java.awt.Graphics;
-import java.util.HashSet;
-import java.util.Set;
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import java.util.*;
+import javax.json.*;
 
 /**
  * An Area is a complete, playable world where a Player can explore. Areas are
@@ -205,14 +198,5 @@ public class Area implements JsonSerializable {
         builder.add("objects", arrayBuilder.build());
         
         return builder.build();
-    }
-    
-    @Override
-    public String toString(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("TODO: better Area::toString\n");
-        sb.append("Tile Map:\n");
-        sb.append(tileMap.toString());
-        return sb.toString();
     }
 }

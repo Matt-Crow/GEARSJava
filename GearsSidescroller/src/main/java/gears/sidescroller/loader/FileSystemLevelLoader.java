@@ -1,16 +1,10 @@
 package gears.sidescroller.loader;
 
-import gears.sidescroller.world.levels.Level;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.logging.Logger;
-import javax.json.Json;
-import javax.json.JsonWriter;
+import gears.sidescroller.world.levels.*;
+import java.io.*;
+import java.nio.file.*;
+import java.util.Collection;
+import javax.json.*;
 
 /**
  *
@@ -31,15 +25,34 @@ public class FileSystemLevelLoader implements LevelLoader {
         levelFolderPath = levelFolder.toString();
         
     }
-
+    
+    @Override
+    public Collection<String> getAvailableLevelName() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
     @Override
     public Level load(String identifier) throws LevelLoadingException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Level level = null;
+        Path toFile = Paths.get(levelFolderPath, identifier + ".json");
+        File asFile = toFile.toFile();
+        
+        try (
+                FileInputStream fin = new FileInputStream(asFile);
+                JsonReader reader = Json.createReader(fin);
+        ){
+            JsonObject obj = reader.readObject();
+            level = new LevelJson().deserialize(obj);
+        } catch (IOException ex) {
+            throw new LevelLoadingException("failed to load Level " + identifier, ex);
+        }
+        
+        return level;
     }
 
     @Override
-    public void save(Level level) throws LevelLoadingException {
-        Path toFile = Paths.get(levelFolderPath, "foo.json");
+    public void save(String identifier, Level level) throws LevelLoadingException {
+        Path toFile = Paths.get(levelFolderPath, identifier + ".json");
         File asFile = toFile.toFile();
         
         try (
