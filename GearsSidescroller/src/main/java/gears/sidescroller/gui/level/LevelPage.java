@@ -3,6 +3,7 @@ package gears.sidescroller.gui.level;
 import gears.sidescroller.gui.Page;
 import gears.sidescroller.gui.PageController;
 import gears.sidescroller.gui.PlayerControls;
+import gears.sidescroller.loader.LevelLoader;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.levels.Level;
 import java.awt.BorderLayout;
@@ -28,10 +29,10 @@ public class LevelPage extends Page{
     private final PlayerControls controls;
     public static final int FPS = 20;
     
-    public LevelPage(PageController controller, Level forLevel, Player thePlayer) {
+    public LevelPage(PageController controller, Level forLevel, Player thePlayer, LevelLoader loader) {
         super(controller);
         setLayout(new BorderLayout());
-        add(new LevelMenuBar(this), BorderLayout.PAGE_START);
+        add(new LevelMenuBar(this, loader), BorderLayout.PAGE_START);
         
         currentLevel = forLevel;
         currentLevel.loadPlayer(thePlayer);

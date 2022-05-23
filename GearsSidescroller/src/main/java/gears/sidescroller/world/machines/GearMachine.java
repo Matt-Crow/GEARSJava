@@ -1,7 +1,6 @@
 package gears.sidescroller.world.machines;
 
 import gears.sidescroller.gui.level.LevelPage;
-import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.util.RotatedGearSprite;
 import gears.sidescroller.util.Sprite;
 import gears.sidescroller.util.UnrotatedGearSprite;
@@ -12,6 +11,10 @@ import java.awt.Graphics;
 /**
  * A GearMachine is a machine which can serve as a repeater for power provided to it.
  * One can create some pretty fun puzzles with these, if one is so inclined.
+ * 
+ * Note that this class currently needn't override 
+ * AbstractMachine::attachJsonProperties, as it has no unique constructor 
+ * arguments
  * 
  * @author Matt Crow
  */
@@ -63,4 +66,8 @@ public class GearMachine extends AbstractMachine implements PowerProvidingMachin
         return 1;
     }
 
+    @Override
+    public String getJsonType() {
+        return "GearMachine";
+    }
 }

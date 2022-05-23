@@ -1,10 +1,10 @@
 package gears.sidescroller.world.machines;
 
-import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.util.Direction;
 import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 import java.awt.Color;
 import java.awt.Graphics;
+import javax.json.JsonObjectBuilder;
 
 /**
  * A ConveryorBeltSegment is a machine which will move AbstractEntities
@@ -103,5 +103,17 @@ public class ConveyorBeltSegment extends AbstractMachine {
             e.setY(e.getY() + this.movesStuffInThisDirection.getYMod() * this.speed);
         }
         return collided;
+    }
+
+    @Override
+    protected void attachJsonProperties(JsonObjectBuilder builder) {
+        super.attachJsonProperties(builder);
+        builder.add("speed", speed);
+        builder.add("movesStuffInThisDirection", movesStuffInThisDirection.getName());
+    }
+
+    @Override
+    public String getJsonType() {
+        return "ConveyorBeltSegment";
     }
 }

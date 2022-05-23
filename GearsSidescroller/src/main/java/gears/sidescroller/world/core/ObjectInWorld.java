@@ -3,11 +3,9 @@ package gears.sidescroller.world.core;
 import gears.sidescroller.loader.JsonSerializable;
 import gears.sidescroller.world.areas.Area;
 import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
-import java.math.BigDecimal;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
-import javax.json.JsonValue;
 
 /**
  * The ObjectInWorld class represents an object
@@ -125,8 +123,29 @@ public abstract class ObjectInWorld implements Collidable, JsonSerializable {
     
     @Override
     public JsonObject toJson(){
-        JsonObjectBuilder foo = Json.createObjectBuilder();
-        foo.add("done", false);
-        return foo.build();
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        builder.add("type", getJsonType());
+        builder.add("x", x);
+        builder.add("y", y);
+        builder.add("width", width);
+        builder.add("height", height);
+        
+        attachJsonProperties(builder);
+        
+        return builder.build();
     }
+    
+    /**
+     * subclasses must override this method to add their properties to the given
+     * JsonObjectBuilder.
+     * 
+     * @param builder the builder currently constructing a JSON representation
+     *  of this object
+     */
+    protected abstract void attachJsonProperties(JsonObjectBuilder builder);
+    
+    /**
+     * @returna unique identifier for this subclass of ObjectInWorld 
+     */
+    public abstract String getJsonType();
 }

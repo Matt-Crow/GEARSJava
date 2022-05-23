@@ -6,6 +6,7 @@ import gears.sidescroller.world.machines.PlacedGearMachine;
 import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 import java.awt.Color;
 import java.awt.Graphics;
+import javax.json.JsonObjectBuilder;
 
 /**
  * The GearItem is an item which the Player can
@@ -14,17 +15,19 @@ import java.awt.Graphics;
  * @author Matt Crow
  */
 public class GearItem extends AbstractItem {
+    private final Color color;
     private final UnrotatedGearSprite sprite;
     
     /**
      * Creates a new GearItem at the given coordinates <b>in pixel-space</b>
      * @param x the x-coordinate of the item
      * @param y the y-coordinate of the item
-     * @param c the color of this item as it appears in the Area.
+     * @param color the color of this item as it appears in the Area.
      */
-    public GearItem(int x, int y, Color c) {
+    public GearItem(int x, int y, Color color) {
         super(x, y);
-        sprite = new UnrotatedGearSprite(c, TILE_SIZE / 2);
+        this.color = color;
+        sprite = new UnrotatedGearSprite(color, TILE_SIZE / 2);
     }
 
     @Override
@@ -46,4 +49,13 @@ public class GearItem extends AbstractItem {
         return true; // gear was placed
     }
 
+    @Override
+    protected void attachJsonProperties(JsonObjectBuilder builder) {
+        builder.add("color", color.getRGB());
+    }
+
+    @Override
+    public String getJsonType() {
+        return "GearItem";
+    }
 }

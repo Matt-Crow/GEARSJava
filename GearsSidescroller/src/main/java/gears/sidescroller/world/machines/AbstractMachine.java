@@ -4,6 +4,8 @@ import gears.sidescroller.world.core.MobileWorldObject;
 import gears.sidescroller.world.core.ObjectInWorld;
 import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 import java.awt.Graphics;
+import java.math.BigDecimal;
+import javax.json.JsonObjectBuilder;
 
 /**
  * Machines are interactable elements in the game world. Machines
@@ -96,4 +98,15 @@ public abstract class AbstractMachine extends ObjectInWorld {
      * @return the boolean 
      */
     public abstract boolean checkForCollisions(MobileWorldObject e);
+    
+    /**
+     * Subclasses should still override this method.
+     * Don't forget to call super!
+     * 
+     * @param builder 
+     */
+    @Override
+    protected void attachJsonProperties(JsonObjectBuilder builder){
+        builder.add("isSelfPowering", isSelfPowering);
+    }
 }

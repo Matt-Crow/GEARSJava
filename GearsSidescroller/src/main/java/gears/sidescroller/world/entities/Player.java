@@ -7,7 +7,11 @@ import gears.sidescroller.world.tiles.AbstractTileTemplate;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.function.Consumer;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
 
 /**
  * A Player is an AbstractEntity which can pick up and use AbstractItems.
@@ -23,6 +27,11 @@ public class Player extends AbstractEntity {
         this.setSpeed(3 * AbstractTileTemplate.TILE_SIZE / LevelPage.FPS);
         inventory = new ArrayList<>();
         inventoryListeners = new ArrayList<>();
+    }
+    
+    public Player(Collection<AbstractItem> inventory){
+        this();
+        inventory.forEach(this::pickupItem);
     }
     
     /**
@@ -128,5 +137,17 @@ public class Player extends AbstractEntity {
     @Override
     public boolean checkForCollisions(MobileWorldObject obj) {
         return this.getCollisionBox().isCollidingWith(obj);
+    }
+
+    @Override
+    protected void attachJsonProperties(JsonObjectBuilder builder) {
+        JsonArrayBuilder inventoryBuilder = Json.createArrayBuilder();
+        inventory.forEach((i)->inventoryBuilder.add(i.toJson()));
+        builder.add("inventory", inventoryBuilder.build());
+    }
+
+    @Override
+    public String getJsonType() {
+        return "Player";
     }
 }

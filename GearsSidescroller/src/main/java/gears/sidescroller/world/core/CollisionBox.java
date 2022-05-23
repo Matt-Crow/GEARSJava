@@ -1,6 +1,6 @@
 package gears.sidescroller.world.core;
 
-import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 
 /**
  * A CollisionBox is used to share collision detection and reaction between
@@ -26,8 +26,13 @@ public class CollisionBox {
             }
 
             @Override
-            public JsonObject toJson() {
-                return forObject.toJson();
+            protected void attachJsonProperties(JsonObjectBuilder builder) {
+                // do nothing
+            }
+
+            @Override
+            public String getJsonType() {
+                return "CollisionBox";
             }
         };
     }

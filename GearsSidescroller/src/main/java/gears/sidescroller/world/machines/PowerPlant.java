@@ -1,11 +1,13 @@
 package gears.sidescroller.world.machines;
 
-import gears.sidescroller.world.entities.AbstractEntity;
 import java.awt.Color;
 import java.awt.Graphics;
 
 /**
  * A PowerPlant is simply a machine which provides power.
+ * 
+ * Note that this class needn't override AbstractMachine::attachJsonProperties,
+ * as it requires no unique constructor arguments
  * 
  * @author Matt Crow
  */
@@ -49,4 +51,8 @@ public class PowerPlant extends AbstractMachine implements PowerProvidingMachine
         return this.getCollisionBox().shoveOut(e);
     }
 
+    @Override
+    public String getJsonType() {
+        return "PowerPlant";
+    }
 }

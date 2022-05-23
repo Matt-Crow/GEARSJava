@@ -1,5 +1,6 @@
 package gears.sidescroller.gui.level;
 
+import gears.sidescroller.loader.LevelLoader;
 import gears.sidescroller.world.levels.Level;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -19,7 +20,7 @@ public class LevelMenuBar extends JMenuBar {
     private final LevelPage inPage;
     
     
-    public LevelMenuBar(LevelPage inPage){
+    public LevelMenuBar(LevelPage inPage, LevelLoader loader){
         this.inPage = inPage;
         
         
@@ -35,7 +36,7 @@ public class LevelMenuBar extends JMenuBar {
         file.add(open);
         
         JMenuItem save = new JMenuItem("save");
-        save.addActionListener((e)->save());
+        save.addActionListener((e)->loader.save(inPage.getCurrentLevel()));
         file.add(save);
         
         add(file);

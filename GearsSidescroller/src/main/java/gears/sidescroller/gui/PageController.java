@@ -1,6 +1,7 @@
 package gears.sidescroller.gui;
 
 import gears.sidescroller.gui.level.LevelPage;
+import gears.sidescroller.loader.LevelLoader;
 import gears.sidescroller.start.TempTestLevel;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.levels.Level;
@@ -17,13 +18,13 @@ import gears.sidescroller.world.levels.LevelGenerator;
 public class PageController {
     private final GameFrame window;
     private Player player;
+    private final LevelLoader levelLoader;
     
-    /**
-     * creates a new PageController and its associated GameFrame
-     */
-    public PageController(GameFrame window, Player player){
+    
+    public PageController(GameFrame window, Player player, LevelLoader levelLoader){
         this.window = window;
         this.player = player;
+        this.levelLoader = levelLoader;
         switchToPage(new HomePage(this));
     }
     
@@ -49,7 +50,7 @@ public class PageController {
     }
     
     public void playLevel(Level level){
-        LevelPage newPage = new LevelPage(this, level, player);
+        LevelPage newPage = new LevelPage(this, level, player, levelLoader);
         switchToPage(newPage);
     }
     
