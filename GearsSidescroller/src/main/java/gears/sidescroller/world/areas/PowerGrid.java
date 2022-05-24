@@ -1,13 +1,11 @@
 package gears.sidescroller.world.areas;
 
 import gears.sidescroller.util.Matrix;
-import gears.sidescroller.util.dataStructures.VolatileLinkedList;
 import gears.sidescroller.world.machines.AbstractMachine;
 import gears.sidescroller.world.machines.PowerProvidingMachine;
 import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.LinkedList;
+import java.awt.*;
+import java.util.*;
 
 /**
  * The PowerGrid is used by an Area to denote which
@@ -77,7 +75,7 @@ public class PowerGrid extends Matrix<Boolean> {
      * @param machines the list of machines to apply power from and apply external
      * power to.
      */
-    public final void update(VolatileLinkedList<AbstractMachine> machines){
+    public final void update(Collection<AbstractMachine> machines){
         setAllTo(false);
         LinkedList<AbstractMachine> currentSet = new LinkedList<>();
         LinkedList<AbstractMachine> nextSet = new LinkedList<>();

@@ -2,7 +2,6 @@ package gears.sidescroller.world.areas;
 
 import gears.sidescroller.loader.JsonSerializable;
 import gears.sidescroller.world.entities.AbstractEntity;
-import gears.sidescroller.util.dataStructures.VolatileLinkedList;
 import gears.sidescroller.world.core.*;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.items.AbstractItem;
@@ -23,14 +22,16 @@ public class Area implements JsonSerializable {
     private final PowerGrid powerGrid;
     
     /*
-    Once I have more behavioral interfaces (Renderable, Interactable, Initializable, etc) 
-    I'll want to categorize by behavior instead of type.
+    Once I have more behavioral interfaces (Renderable, Interactable, 
+    Initializable, etc)  I'll want to categorize by behavior instead of type.
+    Using each of these is marginally faster than iterating & filtering the
+    objects field, but has little benefit otherwise
     */
-    private final VolatileLinkedList<MobileWorldObject> stuffThatCanBumpIntoOtherStuff;
-    private final VolatileLinkedList<Collidable> stuffThatOtherStuffCanBumpInto;
-    private final VolatileLinkedList<Interactable> interactables;
-    private final VolatileLinkedList<AbstractMachine> machines;
-    private final VolatileLinkedList<AbstractItem> items;
+    private final Set<MobileWorldObject> stuffThatCanBumpIntoOtherStuff;
+    private final Set<Collidable> stuffThatOtherStuffCanBumpInto;
+    private final Set<Interactable> interactables;
+    private final Set<AbstractMachine> machines;
+    private final Set<AbstractItem> items;
     
     private final Set<ObjectInWorld> objects;
     
@@ -43,11 +44,11 @@ public class Area implements JsonSerializable {
         tileMap = t;
         powerGrid = new PowerGrid(t.getWidthInCells(), t.getHeightInCells());
         objects = new HashSet<>();
-        stuffThatCanBumpIntoOtherStuff = new VolatileLinkedList<>();
-        stuffThatOtherStuffCanBumpInto = new VolatileLinkedList<>();
-        interactables = new VolatileLinkedList<>();
-        machines = new VolatileLinkedList<>();
-        items = new VolatileLinkedList<>();
+        stuffThatCanBumpIntoOtherStuff = new HashSet<>();
+        stuffThatOtherStuffCanBumpInto = new HashSet<>();
+        interactables = new HashSet<>();
+        machines = new HashSet<>();
+        items = new HashSet<>();
     }
     
     /**
@@ -61,19 +62,19 @@ public class Area implements JsonSerializable {
      */
     public Area addToWorld(ObjectInWorld obj){
         if(obj instanceof MobileWorldObject){
-            this.stuffThatCanBumpIntoOtherStuff.add((MobileWorldObject)obj);
+            stuffThatCanBumpIntoOtherStuff.add((MobileWorldObject)obj);
         }
         if(obj instanceof Collidable){
-            this.stuffThatOtherStuffCanBumpInto.add((Collidable)obj);
+            stuffThatOtherStuffCanBumpInto.add((Collidable)obj);
         }
         if(obj instanceof AbstractMachine){
-            this.machines.add((AbstractMachine) obj);
+            machines.add((AbstractMachine) obj);
         }
         if(obj instanceof AbstractItem){
-            this.items.add((AbstractItem) obj);
+            items.add((AbstractItem) obj);
         }
         if(obj instanceof Interactable){
-            this.interactables.add((Interactable) obj);
+            interactables.add((Interactable) obj);
         }
         objects.add(obj);
         obj.setArea(this);
@@ -90,19 +91,19 @@ public class Area implements JsonSerializable {
      */
     public Area removeFromWorld(ObjectInWorld obj){
         if(obj instanceof MobileWorldObject){
-            this.stuffThatCanBumpIntoOtherStuff.delete((MobileWorldObject)obj);
+            stuffThatCanBumpIntoOtherStuff.remove((MobileWorldObject)obj);
         }
         if(obj instanceof Collidable){
-            this.stuffThatOtherStuffCanBumpInto.delete((Collidable)obj);
+            stuffThatOtherStuffCanBumpInto.remove((Collidable)obj);
         }
         if(obj instanceof AbstractMachine){
-            this.machines.delete((AbstractMachine) obj);
+            machines.remove((AbstractMachine) obj);
         }
         if(obj instanceof AbstractItem){
-            this.items.delete((AbstractItem) obj);
+            items.remove((AbstractItem) obj);
         }
         if(obj instanceof Interactable){
-            this.interactables.delete((Interactable) obj);
+            interactables.remove((Interactable) obj);
         }
         objects.remove(obj);
         return this;
@@ -146,12 +147,14 @@ public class Area implements JsonSerializable {
      */
     public Area update(){
         powerGrid.update(machines);
-        this.stuffThatCanBumpIntoOtherStuff.forEach((e)->{
+        new HashSet<>(stuffThatCanBumpIntoOtherStuff).forEach((e)->{
             if(e instanceof AbstractEntity){
                 ((AbstractEntity)e).update();
             }
-            tileMap.checkForCollisions(e); 
-            this.stuffThatOtherStuffCanBumpInto.forEach((c)->{
+            tileMap.checkForCollisions(e);
+            
+            // make a copy of collidables to avoid ConcurrentModificationException
+            new HashSet<>(stuffThatOtherStuffCanBumpInto).forEach((c)->{
                 if(!c.equals(e)){ // don't collide with self
                     c.checkForCollisions(e);
                 }
@@ -162,9 +165,7 @@ public class Area implements JsonSerializable {
                 m.update();
             }
         });
-        items.forEach((i)->{
-            //i.update(); Don't currently have an update method
-        });
+        
         return this;
     }
     
