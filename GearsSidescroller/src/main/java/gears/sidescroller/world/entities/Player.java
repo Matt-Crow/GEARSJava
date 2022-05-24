@@ -1,38 +1,33 @@
 package gears.sidescroller.world.entities;
 
 import gears.sidescroller.gui.level.LevelPage;
+import gears.sidescroller.world.core.Illuminating;
 import gears.sidescroller.world.core.MobileWorldObject;
 import gears.sidescroller.world.items.AbstractItem;
 import gears.sidescroller.world.tiles.AbstractTileTemplate;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.awt.*;
+import java.util.*;
 import java.util.function.Consumer;
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 
 /**
  * A Player is an AbstractEntity which can pick up and use AbstractItems.
  * 
  * @author Matt Crow
  */
-public class Player extends AbstractEntity {
+public class Player extends AbstractEntity implements Illuminating {
     private final ArrayList<AbstractItem> inventory;
     private final ArrayList<InventoryListener> inventoryListeners;
+    private boolean lightEnabled;
     
     public Player(){
         super();
         this.setSpeed(3 * AbstractTileTemplate.TILE_SIZE / LevelPage.FPS);
         inventory = new ArrayList<>();
         inventoryListeners = new ArrayList<>();
+        lightEnabled = false;
     }
     
-    public Player(Collection<AbstractItem> inventory){
-        this();
-        inventory.forEach(this::pickupItem);
-    }
     
     /**
      * Registers and InventoryListener to receive notifications when this'
@@ -108,6 +103,11 @@ public class Player extends AbstractEntity {
     public void init(){
         inventory.clear();
         fireInventoryChanged();
+        lightEnabled = false;
+    }
+    
+    public void toggleLightEnabled(){
+        lightEnabled = !lightEnabled;
     }
     
     /**
@@ -149,5 +149,27 @@ public class Player extends AbstractEntity {
     @Override
     public String getJsonType() {
         return "Player";
+    }
+
+    @Override
+    public int getLightCenterX() {
+        return getXIdx();
+    }
+
+    @Override
+    public int getLightCenterY() {
+        return getYIdx();
+    }
+
+    @Override
+    public int getIlluminationRange() {
+        return (lightEnabled) ? 3 : 0;
+    }
+
+    @Override
+    public byte getIlluminationAtDistance(int d) {
+        return (lightEnabled)
+                ? (byte) (100 - 15 * d)
+                : 0;
     }
 }

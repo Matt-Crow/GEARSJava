@@ -25,7 +25,10 @@ public class PlayerControls extends EntityControls {
     public void registerTo(LevelPage p){
         super.registerTo(p);
         p.registerKey(KeyEvent.VK_Q, true, ()->{
-            ((Player)getContolledEntity()).grab();
+            ((Player)getControlledEntity()).grab();
+        });
+        p.registerKey(KeyEvent.VK_L, true, ()->{
+            ((Player)getControlledEntity()).toggleLightEnabled();
         });
     }
 }

@@ -41,6 +41,7 @@ when run from the repository root.
 
 * WASD to move
 * Q to interact with your current tile (such as picking up placed gears)
+* L to toggle your light
 * select items from the "inventory" menu on the bottom of the screen to use them
 
 ## Some Screenshots

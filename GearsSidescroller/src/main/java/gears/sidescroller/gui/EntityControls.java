@@ -27,7 +27,7 @@ public class EntityControls extends JPanel {
         this.controlledEntity = controlledEntity;
     }
     
-    protected final AbstractEntity getContolledEntity(){
+    protected final AbstractEntity getControlledEntity(){
         return controlledEntity;
     }
     

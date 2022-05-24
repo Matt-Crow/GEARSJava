@@ -9,6 +9,7 @@ import gears.sidescroller.world.machines.AbstractMachine;
 import gears.sidescroller.world.tileMaps.TileMap;
 import java.awt.Graphics;
 import java.util.*;
+import java.util.stream.Collectors;
 import javax.json.*;
 
 /**
@@ -20,6 +21,7 @@ import javax.json.*;
 public class Area implements JsonSerializable {
     private final TileMap tileMap;
     private final PowerGrid powerGrid;
+    private final LightGrid lightGrid;
     
     /*
     Once I have more behavioral interfaces (Renderable, Interactable, 
@@ -43,6 +45,7 @@ public class Area implements JsonSerializable {
     public Area(TileMap t){
         tileMap = t;
         powerGrid = new PowerGrid(t.getWidthInCells(), t.getHeightInCells());
+        lightGrid = new LightGrid(t.getWidthInCells(), t.getHeightInCells(), (byte)15);
         objects = new HashSet<>();
         stuffThatCanBumpIntoOtherStuff = new HashSet<>();
         stuffThatOtherStuffCanBumpInto = new HashSet<>();
@@ -146,7 +149,15 @@ public class Area implements JsonSerializable {
      * @return this, for chaining purposes. 
      */
     public Area update(){
+        Collection<Illuminating> lights = objects.stream().filter((obj)->{
+            return obj instanceof Illuminating;
+        }).map((obj)->{
+            return (Illuminating)obj;
+        }).collect(Collectors.toSet());
+        
         powerGrid.update(machines);
+        lightGrid.update(lights);
+        
         new HashSet<>(stuffThatCanBumpIntoOtherStuff).forEach((e)->{
             if(e instanceof AbstractEntity){
                 ((AbstractEntity)e).update();
@@ -184,6 +195,7 @@ public class Area implements JsonSerializable {
         items.forEach((item)->{
             item.draw(g);
         });
+        lightGrid.draw(g);
         powerGrid.draw(g);
         
         return this;

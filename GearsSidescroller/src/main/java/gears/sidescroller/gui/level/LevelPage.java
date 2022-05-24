@@ -28,6 +28,7 @@ public class LevelPage extends Page{
     private final Player focusedEntity;
     private final PlayerControls controls;
     public static final int FPS = 20;
+    private static final boolean DRAW_COLLISION_OVERLAY = false;
     
     public LevelPage(PageController controller, Level forLevel, Player thePlayer, LevelLoader loader) {
         super(controller);
@@ -108,7 +109,7 @@ public class LevelPage extends Page{
         currentLevel.draw(g2d);
         g2d.setTransform(priorToTranslate);
         
-        if(this.currentLevel.getCurrentArea().getTileMap().checkForCollisions(focusedEntity)){
+        if(DRAW_COLLISION_OVERLAY && currentLevel.getCurrentArea().getTileMap().checkForCollisions(focusedEntity)){
             g2d.setColor(new Color(255, 0, 0, 127));
             g2d.fillRect(0, 0, getWidth(), getHeight());
         }
