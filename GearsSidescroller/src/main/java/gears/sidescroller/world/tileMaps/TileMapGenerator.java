@@ -4,8 +4,7 @@ import gears.sidescroller.world.tiles.TileGenerator;
 import java.util.function.BiFunction;
 
 /**
- * Use this class to randomly
- * generate tile maps.
+ * Use this class to randomly generate tile maps.
  * 
  * Currently, subsequent invocations of generateRandom will produce the same
  * shape of TileMap, though the colors will be different
@@ -17,7 +16,6 @@ public class TileMapGenerator {
     private final BiFunction<Integer, Integer, Integer> function;
     
     /**
-     * 
      * @param tileGenerator the TileGenerator to use in randomly generating tile designs
      * @param function a function which maps x- and y-coordinates in index-space to keys in the FlyweightMatrix
      * of tile designs in the Areas this generates. Note that the output of this function is automatically 
@@ -46,13 +44,21 @@ public class TileMapGenerator {
     public TileMap generateTileMap(int w, int h){
         TileMap ret = new TileMap(w, h);
         
-        ret.addToTileSet(0, tileGenerator.generateRandom(false)); // should be able to walk on 0
+        ret.addToTileSet(0, tileGenerator.generateRandom(false)); 
+        // should be able to walk on 0
         // since 0 will be the most common tile
+        
+        /*
+        need to add a random value to the inputs of function, as otherwise the
+        shape of the tilemap generated is not random.
+        */
+        int r;
         
         int newKey = -1;
         for(int i = 0; i < w; i++){
             for(int j = 0; j < h; j++){
-                newKey = Math.max(0, function.apply(i, j));
+                r = (int) Math.floor(Math.random() * 10);
+                newKey = Math.max(0, function.apply(i + r, j + r));
                 if(!ret.isKeySet(newKey)){
                     // only add to the tile set if a new key appears
                     ret.addToTileSet(newKey, tileGenerator.generateRandom(true));
