@@ -3,6 +3,7 @@ package gears.sidescroller.world.core;
 import gears.sidescroller.loader.JsonSerializable;
 import gears.sidescroller.world.areas.Area;
 import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
+import java.awt.Graphics;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -134,6 +135,8 @@ public abstract class ObjectInWorld implements Collidable, JsonSerializable {
         
         return builder.build();
     }
+    
+    public abstract void draw(Graphics g);
     
     /**
      * subclasses must override this method to add their properties to the given

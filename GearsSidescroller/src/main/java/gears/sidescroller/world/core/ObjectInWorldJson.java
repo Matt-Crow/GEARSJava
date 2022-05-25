@@ -4,6 +4,7 @@ import gears.sidescroller.loader.JsonResourceType;
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.items.GearItem;
+import gears.sidescroller.world.items.LanternItem;
 import gears.sidescroller.world.machines.ConveyorBeltSegment;
 import gears.sidescroller.world.machines.GearMachine;
 import gears.sidescroller.world.machines.PowerPlant;
@@ -27,6 +28,10 @@ public class ObjectInWorldJson implements JsonResourceType<ObjectInWorld> {
             }
             case "GearItem": {
                 obj = deserializeGearItem(json);
+                break;
+            }
+            case "LanternItem": {
+                obj = deserializeLanternItem(json);
                 break;
             }
             case "ConveyorBeltSegment": {
@@ -61,6 +66,14 @@ public class ObjectInWorldJson implements JsonResourceType<ObjectInWorld> {
                 json.getInt("x"),
                 json.getInt("y"),
                 new Color(json.getInt("color"), true) // has alpha
+        );
+    }
+    
+    private ObjectInWorld deserializeLanternItem(JsonObject json){
+        return new LanternItem(
+                json.getInt("x"),
+                json.getInt("y"),
+                (byte)json.getInt("lightLevel")
         );
     }
 

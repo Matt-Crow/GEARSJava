@@ -58,12 +58,6 @@ public class Level extends Matrix<Area> implements MapBoundsReachedListener, Jso
      * @return this, for chaining purposes. 
      */
     public final Level init(){
-        this.forEachCell((area, xIdx, yIdx)->{
-            if(area != null){
-                area.init();
-            }
-        });
-        
         if(player != null){
             player.init();
         }

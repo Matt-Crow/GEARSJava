@@ -9,12 +9,12 @@ public interface Illuminating {
     /**
      * @return the x-index of the center of the square of light this produces
      */
-    public int getLightCenterX();
+    public int getLightCenterXIdx();
     
     /**
      * @return the y-index of the center of the square of light this produces
      */
-    public int getLightCenterY();
+    public int getLightCenterYIdx();
     
     /**
      * @return the radius of the square of light this object provides 

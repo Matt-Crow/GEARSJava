@@ -152,13 +152,13 @@ public class Player extends AbstractEntity implements Illuminating {
     }
 
     @Override
-    public int getLightCenterX() {
-        return getXIdx();
+    public int getLightCenterXIdx() {
+        return getCenterXIdx();
     }
 
     @Override
-    public int getLightCenterY() {
-        return getYIdx();
+    public int getLightCenterYIdx() {
+        return getCenterYIdx();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package gears.sidescroller.world.core;
 
+import java.awt.Graphics;
 import javax.json.JsonObjectBuilder;
 
 /**
@@ -33,6 +34,11 @@ public class CollisionBox {
             @Override
             public String getJsonType() {
                 return "CollisionBox";
+            }
+
+            @Override
+            public void draw(Graphics g) {
+            
             }
         };
     }

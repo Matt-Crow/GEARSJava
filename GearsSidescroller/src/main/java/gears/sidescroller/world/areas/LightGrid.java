@@ -29,16 +29,16 @@ public class LightGrid extends Matrix<Byte>{
     }
     
     private void applyLightFrom(Illuminating lightSource){
-        final int x0 = lightSource.getLightCenterX();
-        final int y0 = lightSource.getLightCenterY();
+        final int x0 = lightSource.getLightCenterXIdx();
+        final int y0 = lightSource.getLightCenterYIdx();
         final int r = lightSource.getIlluminationRange();
         final int w = getWidthInCells();
         final int h = getHeightInCells();
         byte oldLight;
         byte newLight;
         
-        for(int x = x0 - r; x <= x0 + r && x < w; ++x){
-            for(int y = y0 - r; y <= y0 + r && y < h; ++y){
+        for(int x = Math.max(x0 - r, 0); x <= x0 + r && x < w; ++x){
+            for(int y = Math.max(y0 - r, 0); y <= y0 + r && y < h; ++y){
                 oldLight = get(x, y);
                 newLight = lightSource.getIlluminationAtDistance(
                         Math.abs(x - x0) + Math.abs(y - y0)

@@ -9,6 +9,9 @@ import gears.sidescroller.world.machines.AbstractMachine;
 import gears.sidescroller.world.tileMaps.TileMap;
 import java.awt.Graphics;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javax.json.*;
 
@@ -31,9 +34,7 @@ public class Area implements JsonSerializable {
     */
     private final Set<MobileWorldObject> stuffThatCanBumpIntoOtherStuff;
     private final Set<Collidable> stuffThatOtherStuffCanBumpInto;
-    private final Set<Interactable> interactables;
     private final Set<AbstractMachine> machines;
-    private final Set<AbstractItem> items;
     
     private final Set<ObjectInWorld> objects;
     
@@ -49,9 +50,7 @@ public class Area implements JsonSerializable {
         objects = new HashSet<>();
         stuffThatCanBumpIntoOtherStuff = new HashSet<>();
         stuffThatOtherStuffCanBumpInto = new HashSet<>();
-        interactables = new HashSet<>();
         machines = new HashSet<>();
-        items = new HashSet<>();
     }
     
     /**
@@ -72,12 +71,6 @@ public class Area implements JsonSerializable {
         }
         if(obj instanceof AbstractMachine){
             machines.add((AbstractMachine) obj);
-        }
-        if(obj instanceof AbstractItem){
-            items.add((AbstractItem) obj);
-        }
-        if(obj instanceof Interactable){
-            interactables.add((Interactable) obj);
         }
         objects.add(obj);
         obj.setArea(this);
@@ -102,12 +95,6 @@ public class Area implements JsonSerializable {
         if(obj instanceof AbstractMachine){
             machines.remove((AbstractMachine) obj);
         }
-        if(obj instanceof AbstractItem){
-            items.remove((AbstractItem) obj);
-        }
-        if(obj instanceof Interactable){
-            interactables.remove((Interactable) obj);
-        }
         objects.remove(obj);
         return this;
     }
@@ -123,23 +110,13 @@ public class Area implements JsonSerializable {
     }
     
     /**
-     * DNGN
-     * 
-     * @return this, for chaining purposes
-     */
-    public Area init(){
-        //entities.forEach((e)->e.init());
-        return this;
-    }
-    
-    /**
      * Notifies all the interactable objects in the Area that a Player has
      * interacted, causing them to act as appropriate.
      * 
      * @param p the Player who interacted with this Area
      */
     public final void playerInteracted(Player p){
-        interactables.forEach((i)->i.interactWith(p));
+        each((obj)->obj instanceof Interactable, (obj)->(Interactable)obj, (i)->i.interactWith(p));
     }
     
     /**
@@ -192,13 +169,25 @@ public class Area implements JsonSerializable {
         machines.forEach((m)->{
             m.draw(g);
         });
-        items.forEach((item)->{
-            item.draw(g);
-        });
+        objects.forEach((obj)->obj.draw(g));
         lightGrid.draw(g);
         powerGrid.draw(g);
         
         return this;
+    }
+    
+    /**
+     * performs an operation on each object in this Area that meets a criteria
+     * note that this iterates over a shallow copy of the objects collection, so
+     * it won't face concurrent modifications
+     * 
+     * @param <T> the type matching objects will be cast to
+     * @param matching the criteria
+     * @param mapper converts matching objects to T
+     * @param doThis runs on matching objects after conversion
+     */
+    private <T> void each(Predicate<ObjectInWorld> matching, Function<ObjectInWorld, T> mapper, Consumer<T> doThis){
+        new HashSet<>(objects).stream().filter(matching).map(mapper).forEach(doThis);
     }
     
     @Override

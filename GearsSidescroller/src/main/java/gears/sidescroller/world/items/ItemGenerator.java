@@ -18,8 +18,17 @@ public class ItemGenerator {
      * @return the newly created item 
      */
     public final AbstractItem generateRandomAt(int xCoord, int yCoord){
-        // todo: add ability to randomly choose item type once there are multiple different item types
+        AbstractItem rando;
         Random rng = new Random();
+        if(rng.nextBoolean()){
+            rando = randomGear(xCoord, yCoord, rng);
+        } else {
+            rando = randomLantern(xCoord, yCoord, rng);
+        }
+        return rando;
+    }
+    
+    private GearItem randomGear(int xCoord, int yCoord, Random rng){
         return new GearItem(
             xCoord,
             yCoord,
@@ -29,5 +38,9 @@ public class ItemGenerator {
                 rng.nextInt(256)
             )
         );
+    }
+    
+    private LanternItem randomLantern(int xCoord, int yCoord, Random rng){
+        return new LanternItem(xCoord, yCoord, (byte) rng.nextInt(256));
     }
 }

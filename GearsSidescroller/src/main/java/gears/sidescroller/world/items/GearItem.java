@@ -58,4 +58,9 @@ public class GearItem extends AbstractItem {
     public String getJsonType() {
         return "GearItem";
     }
+    
+    @Override
+    public String toString(){
+        return "Gear";
+    }
 }
