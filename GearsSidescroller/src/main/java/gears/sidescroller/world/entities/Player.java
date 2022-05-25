@@ -20,6 +20,7 @@ public class Player extends AbstractEntity implements Illuminating {
     private final ArrayList<AbstractItem> inventory;
     private final ArrayList<InventoryListener> inventoryListeners;
     private boolean lightEnabled;
+    private boolean isSneaking;
     
     public Player(){
         super();
@@ -27,8 +28,19 @@ public class Player extends AbstractEntity implements Illuminating {
         inventory = new ArrayList<>();
         inventoryListeners = new ArrayList<>();
         lightEnabled = false;
+        isSneaking = false;
     }
     
+    
+    @Override
+    public int getSpeed(){
+        double mod = (isSneaking) ? 0.5 : 1.0;
+        return (int)(super.getSpeed() * mod);
+    }    
+    
+    public void setSneaking(boolean isSneaking){
+        this.isSneaking = isSneaking;
+    }
     
     /**
      * Registers and InventoryListener to receive notifications when this'
@@ -105,6 +117,7 @@ public class Player extends AbstractEntity implements Illuminating {
         inventory.clear();
         fireInventoryChanged();
         lightEnabled = false;
+        isSneaking = false;
     }
     
     public void toggleLightEnabled(){

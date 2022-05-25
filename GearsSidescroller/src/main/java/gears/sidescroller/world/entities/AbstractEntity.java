@@ -45,7 +45,7 @@ public abstract class AbstractEntity extends MobileWorldObject {
     /**
      * @return the speed of this AbstractEntity, measured in pixels per frame.
      */
-    public final int getSpeed(){
+    public int getSpeed(){
         return speed;
     }
     
@@ -81,9 +81,9 @@ public abstract class AbstractEntity extends MobileWorldObject {
      */
     protected AbstractEntity updateMovement(){
         isMoveInDir.forEach((dir, isMove)->{
-            if(isMove){
-                setX(getX() + speed * dir.getXMod());
-                setY(getY() + speed * dir.getYMod());
+            if(isMove){ // use getSpeed() to allow subclasses to override it
+                setX(getX() + getSpeed() * dir.getXMod());
+                setY(getY() + getSpeed() * dir.getYMod());
             }
         });
         return this;

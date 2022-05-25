@@ -76,9 +76,9 @@ public class AreaGenerator {
     private void generateStructuresIn(TileMap here){
         Random rng = new Random();
         // choose number of structures
-        int numStructs = rng.nextInt(3);
+        int numStructs = rng.nextInt(3) + 1;
         for(int i = 0; i < numStructs; i++){
-            Structure newStruct = structureGenerator.generateRoom();
+            Structure newStruct = structureGenerator.generateRandom();
             here.insertMatrix(
                 rng.nextInt(here.getWidthInCells() - newStruct.getWidthInCells()), 
                 rng.nextInt(here.getHeightInCells() - newStruct.getHeightInCells()), 

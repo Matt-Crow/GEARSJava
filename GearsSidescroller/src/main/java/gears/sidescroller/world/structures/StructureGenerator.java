@@ -7,8 +7,7 @@ import java.util.Random;
 /**
  * The StructureGenerator is used to randomly generate Structures for random Area
  * generation. Currently, this just generates simple rectangular rooms. Future
- * versions will be able to generate more complex Structures, such as ones loaded
- * from files.
+ * versions will be able to generate more complex Structures
  * 
  * @author Matt Crow
  */
@@ -27,12 +26,23 @@ public class StructureGenerator {
         this.maxHeight = maxHeight;
     }
     
+    
+    public Structure generateRandom(){
+        Structure s;
+        if(new Random().nextBoolean()){
+            s = generateRoom();
+        } else {
+            s = generatePassage();
+        }
+        return s;
+    }
+    
     /**
      * Creates a new hovel based on the specifications provided to the constructor.
      * 
      * @return a rectangular Structure; not the best place to live in. 
      */
-    public final Structure generateRoom(){
+    private Structure generateRoom(){
         Random rng = new Random();
         int width = rng.nextInt(maxWidth) + 1;
         int height = rng.nextInt(maxHeight) + 1;
@@ -79,5 +89,32 @@ public class StructureGenerator {
         }
         
         return newStruct;
+    }
+    
+    private Structure generatePassage(){
+        Random rng = new Random();
+        int minorLength = rng.nextInt(Math.max(maxWidth - 3, 1)) + 1;
+        int majorLength = minorLength + 3;
+        
+        Structure s;
+        if(rng.nextBoolean()){
+            // longer in the y-direction
+            s = new Structure(minorLength, majorLength);
+            for(int i = 0; i < majorLength; ++i){
+                s.set(0, i, 1);
+                s.set(minorLength - 1, i, 1);
+            }
+        } else {
+            // longer in the x-direction
+            s = new Structure(majorLength, minorLength);
+            for(int i = 0; i < majorLength; ++i){
+                s.set(i, 0, 1);
+                s.set(i, minorLength - 1, 1);
+            }
+        }
+        s.setKeyToVal(0, new TileGenerator().generateRandom(false));
+        s.setKeyToVal(1, new TileGenerator().generateRandom(true));
+        
+        return s;
     }
 }

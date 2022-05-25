@@ -5,6 +5,7 @@ import gears.sidescroller.gui.level.LevelPage;
 import gears.sidescroller.world.entities.Player;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import javax.swing.JMenuBar;
 
 /**
@@ -30,5 +31,39 @@ public class PlayerControls extends EntityControls {
         p.registerKey(KeyEvent.VK_L, true, ()->{
             ((Player)getControlledEntity()).toggleLightEnabled();
         });
+        
+        // for some reason, this never runs
+        p.registerKey(KeyEvent.VK_SHIFT, true, ()->{
+            ((Player)getControlledEntity()).setSneaking(true);
+        });
+        
+        // this runs on key down?!?
+        p.registerKey(KeyEvent.VK_SHIFT, false, ()->{
+            ((Player)getControlledEntity()).setSneaking(false);
+        });
+        
+        /*
+        this works
+        p.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_SHIFT){
+                    ((Player)getControlledEntity()).setSneaking(true);
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_SHIFT){
+                    ((Player)getControlledEntity()).setSneaking(false);
+                }
+            }
+        });
+        */
     }
 }
