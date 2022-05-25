@@ -2,6 +2,8 @@ package gears.sidescroller.world.items;
 
 import gears.sidescroller.world.core.Illuminating;
 import gears.sidescroller.world.entities.Player;
+import gears.sidescroller.world.machines.PlacedLanternMachine;
+import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.json.JsonObjectBuilder;
@@ -20,7 +22,16 @@ public class LanternItem extends AbstractItem implements Illuminating {
 
     @Override
     public boolean doAction(Player whoUsedItem) {
-        return false;
+        PlacedLanternMachine thisAsItem = new PlacedLanternMachine(
+                whoUsedItem.getXIdx() * TILE_SIZE,
+                whoUsedItem.getYIdx() * TILE_SIZE,
+                true,
+                lightLevel,
+                this
+        );
+        whoUsedItem.getArea().addToWorld(thisAsItem);
+        whoUsedItem.removeItem(this);
+        return true; // this was placed
     }
 
     @Override
@@ -34,8 +45,8 @@ public class LanternItem extends AbstractItem implements Illuminating {
         g.fillRect(x + w / 4, y + h / 4, w / 2, h / 2);
         
         g.setColor(new Color(
-                255 - Byte.toUnsignedInt(lightLevel),
-                255 - Byte.toUnsignedInt(lightLevel),
+                Byte.toUnsignedInt(lightLevel),
+                Byte.toUnsignedInt(lightLevel),
                 0
         ));
         g.fillRect(x + w / 3, y + h / 3, w / 3, h / 3);

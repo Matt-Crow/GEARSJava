@@ -41,8 +41,8 @@ public class LanternMachine extends AbstractMachine implements Illuminating {
         g.fillRect(x + w / 4, y + h / 4, w / 2, h / 2);
         
         g.setColor(new Color(
-                255 - Byte.toUnsignedInt(lightLevel),
-                255 - Byte.toUnsignedInt(lightLevel),
+                Byte.toUnsignedInt(lightLevel),
+                Byte.toUnsignedInt(lightLevel),
                 0
         ));
         g.fillRect(x + w / 3, y + h / 3, w / 3, h / 3);}
@@ -80,7 +80,8 @@ public class LanternMachine extends AbstractMachine implements Illuminating {
 
     @Override
     public byte getIlluminationAtDistance(int d) {
-        return (flicker > FPS / 20) 
+        //                            prevents byte rollover in some cases
+        return (flicker > FPS / 20 && d <= getIlluminationRange()) 
                 ? (byte) (Byte.toUnsignedInt(lightLevel) - d * 15)
                 : 0;
     }

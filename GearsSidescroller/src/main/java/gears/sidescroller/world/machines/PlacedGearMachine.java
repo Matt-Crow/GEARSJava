@@ -6,7 +6,6 @@ import gears.sidescroller.world.items.GearItem;
 
 /**
  * A PlacedGearMachine is simply a GearMachine a Player has placed via a GearItem.
- * I don't particularly like how I'm using an entirely different class for this.
  * The Player can pick this back up by interacting with it.
  * 
  * @author Matt Crow
