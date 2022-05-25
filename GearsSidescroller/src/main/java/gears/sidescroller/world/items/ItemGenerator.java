@@ -1,5 +1,6 @@
 package gears.sidescroller.world.items;
 
+import gears.sidescroller.world.core.LightLevel;
 import java.awt.Color;
 import java.util.Random;
 
@@ -41,6 +42,6 @@ public class ItemGenerator {
     }
     
     private LanternItem randomLantern(int xCoord, int yCoord, Random rng){
-        return new LanternItem(xCoord, yCoord, (byte) rng.nextInt(256));
+        return new LanternItem(xCoord, yCoord, new LightLevel(128 + rng.nextInt(128)));
     }
 }

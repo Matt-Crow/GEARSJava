@@ -1,6 +1,7 @@
 package gears.sidescroller.world.items;
 
 import gears.sidescroller.world.core.Illuminating;
+import gears.sidescroller.world.core.LightLevel;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.machines.PlacedLanternMachine;
 import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
@@ -13,9 +14,9 @@ import javax.json.JsonObjectBuilder;
  * @author Matt Crow <mattcrow19@gmail.com>
  */
 public class LanternItem extends AbstractItem implements Illuminating {
-    private final byte lightLevel;
+    private final LightLevel lightLevel;
     
-    public LanternItem(int x, int y, byte lightLevel) {
+    public LanternItem(int x, int y, LightLevel lightLevel) {
         super(x, y);
         this.lightLevel = lightLevel;
     }
@@ -45,8 +46,8 @@ public class LanternItem extends AbstractItem implements Illuminating {
         g.fillRect(x + w / 4, y + h / 4, w / 2, h / 2);
         
         g.setColor(new Color(
-                Byte.toUnsignedInt(lightLevel),
-                Byte.toUnsignedInt(lightLevel),
+                lightLevel.getIntValue(),
+                lightLevel.getIntValue(),
                 0
         ));
         g.fillRect(x + w / 3, y + h / 3, w / 3, h / 3);
@@ -54,7 +55,7 @@ public class LanternItem extends AbstractItem implements Illuminating {
 
     @Override
     protected void attachJsonProperties(JsonObjectBuilder builder) {
-        builder.add("lightLevel", lightLevel);
+        builder.add("lightLevel", lightLevel.getIntValue());
     }
 
     @Override
@@ -78,7 +79,7 @@ public class LanternItem extends AbstractItem implements Illuminating {
     }
 
     @Override
-    public byte getIlluminationAtDistance(int d) {
+    public LightLevel getIlluminationAtDistance(int d) {
         return lightLevel;
     }
     

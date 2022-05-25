@@ -2,6 +2,7 @@ package gears.sidescroller.world.areas;
 
 import gears.sidescroller.util.Matrix;
 import gears.sidescroller.world.core.Illuminating;
+import gears.sidescroller.world.core.LightLevel;
 import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -13,16 +14,16 @@ import java.util.Collection;
  * @author Matt Crow <mattcrow19@gmail.com>
  */
 public class LightGrid extends Matrix<Byte>{
-    private final byte ambientLightLevel; // unsigned byte
+    private final LightLevel ambientLightLevel;
     
-    public LightGrid(int width, int height, byte ambientLightLevel) {
+    public LightGrid(int width, int height, LightLevel ambientLightLevel) {
         super(width, height);
         this.ambientLightLevel = ambientLightLevel;
-        setAllTo(this.ambientLightLevel);
+        setAllTo(ambientLightLevel.getValue());
     }
     
     public void update(Collection<Illuminating> lightSources){
-        setAllTo(ambientLightLevel);
+        setAllTo(ambientLightLevel.getValue());
         lightSources.forEach((light)->{
             applyLightFrom(light);
         });
@@ -42,7 +43,7 @@ public class LightGrid extends Matrix<Byte>{
                 oldLight = get(x, y);
                 newLight = lightSource.getIlluminationAtDistance(
                         Math.abs(x - x0) + Math.abs(y - y0)
-                );
+                ).getValue();
                 if(Byte.compareUnsigned(newLight, oldLight) > 0){
                     set(x, y, newLight);
                 }

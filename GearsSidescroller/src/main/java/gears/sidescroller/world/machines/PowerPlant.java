@@ -1,5 +1,7 @@
 package gears.sidescroller.world.machines;
 
+import gears.sidescroller.world.core.Illuminating;
+import gears.sidescroller.world.core.LightLevel;
 import java.awt.Color;
 import java.awt.Graphics;
 
@@ -11,7 +13,7 @@ import java.awt.Graphics;
  * 
  * @author Matt Crow
  */
-public class PowerPlant extends AbstractMachine implements PowerProvidingMachine {
+public class PowerPlant extends AbstractMachine implements PowerProvidingMachine, Illuminating {
 
     /**
      * 
@@ -54,5 +56,25 @@ public class PowerPlant extends AbstractMachine implements PowerProvidingMachine
     @Override
     public String getJsonType() {
         return "PowerPlant";
+    }
+
+    @Override
+    public int getLightCenterXIdx() {
+        return getCenterXIdx();
+    }
+
+    @Override
+    public int getLightCenterYIdx() {
+        return getCenterYIdx();
+    }
+
+    @Override
+    public int getIlluminationRange() {
+        return 3; // same as power radius
+    }
+
+    @Override
+    public LightLevel getIlluminationAtDistance(int d) {
+        return LightLevel.capped(125 - d * 15);
     }
 }

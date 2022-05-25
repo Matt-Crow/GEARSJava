@@ -26,5 +26,5 @@ public interface Illuminating {
      * @return the illumination this provides to a tile at the given number of
      *  tiles away
      */
-    public byte getIlluminationAtDistance(int d);
+    public LightLevel getIlluminationAtDistance(int d);
 }

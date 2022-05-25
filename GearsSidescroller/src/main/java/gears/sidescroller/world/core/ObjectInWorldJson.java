@@ -78,7 +78,7 @@ public class ObjectInWorldJson implements JsonResourceType<ObjectInWorld> {
         return new LanternItem(
                 json.getInt("x"),
                 json.getInt("y"),
-                (byte)json.getInt("lightLevel")
+                new LightLevel(json.getInt("lightLevel"))
         );
     }
 
@@ -101,7 +101,7 @@ public class ObjectInWorldJson implements JsonResourceType<ObjectInWorld> {
                 json.getInt("x"),
                 json.getInt("y"),
                 json.getBoolean("isSelfPowering"), 
-                (byte) json.getInt("lightLevel")
+                new LightLevel(json.getInt("lightLevel"))
         );
     }
 

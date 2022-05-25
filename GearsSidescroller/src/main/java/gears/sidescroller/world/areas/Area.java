@@ -33,7 +33,7 @@ public class Area implements JsonSerializable {
     public Area(TileMap t) {
         tileMap = t;
         powerGrid = new PowerGrid(t.getWidthInCells(), t.getHeightInCells());
-        lightGrid = new LightGrid(t.getWidthInCells(), t.getHeightInCells(), (byte) 15);
+        lightGrid = new LightGrid(t.getWidthInCells(), t.getHeightInCells(), new LightLevel(15));
         objects = new HashSet<>();
     }
 

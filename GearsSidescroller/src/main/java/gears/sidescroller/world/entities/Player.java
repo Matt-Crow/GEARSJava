@@ -2,6 +2,7 @@ package gears.sidescroller.world.entities;
 
 import gears.sidescroller.gui.level.LevelPage;
 import gears.sidescroller.world.core.Illuminating;
+import gears.sidescroller.world.core.LightLevel;
 import gears.sidescroller.world.core.MobileWorldObject;
 import gears.sidescroller.world.items.AbstractItem;
 import gears.sidescroller.world.tiles.AbstractTileTemplate;
@@ -167,9 +168,9 @@ public class Player extends AbstractEntity implements Illuminating {
     }
 
     @Override
-    public byte getIlluminationAtDistance(int d) {
+    public LightLevel getIlluminationAtDistance(int d) {
         return (lightEnabled)
-                ? (byte) (100 - 15 * d)
-                : 0;
+                ? new LightLevel(100 - 15 * d)
+                : LightLevel.NO_LIGHT;
     }
 }

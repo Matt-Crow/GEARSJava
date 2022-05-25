@@ -2,6 +2,7 @@ package gears.sidescroller.world.machines;
 
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.world.areas.Area;
+import gears.sidescroller.world.core.LightLevel;
 import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 import java.util.LinkedList;
 import java.util.Random;
@@ -37,7 +38,7 @@ public class MachineGenerator {
                 ret.addAll(createConveyorBelt(inThisArea, xIdx, yIdx));
                 break;
             case 3:
-                ret.add(new LanternMachine(xIdx * TILE_SIZE, yIdx * TILE_SIZE, rng.nextBoolean(), (byte) rng.nextInt(256)));
+                ret.add(new LanternMachine(xIdx * TILE_SIZE, yIdx * TILE_SIZE, rng.nextBoolean(), new LightLevel(rng.nextInt(256))));
                 break;
         }
         
