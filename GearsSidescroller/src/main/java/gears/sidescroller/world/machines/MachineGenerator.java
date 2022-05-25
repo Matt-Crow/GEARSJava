@@ -13,6 +13,38 @@ import java.util.Random;
  */
 public class MachineGenerator {
     /**
+     * Creates one or more new machines to add to the given Area. Note that this method does not do the 
+     * actual adding, and so the caller is responsible for doing so.
+     * 
+     * This method must return a list, as this may return a series of ConveyorBeltSegments
+     * 
+     * @param inThisArea the Area these machines should later be added to
+     * @param xIdx the x-coordinate this new machine will be added to, measured in index-space
+     * @param yIdx the y-coordinate this new machine will be added to, measured in index-space
+     * @return 
+     */
+    public final LinkedList<AbstractMachine> createRandomMachineAt(Area inThisArea, int xIdx, int yIdx){
+        LinkedList<AbstractMachine> ret = new LinkedList<>();
+        Random rng = new Random();
+        switch(rng.nextInt(4)){
+            case 0:
+                ret.add(new PowerPlant(xIdx * TILE_SIZE, yIdx * TILE_SIZE));
+                break;
+            case 1:
+                ret.add(new GearMachine(xIdx * TILE_SIZE, yIdx * TILE_SIZE));
+                break;
+            case 2:
+                ret.addAll(createConveyorBelt(inThisArea, xIdx, yIdx));
+                break;
+            case 3:
+                ret.add(new LanternMachine(xIdx * TILE_SIZE, yIdx * TILE_SIZE, rng.nextBoolean(), (byte) rng.nextInt(256)));
+                break;
+        }
+        
+        return ret;
+    }
+    
+    /**
      * Creates a chain of ConveyorBeltSegments, where the nth segment will move 
      * AbstractEntities onto the (n+1)th segment.
      * 
@@ -58,32 +90,5 @@ public class MachineGenerator {
         return ret;
     }
     
-    /**
-     * Creates one or more new machines to add to the given Area. Note that this method does not do the 
-     * actual adding, and so the caller is responsible for doing so.
-     * 
-     * This method must return a list, as this may return a series of ConveyorBeltSegments
-     * 
-     * @param inThisArea the Area these machines should later be added to
-     * @param xIdx the x-coordinate this new machine will be added to, measured in index-space
-     * @param yIdx the y-coordinate this new machine will be added to, measured in index-space
-     * @return 
-     */
-    public final LinkedList<AbstractMachine> createRandomMachineAt(Area inThisArea, int xIdx, int yIdx){
-        LinkedList<AbstractMachine> ret = new LinkedList<>();
-        Random rng = new Random();
-        switch(rng.nextInt(3)){
-            case 0:
-                ret.add(new PowerPlant(xIdx * TILE_SIZE, yIdx * TILE_SIZE));
-                break;
-            case 1:
-                ret.add(new GearMachine(xIdx * TILE_SIZE, yIdx * TILE_SIZE));
-                break;
-            case 2:
-                ret.addAll(createConveyorBelt(inThisArea, xIdx, yIdx));
-                break;
-        }
-        
-        return ret;
-    }
+    
 }

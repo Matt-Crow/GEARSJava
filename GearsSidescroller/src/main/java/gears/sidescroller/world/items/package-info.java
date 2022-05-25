@@ -4,6 +4,6 @@
  * 
  * Upon creating new subclasses of AbstractItem, you will need to edit or subclass
  * ItemGenerator to include your new item in randomly generated Areas.
- * 
+ * You'll also need to include the item in core.ObjectInWorldJson
  */
 package gears.sidescroller.world.items;

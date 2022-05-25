@@ -7,6 +7,7 @@ import gears.sidescroller.world.items.GearItem;
 import gears.sidescroller.world.items.LanternItem;
 import gears.sidescroller.world.machines.ConveyorBeltSegment;
 import gears.sidescroller.world.machines.GearMachine;
+import gears.sidescroller.world.machines.LanternMachine;
 import gears.sidescroller.world.machines.PowerPlant;
 import java.awt.Color;
 import javax.json.*;
@@ -40,6 +41,10 @@ public class ObjectInWorldJson implements JsonResourceType<ObjectInWorld> {
             }
             case "GearMachine": {
                 obj = deserializeGearMachine(json);
+                break;
+            }
+            case "LanternMachine": {
+                obj = deserializeLanternMachine(json);
                 break;
             }
             case "PowerPlant": {
@@ -89,6 +94,15 @@ public class ObjectInWorldJson implements JsonResourceType<ObjectInWorld> {
 
     private ObjectInWorld deserializeGearMachine(JsonObject json) {
         return new GearMachine(json.getInt("x"), json.getInt("y"));
+    }
+    
+    private ObjectInWorld deserializeLanternMachine(JsonObject json){
+        return new LanternMachine(
+                json.getInt("x"),
+                json.getInt("y"),
+                json.getBoolean("isSelfPowering"), 
+                (byte) json.getInt("lightLevel")
+        );
     }
 
     private ObjectInWorld deserializePowerPlant(JsonObject json) {
