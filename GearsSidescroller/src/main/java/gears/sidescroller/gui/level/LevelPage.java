@@ -1,6 +1,8 @@
 package gears.sidescroller.gui.level;
 
 import gears.sidescroller.gui.*;
+import gears.sidescroller.gui.console.ConsoleFactory;
+import gears.sidescroller.gui.console.ConsoleFrame;
 import gears.sidescroller.loader.LevelLoader;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.levels.Level;
@@ -21,6 +23,7 @@ public class LevelPage extends Page{
     private final Player focusedEntity;
     private final PlayerControls controls;
     private double zoom;
+    private boolean isConsoleShowing;
     
     public static final int FPS = 20;
     private static final boolean DRAW_COLLISION_OVERLAY = false;
@@ -47,12 +50,14 @@ public class LevelPage extends Page{
         timer.start();
         
         zoom = 1.0;
+        isConsoleShowing = false;
         
         setFocusable(true);
         add(controls, BorderLayout.CENTER);
         
         registerKey(KeyEvent.VK_EQUALS, true, this::zoomIn);
         registerKey(KeyEvent.VK_MINUS, true, this::zoomOut);
+        registerKey(KeyEvent.VK_C, true, this::showConsole);
     }
     
     /**
@@ -109,6 +114,19 @@ public class LevelPage extends Page{
     private void update(){
         currentLevel.update();
         repaint();
+    }
+    
+    private void showConsole(){
+        if(!isConsoleShowing){
+            ConsoleFrame f = new ConsoleFactory().makeDefaultConsole();
+            isConsoleShowing = true;
+            f.addWindowListener(new WindowAdapter(){
+                @Override
+                public void windowClosed(WindowEvent e){
+                    isConsoleShowing = false;
+                }
+            });
+        }
     }
 
     @Override
