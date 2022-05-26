@@ -36,12 +36,19 @@ when run from the repository root.
 * everything in the package info for world
 * sprite loader
 * Renderable interface which gives access to a 1x1 tile sprite
+* not sure if JSON serialization is needed, or levels should just be created in
+  memory. If it is needed, I'll want to rewrite it so it's harder to forget to
+  implement a deserializer for each new serializable class. A unit test could
+  work. 
 
 ## Controls
 
 * WASD to move
 * Q to interact with your current tile (such as picking up placed gears)
 * L to toggle your light
+* hold X to sneak
+* +/= to zoom in
+* -/_ to zoom out
 * select items from the "inventory" menu on the bottom of the screen to use them
 
 ## Some Screenshots

@@ -1,4 +1,4 @@
-package gears.sidescroller.gui;
+package gears.sidescroller.gui.level;
 
 import gears.sidescroller.gui.level.PlayerInventoryMenu;
 import gears.sidescroller.gui.level.LevelPage;
@@ -32,38 +32,19 @@ public class PlayerControls extends EntityControls {
             ((Player)getControlledEntity()).toggleLightEnabled();
         });
         
-        // for some reason, this never runs
-        p.registerKey(KeyEvent.VK_SHIFT, true, ()->{
+        /*
+        This current system doesn't allow the likes of KeyEvent.VK_SHIFT, as
+        shift and its ilk are modifier keys, and so the keystrokes are a bit
+        different.
+        
+        To allow this to work, I'd need to rework the LevelPage::registerKey to
+        use KeyListeners instead of action maps
+        */
+        p.registerKey(KeyEvent.VK_X, true, ()->{
             ((Player)getControlledEntity()).setSneaking(true);
         });
-        
-        // this runs on key down?!?
-        p.registerKey(KeyEvent.VK_SHIFT, false, ()->{
+        p.registerKey(KeyEvent.VK_X, false, ()->{
             ((Player)getControlledEntity()).setSneaking(false);
-        });
-        
-        /*
-        this works
-        p.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_SHIFT){
-                    ((Player)getControlledEntity()).setSneaking(true);
-                }
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_SHIFT){
-                    ((Player)getControlledEntity()).setSneaking(false);
-                }
-            }
-        });
-        */
+        });        
     }
 }

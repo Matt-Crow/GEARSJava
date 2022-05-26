@@ -1,20 +1,13 @@
 package gears.sidescroller.gui.level;
 
-import gears.sidescroller.gui.Page;
-import gears.sidescroller.gui.PageController;
-import gears.sidescroller.gui.PlayerControls;
+import gears.sidescroller.gui.*;
 import gears.sidescroller.loader.LevelLoader;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.levels.Level;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.geom.AffineTransform;
-import javax.swing.AbstractAction;
-import javax.swing.KeyStroke;
-import javax.swing.Timer;
+import javax.swing.*;
 
 /**
  * The LevelPage class is used to render Levels, 
@@ -23,10 +16,12 @@ import javax.swing.Timer;
  * @author Matt Crow
  */
 public class LevelPage extends Page{
-    private Level currentLevel;
+    private final Level currentLevel;
     private final Timer timer;
     private final Player focusedEntity;
     private final PlayerControls controls;
+    private double zoom;
+    
     public static final int FPS = 20;
     private static final boolean DRAW_COLLISION_OVERLAY = false;
     
@@ -50,9 +45,14 @@ public class LevelPage extends Page{
         });
         timer.setRepeats(true);
         timer.start();
-        setFocusable(true);
         
+        zoom = 1.0;
+        
+        setFocusable(true);
         add(controls, BorderLayout.CENTER);
+        
+        registerKey(KeyEvent.VK_EQUALS, true, this::zoomIn);
+        registerKey(KeyEvent.VK_MINUS, true, this::zoomOut);
     }
     
     /**
@@ -71,6 +71,7 @@ public class LevelPage extends Page{
      */
     public void registerKey(int key, boolean pressed, Runnable r){
         String text = key + ((pressed) ? " pressed" : " released");
+        //                                            V no modifiers (shift, alt, etc)
         getInputMap().put(KeyStroke.getKeyStroke(key, 0, !pressed), text);
         getActionMap().put(text, new AbstractAction(){
             @Override
@@ -91,6 +92,20 @@ public class LevelPage extends Page{
         currentLevel.getCurrentArea().removeFromWorld(focusedEntity);
     }
     
+    public void zoomIn(){
+        zoom += 0.1;
+        if(zoom > 2.0){
+            zoom = 2.0;
+        }
+    }
+    
+    public void zoomOut(){
+        zoom -= 0.1;
+        if(zoom < 0.5){
+            zoom = 0.5;
+        }
+    }
+    
     private void update(){
         currentLevel.update();
         repaint();
@@ -101,10 +116,10 @@ public class LevelPage extends Page{
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
         AffineTransform priorToTranslate = g2d.getTransform();
-        
-        g2d.translate(
-            -(int)(focusedEntity.getX() - getWidth() / 2),
-            -(int)(focusedEntity.getY() - getHeight() / 2)
+        g2d.scale(zoom, zoom);
+        g2d.translate( // center on the focusedEntity
+            -(int)(focusedEntity.getX() - getWidth() / (2 * zoom)),
+            -(int)(focusedEntity.getY() - getHeight() / (2 * zoom))
         );
         currentLevel.draw(g2d);
         g2d.setTransform(priorToTranslate);
