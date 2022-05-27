@@ -49,8 +49,8 @@ public class LanternMachine extends AbstractMachine implements Illuminating {
         g.fillRect(x + w / 3, y + h / 3, w / 3, h / 3);}
 
     @Override
-    public boolean checkForCollisions(MobileWorldObject e) {
-        return getCollisionBox().isCollidingWith(e); // don't react
+    public void collideWith(MobileWorldObject e) {
+        // don't react
     }
     
     @Override

@@ -110,8 +110,8 @@ public class Area implements JsonSerializable {
             tileMap.checkForCollisions(e);
 
             each((obj) -> obj instanceof Collidable, (obj) -> (Collidable) obj, (c) -> {
-                if (!c.equals(e)) { // don't collide with self
-                    c.checkForCollisions(e);
+                if (!c.equals(e) && c.isCollidingWith(e)) { // don't collide with self
+                    c.collideWith(e);
                 }
             });
         });

@@ -29,17 +29,14 @@ public abstract class AbstractItem extends WorldObject {
     /**
      * Checks to see if a Player collects this.
      * 
-     * @param e the MobileWorldObject to check for collisions with.
-     * @return whether or not the given entity collided with this.
+     * @param e the MobileWorldObject to collide with.
      */
     @Override
-    public final boolean checkForCollisions(MobileWorldObject e){
-        boolean collided = this.getCollisionBox().isCollidingWith(e);
-        if(collided && e instanceof Player){
+    public void collideWith(MobileWorldObject e){
+        if(e instanceof Player){
             getArea().removeFromWorld(this);
             ((Player)e).pickupItem(this);
         }
-        return collided;
     }
 
     /**

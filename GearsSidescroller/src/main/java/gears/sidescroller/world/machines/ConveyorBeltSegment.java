@@ -1,6 +1,7 @@
 package gears.sidescroller.world.machines;
 
 import gears.sidescroller.util.Direction;
+import gears.sidescroller.world.core.MobileWorldObject;
 import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -88,21 +89,16 @@ public class ConveyorBeltSegment extends AbstractMachine {
     }
 
     /**
-     * Checks for collisions with the given AbstractEntity,
-     * and moves them if appropriate.
+     * Moves the given AbstractEntity if appropriate.
      * 
-     * @param e the AbstractEntity to check for collisions with.
-     * 
-     * @return the boolean 
+     * @param e the AbstractEntity this collided with
      */
     @Override
-    public boolean checkForCollisions(gears.sidescroller.world.core.MobileWorldObject e) {
-        boolean collided = this.getCollisionBox().isCollidingWith(e);
-        if(collided && isPowered()){
+    public void collideWith(MobileWorldObject e) {
+        if(isPowered()){
             e.setX(e.getXAsInt() + this.movesStuffInThisDirection.getXMod() * this.speed);
             e.setY(e.getYAsInt() + this.movesStuffInThisDirection.getYMod() * this.speed);
         }
-        return collided;
     }
 
     @Override

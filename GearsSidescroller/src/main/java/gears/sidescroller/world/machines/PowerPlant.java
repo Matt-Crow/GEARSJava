@@ -2,6 +2,7 @@ package gears.sidescroller.world.machines;
 
 import gears.sidescroller.world.core.Illuminating;
 import gears.sidescroller.world.core.LightLevel;
+import gears.sidescroller.world.core.MobileWorldObject;
 import java.awt.Color;
 import java.awt.Graphics;
 
@@ -49,8 +50,8 @@ public class PowerPlant extends AbstractMachine implements PowerProvidingMachine
     }
 
     @Override
-    public boolean checkForCollisions(gears.sidescroller.world.core.MobileWorldObject e) {
-        return this.getCollisionBox().shoveOut(e);
+    public void collideWith(MobileWorldObject e) {
+        getCollisionBox().shoveOut(e);
     }
 
     @Override

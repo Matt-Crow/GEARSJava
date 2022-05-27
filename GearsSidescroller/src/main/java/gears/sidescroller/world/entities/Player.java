@@ -148,8 +148,8 @@ public class Player extends AbstractEntity implements Illuminating {
     }
 
     @Override
-    public boolean checkForCollisions(MobileWorldObject obj) {
-        return this.getCollisionBox().isCollidingWith(obj);
+    public void collideWith(MobileWorldObject obj) {
+        
     }
 
     @Override

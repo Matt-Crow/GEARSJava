@@ -22,9 +22,7 @@ public class CollisionBox {
     public CollisionBox(int x, int y, int w, int h){
         forObject = new WorldObject(x, y, w, h) {
             @Override
-            public boolean checkForCollisions(MobileWorldObject obj) {
-                return this.getCollisionBox().isCollidingWith(obj);
-            }
+            public void collideWith(MobileWorldObject obj) {}
 
             @Override
             protected void attachJsonProperties(JsonObjectBuilder builder) {}

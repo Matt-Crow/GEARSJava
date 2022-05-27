@@ -4,6 +4,7 @@ import gears.sidescroller.gui.level.LevelPage;
 import gears.sidescroller.util.RotatedGearSprite;
 import gears.sidescroller.util.Sprite;
 import gears.sidescroller.util.UnrotatedGearSprite;
+import gears.sidescroller.world.core.MobileWorldObject;
 import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -56,9 +57,8 @@ public class GearMachine extends AbstractMachine implements PowerProvidingMachin
     }
 
     @Override
-    public boolean checkForCollisions(gears.sidescroller.world.core.MobileWorldObject e) {
+    public void collideWith(MobileWorldObject e) {
         // don't shove out
-        return this.getCollisionBox().isCollidingWith(e);
     }
 
     @Override

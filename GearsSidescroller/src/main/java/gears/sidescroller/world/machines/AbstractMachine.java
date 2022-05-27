@@ -95,17 +95,8 @@ public abstract class AbstractMachine extends WorldObject {
     @Override
     public abstract void draw(Graphics g);
     
-    /**
-     * Checks for collisions with the given AbstractEntity, and reacts accordingly.
-     * Remember that you can always use {@code this.getCollisionBox().isCollidingWith(e)}
-     * to make life easier for yourself.
-     * 
-     * @param e the AbstractEntity to check for collisions with
-     * 
-     * @return the boolean 
-     */
     @Override
-    public abstract boolean checkForCollisions(MobileWorldObject e);
+    public abstract void collideWith(MobileWorldObject e);
     
     /**
      * Subclasses should still override this method.
