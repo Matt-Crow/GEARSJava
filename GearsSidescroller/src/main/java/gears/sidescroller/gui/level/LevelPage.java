@@ -118,7 +118,7 @@ public class LevelPage extends Page{
     
     private void showConsole(){
         if(!isConsoleShowing){
-            ConsoleFrame f = new ConsoleFactory().makeDefaultConsole();
+            ConsoleFrame f = new ConsoleFactory().makeDefaultConsole(currentLevel);
             isConsoleShowing = true;
             f.addWindowListener(new WindowAdapter(){
                 @Override

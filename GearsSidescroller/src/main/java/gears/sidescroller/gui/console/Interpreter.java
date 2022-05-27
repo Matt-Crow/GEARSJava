@@ -1,5 +1,7 @@
 package gears.sidescroller.gui.console;
 
+import java.util.Set;
+
 /**
  *
  * @author Matt Crow <mattcrow19@gmail.com>
@@ -14,4 +16,6 @@ public interface Interpreter {
      *  the given command
      */
     public void interpret(String command, String[] args) throws InvalidCommandException, IllegalArgumentException;
+
+    public Set<String> getSupportedCommands();
 }
