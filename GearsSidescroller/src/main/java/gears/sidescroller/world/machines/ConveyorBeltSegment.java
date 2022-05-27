@@ -45,20 +45,20 @@ public class ConveyorBeltSegment extends AbstractMachine {
         int y0;
         switch(movesStuffInThisDirection){
             case UP:
-               x0 = getX();
-               y0 = getY() + getHeight();
+               x0 = getXAsInt();
+               y0 = getYAsInt() + getHeight();
                break;
             case DOWN:
-                x0 = getX();
-                y0 = getY();
+                x0 = getXAsInt();
+                y0 = getYAsInt();
                 break;
             case LEFT:
-                x0 = getX() + getWidth();
-                y0 = getY();
+                x0 = getXAsInt() + getWidth();
+                y0 = getYAsInt();
                 break;
             case RIGHT:
-                x0 = getX();
-                y0 = getY();
+                x0 = getXAsInt();
+                y0 = getYAsInt();
                 break;
             default:
                 throw new UnsupportedOperationException();
@@ -70,7 +70,7 @@ public class ConveyorBeltSegment extends AbstractMachine {
     }
 
     @Override
-    public void update() {
+    public void machineUpdate() {
         lineXOffset = (lineXOffset + movesStuffInThisDirection.getXMod() * speed) % getWidth();
         lineYOffset = (lineYOffset + movesStuffInThisDirection.getYMod() * speed) % getHeight();
     }
@@ -81,7 +81,7 @@ public class ConveyorBeltSegment extends AbstractMachine {
         //                         LEFT or RIGHT will have no xOffset
         int xOffset = Math.abs(TILE_SIZE * movesStuffInThisDirection.getYMod()) / 10;
         int yOffset = Math.abs(TILE_SIZE * movesStuffInThisDirection.getXMod()) / 10;
-        g.fillRect(getX() + xOffset, getY() + yOffset, getWidth() - xOffset * 2, getHeight() - yOffset * 2);
+        g.fillRect(getXAsInt() + xOffset, getYAsInt() + yOffset, getWidth() - xOffset * 2, getHeight() - yOffset * 2);
     
         g.setColor(Color.GRAY);
         g.fillRect(lineStartX + xOffset + lineXOffset, lineStartY + yOffset + lineYOffset, lineWidth, lineHeight);
@@ -99,8 +99,8 @@ public class ConveyorBeltSegment extends AbstractMachine {
     public boolean checkForCollisions(gears.sidescroller.world.core.MobileWorldObject e) {
         boolean collided = this.getCollisionBox().isCollidingWith(e);
         if(collided && isPowered()){
-            e.setX(e.getX() + this.movesStuffInThisDirection.getXMod() * this.speed);
-            e.setY(e.getY() + this.movesStuffInThisDirection.getYMod() * this.speed);
+            e.setX(e.getXAsInt() + this.movesStuffInThisDirection.getXMod() * this.speed);
+            e.setY(e.getYAsInt() + this.movesStuffInThisDirection.getYMod() * this.speed);
         }
         return collided;
     }

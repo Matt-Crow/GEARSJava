@@ -13,21 +13,16 @@ import java.util.HashMap;
  * @author Matt Crow
  */
 public abstract class AbstractEntity extends MobileWorldObject {
-    private int speed;
+    private int speed; // measured in pixels / second
     private final HashMap<Direction, Boolean> isMoveInDir; 
     // allows for moving diaganally using just cardinal directions,
     // which a single Direction wouldn't allow
     
-    private final long id;
-    
-    private static long NEXT_ID = 0;
     
     public AbstractEntity(){
         super(0, 0, TILE_SIZE, TILE_SIZE);
         speed = 0;
         isMoveInDir = new HashMap<>();
-        id = NEXT_ID;
-        NEXT_ID++;
     }
     
     /**
@@ -60,45 +55,25 @@ public abstract class AbstractEntity extends MobileWorldObject {
      * @return this, for chaining purposes. 
      */
     public final AbstractEntity setMovingInDir(Direction dir, boolean isMoving){
-        this.isMoveInDir.put(dir, isMoving);
+        isMoveInDir.put(dir, isMoving);
         return this;
+    }  
+    
+    @Override
+    public void update(int fps){
+        doUpdate();
+        super.update(fps);
     }
     
-    /**
-     * 
-     * @return a unique identifier 
-     * for this entity
-     */
-    public final long getId(){
-        return id;
-    }
-    
-    /**
-     * Updates the coordinates of this AbstractEntity based on the Directions it
-     * is moving in.
-     * 
-     * @return this, for chaining purposes 
-     */
-    protected AbstractEntity updateMovement(){
+    @Override
+    public void move(int fps) {
         isMoveInDir.forEach((dir, isMove)->{
-            if(isMove){ // use getSpeed() to allow subclasses to override it
-                setX(getX() + getSpeed() * dir.getXMod());
-                setY(getY() + getSpeed() * dir.getYMod());
+            if(isMove){ // uses getSpeed() to allow subclasses to override it
+                setX(getX() + getSpeed() * dir.getXMod() / fps);
+                setY(getY() + getSpeed() * dir.getYMod() / fps);
             }
         });
-        return this;
     }
-    
-    /**
-     * Updates this, invoked at the end of each frame.
-     * 
-     * @return this, for chaining purposes. 
-     */
-    public final AbstractEntity update(){
-        doUpdate();
-        updateMovement();
-        return this;
-    } 
     
     /**
      * Subclasses should override this method to perform any end-of-frame updates
@@ -108,5 +83,6 @@ public abstract class AbstractEntity extends MobileWorldObject {
      */
     public abstract AbstractEntity doUpdate();
     
+    @Override
     public abstract void draw(Graphics g);
 }

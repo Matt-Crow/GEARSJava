@@ -32,7 +32,7 @@ public class GearItem extends AbstractItem {
 
     @Override
     public void draw(Graphics g) {
-        sprite.draw(g, getX() + TILE_SIZE / 4, getY() + TILE_SIZE / 4);
+        sprite.draw(g, getXAsInt() + TILE_SIZE / 4, getYAsInt() + TILE_SIZE / 4);
     }
     
     /**
@@ -62,5 +62,10 @@ public class GearItem extends AbstractItem {
     @Override
     public String toString(){
         return "Gear";
+    }
+
+    @Override
+    public void update(int fps) {
+        
     }
 }

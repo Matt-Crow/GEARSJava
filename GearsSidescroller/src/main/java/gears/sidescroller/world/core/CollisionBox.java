@@ -16,20 +16,18 @@ import javax.json.JsonObjectBuilder;
  * @author Matt Crow
  */
 public class CollisionBox {
-    private final ObjectInWorld forObject;
+    private final WorldObject forObject;
     
     // need this for tiles
     public CollisionBox(int x, int y, int w, int h){
-        forObject = new ObjectInWorld(x, y, w, h) {
+        forObject = new WorldObject(x, y, w, h) {
             @Override
             public boolean checkForCollisions(MobileWorldObject obj) {
                 return this.getCollisionBox().isCollidingWith(obj);
             }
 
             @Override
-            protected void attachJsonProperties(JsonObjectBuilder builder) {
-                // do nothing
-            }
+            protected void attachJsonProperties(JsonObjectBuilder builder) {}
 
             @Override
             public String getJsonType() {
@@ -37,29 +35,30 @@ public class CollisionBox {
             }
 
             @Override
-            public void draw(Graphics g) {
-            
-            }
+            public void draw(Graphics g) {}
+
+            @Override
+            public void update(int fps) {}
         };
     }
     
-    public CollisionBox(ObjectInWorld forObject){
+    public CollisionBox(WorldObject forObject){
         this.forObject = forObject;
     }
     
-    public final ObjectInWorld getWorldObject(){
+    public final WorldObject getWorldObject(){
         return forObject;
     }
     
-    public final boolean isOtherObjectOutside(ObjectInWorld otherObject){
-        return forObject.getX() > otherObject.getX() + otherObject.getWidth() //other object is to the left
-            || forObject.getX() + forObject.getWidth() < otherObject.getX() // other object is to the right
-            || forObject.getY() > otherObject.getY() + otherObject.getHeight() // other object is above
-            || forObject.getY() + forObject.getHeight() < otherObject.getY() // other object is below
+    public final boolean isOtherObjectOutside(WorldObject otherObject){
+        return forObject.getXAsInt() > otherObject.getXAsInt() + otherObject.getWidth() //other object is to the left
+            || forObject.getXAsInt() + forObject.getWidth() < otherObject.getXAsInt() // other object is to the right
+            || forObject.getYAsInt() > otherObject.getYAsInt() + otherObject.getHeight() // other object is above
+            || forObject.getYAsInt() + forObject.getHeight() < otherObject.getYAsInt() // other object is below
             ;
     }
     
-    public final boolean isCollidingWith(ObjectInWorld otherObject){        
+    public final boolean isCollidingWith(WorldObject otherObject){        
         return otherObject instanceof Collidable && !isOtherObjectOutside(otherObject);
     }
     
@@ -68,27 +67,27 @@ public class CollisionBox {
         if(willShoveOut){
             // figure out which way to shove them out
             // find difference between their centers
-            int dx = forObject.getX() + forObject.getWidth() / 2 - 
-                (otherObject.getX() + otherObject.getWidth() / 2);
-            int dy = forObject.getY() + forObject.getHeight() / 2 -
-                (otherObject.getY() + otherObject.getHeight() / 2);
+            int dx = forObject.getXAsInt() + forObject.getWidth() / 2 - 
+                (otherObject.getXAsInt() + otherObject.getWidth() / 2);
+            int dy = forObject.getYAsInt() + forObject.getHeight() / 2 -
+                (otherObject.getYAsInt() + otherObject.getHeight() / 2);
             if(Math.abs(dx) > Math.abs(dy)){
                 // shove them left or right
                 if(dx < forObject.getWidth() / 2){
                     // more than half way through, so shove to the right
-                    otherObject.setX(forObject.getX() + forObject.getWidth());
+                    otherObject.setX(forObject.getXAsInt() + forObject.getWidth());
                 } else if(dx < forObject.getWidth()){
                     // not yet half way through
-                    otherObject.setX(forObject.getX() - otherObject.getWidth());
+                    otherObject.setX(forObject.getXAsInt() - otherObject.getWidth());
                 } else {
                     // dx is too big, so the object isn't really colliding
                 }
             } else {
                 // shove up or down
                 if(dy < forObject.getHeight() / 2){
-                    otherObject.setY(forObject.getY() + forObject.getHeight());
+                    otherObject.setY(forObject.getYAsInt() + forObject.getHeight());
                 } else if(dy < forObject.getHeight()){
-                    otherObject.setY(forObject.getY() - otherObject.getHeight());
+                    otherObject.setY(forObject.getYAsInt() - otherObject.getHeight());
                 } else {
                     // dy too big
                 }

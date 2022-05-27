@@ -7,6 +7,5 @@
  * interactions.
  * 
  * @author Matt Crow
- * @see gears.sidescroller.world.core.Interactable
  */
 package gears.sidescroller.world.core;

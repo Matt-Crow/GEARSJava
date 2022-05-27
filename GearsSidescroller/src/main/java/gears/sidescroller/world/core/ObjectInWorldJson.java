@@ -16,11 +16,11 @@ import javax.json.*;
  *
  * @author Matt Crow <mattcrow19@gmail.com>
  */
-public class ObjectInWorldJson implements JsonResourceType<ObjectInWorld> {
+public class ObjectInWorldJson implements JsonResourceType<WorldObject> {
 
     @Override
-    public ObjectInWorld deserialize(JsonObject json) {
-        ObjectInWorld obj = null;
+    public WorldObject deserialize(JsonObject json) {
+        WorldObject obj = null;
         
         switch(json.getString("type")){
             case "Player": {
@@ -59,14 +59,14 @@ public class ObjectInWorldJson implements JsonResourceType<ObjectInWorld> {
         return obj;
     }
 
-    private ObjectInWorld deserializePlayer(JsonObject json) {
+    private WorldObject deserializePlayer(JsonObject json) {
         Player p = new Player();
         p.setX(json.getInt("x"));
         p.setY(json.getInt("y"));
         return p;
     }
 
-    private ObjectInWorld deserializeGearItem(JsonObject json) {
+    private WorldObject deserializeGearItem(JsonObject json) {
         return new GearItem(
                 json.getInt("x"),
                 json.getInt("y"),
@@ -74,7 +74,7 @@ public class ObjectInWorldJson implements JsonResourceType<ObjectInWorld> {
         );
     }
     
-    private ObjectInWorld deserializeLanternItem(JsonObject json){
+    private WorldObject deserializeLanternItem(JsonObject json){
         return new LanternItem(
                 json.getInt("x"),
                 json.getInt("y"),
@@ -82,7 +82,7 @@ public class ObjectInWorldJson implements JsonResourceType<ObjectInWorld> {
         );
     }
 
-    private ObjectInWorld deserializeConveyorBeltSegment(JsonObject json) {
+    private WorldObject deserializeConveyorBeltSegment(JsonObject json) {
         return new ConveyorBeltSegment(
                 json.getInt("x"),
                 json.getInt("y"),
@@ -92,11 +92,11 @@ public class ObjectInWorldJson implements JsonResourceType<ObjectInWorld> {
         );
     }
 
-    private ObjectInWorld deserializeGearMachine(JsonObject json) {
+    private WorldObject deserializeGearMachine(JsonObject json) {
         return new GearMachine(json.getInt("x"), json.getInt("y"));
     }
     
-    private ObjectInWorld deserializeLanternMachine(JsonObject json){
+    private WorldObject deserializeLanternMachine(JsonObject json){
         return new LanternMachine(
                 json.getInt("x"),
                 json.getInt("y"),
@@ -105,7 +105,7 @@ public class ObjectInWorldJson implements JsonResourceType<ObjectInWorld> {
         );
     }
 
-    private ObjectInWorld deserializePowerPlant(JsonObject json) {
+    private WorldObject deserializePowerPlant(JsonObject json) {
         return new PowerPlant(json.getInt("x"), json.getInt("y"));
     }
 }

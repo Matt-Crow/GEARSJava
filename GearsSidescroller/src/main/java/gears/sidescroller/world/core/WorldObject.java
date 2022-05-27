@@ -9,27 +9,31 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
 /**
- * The ObjectInWorld class represents an object
- * which is physically present in the game world.
+ * The ObjectInWorld class represents an object physically present in an Area.
+ * It contains attributes and methods used by several otherwise unrelated 
+ * classes.
  * 
- * It contains attributes and methods used by several
- * otherwise unrelated classes.
- * 
- * Note that this class does not support changing the
- * object's coordinates: a class must inherit from MobileWorldObject
- * to do so.
+ * One primary point of interest with this class is the differences between
+ * index-space and world-space: The index-space coordinate of an object is the 
+ * cell in a tile map that contains the upper-left corner of the object. Whereas 
+ * the world-space coordinate of an object are the exact coordinates of its
+ * upper-left corner.
  * 
  * @author Matt Crow
- * @see gears.sidescroller.world.core.MobileWorldObject
  */
-public abstract class ObjectInWorld implements Collidable, JsonSerializable {
-    protected int x;
-    protected int y;
+public abstract class WorldObject implements Collidable, JsonSerializable {
+    /*
+    these 2 must be stored as decimals so they can be changed during high frame 
+    rates, where they may change by less than 1
+    */
+    private double x;
+    private double y;
+    
     private final int width;
     private final int height;
     private Area inArea;
     
-    public ObjectInWorld(int x, int y, int w, int h){
+    public WorldObject(int x, int y, int w, int h){
         this.x = x;
         this.y = y;
         width = w;
@@ -38,73 +42,107 @@ public abstract class ObjectInWorld implements Collidable, JsonSerializable {
     }
     
     /**
-     * 
-     * @return the x-coordinate of this object, in pixel-space 
+     * @param x the x-coordinate of this object, in pixel-space
      */
-    public final int getX(){
+    public void setX(double x){
+        this.x = x;
+    }
+    
+    public double getX(){
         return x;
     }
     
     /**
-     * 
+     * @return the x-coordinate of this object, in pixel-space 
+     */
+    public int getXAsInt(){
+        return (int) x;
+    }
+    
+    /**
      * @return the x-coordinate of this object, in index-space.
      */
-    public final int getXIdx(){
-        return x / TILE_SIZE;
+    public int getXIdx(){
+        return getXAsInt() / TILE_SIZE;
     }
     
-    public final int getCenterX(){
-        return x + width / 2;
+    /**
+     * @param xIdx the tile column this should be moved to 
+     */
+    public void setXIdx(int xIdx){
+        setX(xIdx * TILE_SIZE);
     }
     
-    public final int getCenterXIdx(){
+    /**
+     * @return the x-coordinate of the center of this object, in pixel-space
+     */
+    public int getCenterX(){
+        return getXAsInt() + width / 2;
+    }
+    
+    /**
+     * @return the x-index of the center of this object, in index-space 
+     */
+    public int getCenterXIdx(){
         return getCenterX() / TILE_SIZE;
+    }
+    
+    public void setY(double y){
+        this.y = y;
+    }
+    
+    public double getY(){
+        return y;
     }
     
     /**
      * 
      * @return the y-coordinate of this object, in pixel-space 
      */
-    public final int getY(){
-        return y;
+    public int getYAsInt(){
+        return (int) y;
+    }
+    
+    public void setYIdx(int yIdx){
+        setY(yIdx * TILE_SIZE);
     }
     
     /**
      * 
      * @return the y-coordinate of this object, in index-space
      */
-    public final int getYIdx(){
-        return y / TILE_SIZE;
+    public int getYIdx(){
+        return getYAsInt() / TILE_SIZE;
     }
     
-    public final int getCenterY(){
-        return y + height / 2;
+    public int getCenterY(){
+        return getYAsInt() + height / 2;
     }
     
-    public final int getCenterYIdx(){
+    public int getCenterYIdx(){
         return getCenterY() / TILE_SIZE;
     }
     
-    public final int getWidth(){
+    public int getWidth(){
         return width;
     }
-    public final int getWidthInTiles(){
+    public int getWidthInTiles(){
         return width / TILE_SIZE;
     }
     
-    public final int getHeight(){
+    public int getHeight(){
         return height;
     }
-    public final int getHeightInTiles(){
+    public int getHeightInTiles(){
         return height / TILE_SIZE;
     }
 
-    public final ObjectInWorld setArea(Area a){
+    public WorldObject setArea(Area a){
         this.inArea = a;
         return this;
     }
     
-    public final Area getArea(){
+    public Area getArea(){
         return inArea;
     }
     
@@ -136,6 +174,11 @@ public abstract class ObjectInWorld implements Collidable, JsonSerializable {
         return builder.build();
     }
     
+    /**
+     * @param fps the number of frames since the last update 
+     */
+    public abstract void update(int fps);
+    
     public abstract void draw(Graphics g);
     
     /**
@@ -148,7 +191,7 @@ public abstract class ObjectInWorld implements Collidable, JsonSerializable {
     protected abstract void attachJsonProperties(JsonObjectBuilder builder);
     
     /**
-     * @returna unique identifier for this subclass of ObjectInWorld 
+     * @return a unique identifier for this subclass of WorldObject 
      */
     public abstract String getJsonType();
 }

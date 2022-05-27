@@ -28,12 +28,12 @@ public class PowerPlant extends AbstractMachine implements PowerProvidingMachine
      * GNDN (that's a Star Trek reference)
      */
     @Override
-    public void update() {}
+    public void machineUpdate() {}
 
     @Override
     public void draw(Graphics g) {
-        int x = getX();
-        int y = getY();
+        int x = getXAsInt();
+        int y = getYAsInt();
         int w = getWidth();
         int h = getHeight();
         int offset = w / 10;

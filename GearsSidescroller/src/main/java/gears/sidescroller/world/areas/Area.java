@@ -1,7 +1,7 @@
 package gears.sidescroller.world.areas;
 
+import gears.sidescroller.gui.level.LevelPage;
 import gears.sidescroller.loader.JsonSerializable;
-import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.world.core.*;
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.machines.AbstractMachine;
@@ -23,7 +23,7 @@ public class Area implements JsonSerializable {
     private final TileMap tileMap;
     private final PowerGrid powerGrid;
     private final LightGrid lightGrid;
-    private final Set<ObjectInWorld> objects;
+    private final Set<WorldObject> objects;
 
     /**
      * Creates a new Area with the given TileMap
@@ -42,24 +42,24 @@ public class Area implements JsonSerializable {
      * alter the object's coordinates. This automatically invokes
      * {@code obj.setArea(this)}, so you needn't worry about that.
      *
-     * @param obj the ObjectInWorld to add to this Area.
+     * @param obj the WorldObject to add to this Area.
      *
      * @return this, for chaining purposes
      */
-    public Area addToWorld(ObjectInWorld obj) {
+    public Area addToWorld(WorldObject obj) {
         objects.add(obj);
         obj.setArea(this);
         return this;
     }
 
     /**
-     * Removes the given ObjectInWorld from this Area, if it is present.
+     * Removes the given WorldObject from this Area, if it is present.
      *
-     * @param obj the ObjectInWorld to remove from this Area.
+     * @param obj the WorldObject to remove from this Area.
      *
      * @return this, for chaining purposes.
      */
-    public Area removeFromWorld(ObjectInWorld obj) {
+    public Area removeFromWorld(WorldObject obj) {
         objects.remove(obj);
         return this;
     }
@@ -105,10 +105,8 @@ public class Area implements JsonSerializable {
         }).collect(Collectors.toSet());
         lightGrid.update(lights);
 
+        objects.forEach((obj)->obj.update(LevelPage.FPS));
         each((obj) -> obj instanceof MobileWorldObject, (obj) -> (MobileWorldObject) obj, (e) -> {
-            if (e instanceof AbstractEntity) {
-                ((AbstractEntity) e).update();
-            }
             tileMap.checkForCollisions(e);
 
             each((obj) -> obj instanceof Collidable, (obj) -> (Collidable) obj, (c) -> {
@@ -116,12 +114,6 @@ public class Area implements JsonSerializable {
                     c.checkForCollisions(e);
                 }
             });
-        });
-
-        machines.forEach((m) -> {
-            if (m.isPowered()) {
-                m.update();
-            }
         });
 
         return this;
@@ -153,7 +145,7 @@ public class Area implements JsonSerializable {
      * @param mapper converts matching objects to T
      * @param doThis runs on matching objects after conversion
      */
-    private <T> void each(Predicate<ObjectInWorld> matching, Function<ObjectInWorld, T> mapper, Consumer<T> doThis) {
+    private <T> void each(Predicate<WorldObject> matching, Function<WorldObject, T> mapper, Consumer<T> doThis) {
         new HashSet<>(objects).stream().filter(matching).map(mapper).forEach(doThis);
     }
 

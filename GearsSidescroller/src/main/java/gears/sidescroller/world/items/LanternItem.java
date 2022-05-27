@@ -37,8 +37,8 @@ public class LanternItem extends AbstractItem implements Illuminating {
 
     @Override
     public void draw(Graphics g) {
-        int x = getX();
-        int y = getY();
+        int x = getXAsInt();
+        int y = getYAsInt();
         int w = getWidth();
         int h = getHeight();
         
@@ -86,5 +86,10 @@ public class LanternItem extends AbstractItem implements Illuminating {
     @Override
     public String toString(){
         return "Lantern";
+    }
+
+    @Override
+    public void update(int fps) {
+        
     }
 }

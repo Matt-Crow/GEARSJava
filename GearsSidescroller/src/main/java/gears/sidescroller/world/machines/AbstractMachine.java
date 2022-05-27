@@ -1,10 +1,9 @@
 package gears.sidescroller.world.machines;
 
 import gears.sidescroller.world.core.MobileWorldObject;
-import gears.sidescroller.world.core.ObjectInWorld;
+import gears.sidescroller.world.core.WorldObject;
 import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 import java.awt.Graphics;
-import java.math.BigDecimal;
 import javax.json.JsonObjectBuilder;
 
 /**
@@ -15,7 +14,7 @@ import javax.json.JsonObjectBuilder;
  * 
  * @author Matt Crow
  */
-public abstract class AbstractMachine extends ObjectInWorld {
+public abstract class AbstractMachine extends WorldObject {
     private final boolean isSelfPowering;
     private boolean isExternallyPowered;
     
@@ -70,6 +69,13 @@ public abstract class AbstractMachine extends ObjectInWorld {
         return isSelfPowering || isExternallyPowered;
     }
     
+    @Override
+    public void update(int fps){
+        if(isPowered()){
+            machineUpdate();
+        }
+    }
+    
     /**
      * Updates the machine. Note that
      * this method is only invoked when
@@ -78,7 +84,7 @@ public abstract class AbstractMachine extends ObjectInWorld {
      * Machines can use this method to update
      * animation frames, if you want.
      */
-    public abstract void update();
+    public abstract void machineUpdate();
     
     /**
      * Renders this machine on the given
@@ -86,6 +92,7 @@ public abstract class AbstractMachine extends ObjectInWorld {
      * 
      * @param g the Graphics object to render this on
      */
+    @Override
     public abstract void draw(Graphics g);
     
     /**
@@ -97,6 +104,7 @@ public abstract class AbstractMachine extends ObjectInWorld {
      * 
      * @return the boolean 
      */
+    @Override
     public abstract boolean checkForCollisions(MobileWorldObject e);
     
     /**

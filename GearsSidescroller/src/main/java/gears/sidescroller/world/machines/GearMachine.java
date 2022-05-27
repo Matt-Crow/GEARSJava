@@ -42,7 +42,7 @@ public class GearMachine extends AbstractMachine implements PowerProvidingMachin
     }
 
     @Override
-    public void update() {
+    public void machineUpdate() {
         frameCount++;
         if(frameCount >= TIME_UNTIL_UPDATE){
             frameCount = 0;
@@ -52,7 +52,7 @@ public class GearMachine extends AbstractMachine implements PowerProvidingMachin
 
     @Override
     public void draw(Graphics g) {
-        SPRITES[this.currentState].draw(g, getX(), getY());
+        SPRITES[this.currentState].draw(g, getXAsInt(), getYAsInt());
     }
 
     @Override

@@ -75,7 +75,7 @@ public class Level extends Matrix<Area> implements MapBoundsReachedListener, Jso
     
     public String getPlayerCoordinateString(){
         String format = "Area[%d][%d] coordinates (%d, %d)";
-        return String.format(format, currentAreaX, currentAreaY, player.getX(), player.getY());
+        return String.format(format, currentAreaX, currentAreaY, player.getXAsInt(), player.getYAsInt());
     }
     
     /**

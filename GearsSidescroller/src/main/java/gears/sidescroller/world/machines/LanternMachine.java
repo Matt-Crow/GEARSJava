@@ -24,7 +24,7 @@ public class LanternMachine extends AbstractMachine implements Illuminating {
     }
 
     @Override
-    public void update() {
+    public void machineUpdate() {
         ++flicker;
         if(flicker >= FPS){
             flicker = 0;
@@ -33,8 +33,8 @@ public class LanternMachine extends AbstractMachine implements Illuminating {
 
     @Override
     public void draw(Graphics g) {
-        int x = getX();
-        int y = getY();
+        int x = getXAsInt();
+        int y = getYAsInt();
         int w = getWidth();
         int h = getHeight();
         

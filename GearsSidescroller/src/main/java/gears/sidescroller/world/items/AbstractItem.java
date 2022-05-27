@@ -1,9 +1,8 @@
 package gears.sidescroller.world.items;
 
 import gears.sidescroller.world.core.MobileWorldObject;
-import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.world.entities.Player;
-import gears.sidescroller.world.core.ObjectInWorld;
+import gears.sidescroller.world.core.WorldObject;
 import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 import java.awt.Graphics;
 
@@ -16,7 +15,7 @@ import java.awt.Graphics;
  * 
  * @author Matt Crow
  */
-public abstract class AbstractItem extends ObjectInWorld {
+public abstract class AbstractItem extends WorldObject {
     /**
      * Creates a new AbstarctItem at the given coordinates,
      * <b>measured in pixel-space</b>
@@ -33,6 +32,7 @@ public abstract class AbstractItem extends ObjectInWorld {
      * @param e the MobileWorldObject to check for collisions with.
      * @return whether or not the given entity collided with this.
      */
+    @Override
     public final boolean checkForCollisions(MobileWorldObject e){
         boolean collided = this.getCollisionBox().isCollidingWith(e);
         if(collided && e instanceof Player){

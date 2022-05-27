@@ -25,7 +25,7 @@ public class LevelPage extends Page{
     private double zoom;
     private boolean isConsoleShowing;
     
-    public static final int FPS = 20;
+    public static final int FPS = 60;
     private static final boolean DRAW_COLLISION_OVERLAY = false;
     
     public LevelPage(PageController controller, Level forLevel, Player thePlayer, LevelLoader loader) {
@@ -136,8 +136,8 @@ public class LevelPage extends Page{
         AffineTransform priorToTranslate = g2d.getTransform();
         g2d.scale(zoom, zoom);
         g2d.translate( // center on the focusedEntity
-            -(int)(focusedEntity.getX() - getWidth() / (2 * zoom)),
-            -(int)(focusedEntity.getY() - getHeight() / (2 * zoom))
+            -(int)(focusedEntity.getXAsInt() - getWidth() / (2 * zoom)),
+            -(int)(focusedEntity.getYAsInt() - getHeight() / (2 * zoom))
         );
         currentLevel.draw(g2d);
         g2d.setTransform(priorToTranslate);

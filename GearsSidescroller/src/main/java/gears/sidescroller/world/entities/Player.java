@@ -1,6 +1,5 @@
 package gears.sidescroller.world.entities;
 
-import gears.sidescroller.gui.level.LevelPage;
 import gears.sidescroller.world.core.Illuminating;
 import gears.sidescroller.world.core.LightLevel;
 import gears.sidescroller.world.core.MobileWorldObject;
@@ -24,7 +23,7 @@ public class Player extends AbstractEntity implements Illuminating {
     
     public Player(){
         super();
-        this.setSpeed(3 * AbstractTileTemplate.TILE_SIZE / LevelPage.FPS);
+        this.setSpeed(4 * AbstractTileTemplate.TILE_SIZE); // seems like it's going slower than this
         inventory = new ArrayList<>();
         inventoryListeners = new ArrayList<>();
         lightEnabled = false;
@@ -145,7 +144,7 @@ public class Player extends AbstractEntity implements Illuminating {
         //temporary until I have player sprites
         int t = AbstractTileTemplate.TILE_SIZE;
         g.setColor(Color.gray);
-        g.fillRect(getX(), getY(), t, t);
+        g.fillRect(getXAsInt(), getYAsInt(), t, t);
     }
 
     @Override
@@ -164,7 +163,7 @@ public class Player extends AbstractEntity implements Illuminating {
     public String getJsonType() {
         return "Player";
     }
-
+    
     @Override
     public int getLightCenterXIdx() {
         return getCenterXIdx();

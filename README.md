@@ -40,6 +40,7 @@ when run from the repository root.
   memory. If it is needed, I'll want to rewrite it so it's harder to forget to
   implement a deserializer for each new serializable class. A unit test could
   work. 
+* the gui.console package is incomplete, needing commands that accept arguments
 
 ## Controls
 

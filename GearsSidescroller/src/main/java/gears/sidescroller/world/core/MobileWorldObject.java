@@ -1,7 +1,5 @@
 package gears.sidescroller.world.core;
 
-import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
-
 /**
  * The MobileWorldObject class adds support for changing
  * the coordinates of an ObjectInWorld. I may need to change
@@ -10,26 +8,27 @@ import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
  * 
  * @author Matt Crow
  */
-public abstract class MobileWorldObject extends ObjectInWorld {
+public abstract class MobileWorldObject extends WorldObject {
 
     public MobileWorldObject(int x, int y, int w, int h) {
         super(x, y, w, h);
     }
     
-    public final MobileWorldObject setX(int x){
-        this.x = x;
-        return this;
+    /**
+     * Moves this object. Subclasses should override this method and call
+     * super.update if they need special behavior.
+     * 
+     * @param fps the frame rate 
+     */
+    @Override
+    public void update(int fps){
+        move(fps);
     }
-    public final MobileWorldObject setXIdx(int xIdx){
-        this.x = xIdx * TILE_SIZE;
-        return this;
-    }
-    public final MobileWorldObject setY(int y){
-        this.y = y;
-        return this;
-    }
-    public final MobileWorldObject setYIdx(int yIdx){
-        this.y = yIdx * TILE_SIZE;
-        return this;
-    }
+    
+    /**
+     * updates the coordinates of this object
+     * @param fps the approximate number of frames since the last call to move.
+     *  Subclasses should scale their movement based upon this parameter.
+     */
+    public abstract void move(int fps);
 }

@@ -204,18 +204,18 @@ public class TileMap extends FlyweightMatrix<AbstractTileTemplate> implements Js
     private OutOfBoundsEvent checkIfOutsideBounds(MobileWorldObject e){
         OutOfBoundsEvent lrEvent = null; // left-right
         OutOfBoundsEvent udEvent = null; // up-down
-        if(e.getX() < 0){
+        if(e.getXAsInt() < 0){
             e.setX(0);
             lrEvent = new OutOfBoundsEvent(this, e, Direction.LEFT);
-        } else if(e.getX() > getWidthInPixels() - e.getWidth()){
+        } else if(e.getXAsInt() > getWidthInPixels() - e.getWidth()){
             e.setX(getWidthInPixels() - e.getWidth());
             lrEvent = new OutOfBoundsEvent(this, e, Direction.RIGHT);
         }
         
-        if(e.getY() < 0){
+        if(e.getYAsInt() < 0){
             e.setY(0);
             udEvent = new OutOfBoundsEvent(this, e, Direction.UP);
-        } else if(e.getY() > getHeightInPixels() - e.getHeight()){
+        } else if(e.getYAsInt() > getHeightInPixels() - e.getHeight()){
             e.setY(getHeightInPixels() - e.getHeight());
             udEvent = new OutOfBoundsEvent(this, e, Direction.DOWN);
         }
@@ -227,8 +227,8 @@ public class TileMap extends FlyweightMatrix<AbstractTileTemplate> implements Js
             event = lrEvent;
         } else {
             // neither is null, so favor the direction more out of bounds
-            double dx = Math.abs(e.getX() - getWidthInPixels() / 2); // distance from center
-            double dy = Math.abs(e.getY() - getHeightInPixels() / 2);
+            double dx = Math.abs(e.getXAsInt() - getWidthInPixels() / 2); // distance from center
+            double dy = Math.abs(e.getYAsInt() - getHeightInPixels() / 2);
             event = (dx < dy) ? udEvent : lrEvent;
         }
         
@@ -281,8 +281,8 @@ public class TileMap extends FlyweightMatrix<AbstractTileTemplate> implements Js
         possibly be colliding with.
         */
         
-        int yIdx = (int)(e.getY() / AbstractTileTemplate.TILE_SIZE);
-        int xIdx = (int)(e.getX() / AbstractTileTemplate.TILE_SIZE);
+        int yIdx = (int)(e.getYAsInt() / AbstractTileTemplate.TILE_SIZE);
+        int xIdx = (int)(e.getXAsInt() / AbstractTileTemplate.TILE_SIZE);
         
         boolean collUpperLeft  = handleCollisions(e, xIdx  , yIdx  );
         boolean collUpperRight = handleCollisions(e, xIdx+1, yIdx  );
