@@ -72,7 +72,7 @@ public abstract class AbstractMachine extends WorldObject {
     @Override
     public void update(int fps){
         if(isPowered()){
-            machineUpdate();
+            machineUpdate(fps);
         }
     }
     
@@ -84,7 +84,7 @@ public abstract class AbstractMachine extends WorldObject {
      * Machines can use this method to update
      * animation frames, if you want.
      */
-    public abstract void machineUpdate();
+    public abstract void machineUpdate(int fps);
     
     /**
      * Renders this machine on the given

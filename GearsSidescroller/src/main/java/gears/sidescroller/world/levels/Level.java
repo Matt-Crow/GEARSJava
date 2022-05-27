@@ -79,14 +79,14 @@ public class Level extends Matrix<Area> implements MapBoundsReachedListener, Jso
     }
     
     /**
-     * Updates the current Area. Note that 
-     * this means all other Areas are suspended,
-     * and are not updated.
+     * Updates the current Area.
+     * Note that other Areas are suspended, and are not updated.
      * 
+     * @param fps the frame rate at which this is being updated
      * @return this, for chaining purposes. 
      */
-    public final Level update(){
-        getCurrentArea().update();
+    public final Level update(int fps){
+        getCurrentArea().update(fps);
         return this;
     }
     

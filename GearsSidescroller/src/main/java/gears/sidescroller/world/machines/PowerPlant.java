@@ -29,7 +29,7 @@ public class PowerPlant extends AbstractMachine implements PowerProvidingMachine
      * GNDN (that's a Star Trek reference)
      */
     @Override
-    public void machineUpdate() {}
+    public void machineUpdate(int fps) {}
 
     @Override
     public void draw(Graphics g) {

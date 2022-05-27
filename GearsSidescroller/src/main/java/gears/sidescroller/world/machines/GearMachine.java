@@ -25,7 +25,6 @@ public class GearMachine extends AbstractMachine implements PowerProvidingMachin
     */
     private int currentState;
     private int frameCount;
-    private static final int TIME_UNTIL_UPDATE = LevelPage.FPS;
     private static final Sprite[] SPRITES = new Sprite[]{
         new UnrotatedGearSprite(Color.GRAY, TILE_SIZE),
         new RotatedGearSprite(Color.GRAY, TILE_SIZE)
@@ -43,9 +42,9 @@ public class GearMachine extends AbstractMachine implements PowerProvidingMachin
     }
 
     @Override
-    public void machineUpdate() {
+    public void machineUpdate(int fps) {
         frameCount++;
-        if(frameCount >= TIME_UNTIL_UPDATE){
+        if(frameCount >= fps){
             frameCount = 0;
             currentState = (currentState + 1) % SPRITES.length;
         }

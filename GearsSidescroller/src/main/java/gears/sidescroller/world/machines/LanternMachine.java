@@ -1,6 +1,5 @@
 package gears.sidescroller.world.machines;
 
-import static gears.sidescroller.gui.level.LevelPage.FPS;
 import gears.sidescroller.world.core.Illuminating;
 import gears.sidescroller.world.core.LightLevel;
 import gears.sidescroller.world.core.MobileWorldObject;
@@ -15,20 +14,24 @@ import javax.json.JsonObjectBuilder;
  */
 public class LanternMachine extends AbstractMachine implements Illuminating {
     private final LightLevel lightLevel;
+    private boolean isFlickering;
     private int flicker;
     
     public LanternMachine(int x, int y, boolean selfPowering, LightLevel lightLevel) {
         super(x, y, TILE_SIZE, TILE_SIZE, selfPowering);
         this.lightLevel = lightLevel;
         flicker = 0;
+        isFlickering = false;
     }
 
     @Override
-    public void machineUpdate() {
+    public void machineUpdate(int fps) {
         ++flicker;
-        if(flicker >= FPS){
+        if(flicker >= fps){
             flicker = 0;
         }
+        
+        isFlickering = flicker > fps / 20; // flicker 5% of the time
     }
 
     @Override
@@ -81,7 +84,7 @@ public class LanternMachine extends AbstractMachine implements Illuminating {
 
     @Override
     public LightLevel getIlluminationAtDistance(int d) {
-        return (flicker > FPS / 20)
+        return (isFlickering)
                 ? LightLevel.capped(lightLevel.getIntValue() - d * 15)
                 : LightLevel.NO_LIGHT;
     }

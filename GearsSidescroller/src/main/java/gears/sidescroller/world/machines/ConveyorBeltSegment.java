@@ -16,14 +16,15 @@ import javax.json.JsonObjectBuilder;
 public class ConveyorBeltSegment extends AbstractMachine {
     private final Direction movesStuffInThisDirection;
     private final int speed;
+    private int lastFps; // needed for collideWith
     
     /*
     These 6 fields are used in rendering
     the animated line that zooms down this
     ConveryorBeltSegment.
     */
-    private int lineXOffset;
-    private int lineYOffset;
+    private double lineXOffset;
+    private double lineYOffset;
     private final int lineStartX;
     private final int lineStartY;
     private final int lineWidth;
@@ -42,6 +43,7 @@ public class ConveyorBeltSegment extends AbstractMachine {
         this.movesStuffInThisDirection = movesStuffInThisDirection;
         this.lineXOffset = 0;
         this.lineYOffset = 0;
+        lastFps = 1;
         int x0;
         int y0;
         switch(movesStuffInThisDirection){
@@ -71,9 +73,10 @@ public class ConveyorBeltSegment extends AbstractMachine {
     }
 
     @Override
-    public void machineUpdate() {
-        lineXOffset = (lineXOffset + movesStuffInThisDirection.getXMod() * speed) % getWidth();
-        lineYOffset = (lineYOffset + movesStuffInThisDirection.getYMod() * speed) % getHeight();
+    public void machineUpdate(int fps) {
+        lastFps = fps;
+        lineXOffset = (lineXOffset + movesStuffInThisDirection.getXMod() * speed / (double)fps) % getWidth();
+        lineYOffset = (lineYOffset + movesStuffInThisDirection.getYMod() * speed / (double)fps) % getHeight();
     }
 
     @Override
@@ -85,7 +88,12 @@ public class ConveyorBeltSegment extends AbstractMachine {
         g.fillRect(getXAsInt() + xOffset, getYAsInt() + yOffset, getWidth() - xOffset * 2, getHeight() - yOffset * 2);
     
         g.setColor(Color.GRAY);
-        g.fillRect(lineStartX + xOffset + lineXOffset, lineStartY + yOffset + lineYOffset, lineWidth, lineHeight);
+        g.fillRect(
+                (int)(lineStartX + xOffset + lineXOffset), 
+                (int)(lineStartY + yOffset + lineYOffset), 
+                lineWidth, 
+                lineHeight
+        );
     }
 
     /**
@@ -96,8 +104,9 @@ public class ConveyorBeltSegment extends AbstractMachine {
     @Override
     public void collideWith(MobileWorldObject e) {
         if(isPowered()){
-            e.setX(e.getXAsInt() + this.movesStuffInThisDirection.getXMod() * this.speed);
-            e.setY(e.getYAsInt() + this.movesStuffInThisDirection.getYMod() * this.speed);
+            double fps = (double)lastFps;
+            e.setX(e.getX() + this.movesStuffInThisDirection.getXMod() * this.speed / fps);
+            e.setY(e.getY() + this.movesStuffInThisDirection.getYMod() * this.speed / fps);
         }
     }
 

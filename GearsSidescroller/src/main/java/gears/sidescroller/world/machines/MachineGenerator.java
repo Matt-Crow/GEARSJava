@@ -65,7 +65,7 @@ public class MachineGenerator {
         int currYIdx = startYIdx;
         Direction[] possibleDirs = Direction.getCardinalDirections();
         Direction currDir = possibleDirs[rng.nextInt(possibleDirs.length)];
-        int speed = rng.nextInt(TILE_SIZE / 5);
+        int speed = rng.nextInt(3 * TILE_SIZE);
         int shouldTurnLeftRightOrGoStrait = -1;
         while(currLength < maxLength && inThisArea.getTileMap().isTileOpen(currXIdx, currYIdx)){
             ret.add(new ConveyorBeltSegment(

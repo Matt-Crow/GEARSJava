@@ -25,7 +25,7 @@ public class LevelPage extends Page{
     private double zoom;
     private boolean isConsoleShowing;
     
-    public static final int FPS = 60;
+    private static final int FPS = 60;
     private static final boolean DRAW_COLLISION_OVERLAY = false;
     
     public LevelPage(PageController controller, Level forLevel, Player thePlayer, LevelLoader loader) {
@@ -112,7 +112,7 @@ public class LevelPage extends Page{
     }
     
     private void update(){
-        currentLevel.update();
+        currentLevel.update(FPS);
         repaint();
     }
     

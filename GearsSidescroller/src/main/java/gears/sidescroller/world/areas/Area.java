@@ -1,6 +1,5 @@
 package gears.sidescroller.world.areas;
 
-import gears.sidescroller.gui.level.LevelPage;
 import gears.sidescroller.loader.JsonSerializable;
 import gears.sidescroller.world.core.*;
 import gears.sidescroller.world.entities.Player;
@@ -85,12 +84,13 @@ public class Area implements JsonSerializable {
     }
 
     /**
-     * Updates this Area and everything within it. This method is invoked once
+     * Updates this Area and everything within it.This method is invoked once
      * per frame by Level.
      *
+     * @param fps the frame rate at which this is being updated
      * @return this, for chaining purposes.
      */
-    public Area update() {
+    public Area update(int fps) {
         Collection<AbstractMachine> machines = objects.stream().filter((obj) -> {
             return obj instanceof AbstractMachine;
         }).map((obj) -> {
@@ -105,7 +105,7 @@ public class Area implements JsonSerializable {
         }).collect(Collectors.toSet());
         lightGrid.update(lights);
 
-        objects.forEach((obj)->obj.update(LevelPage.FPS));
+        objects.forEach((obj)->obj.update(fps));
         each((obj) -> obj instanceof MobileWorldObject, (obj) -> (MobileWorldObject) obj, (e) -> {
             tileMap.checkForCollisions(e);
 

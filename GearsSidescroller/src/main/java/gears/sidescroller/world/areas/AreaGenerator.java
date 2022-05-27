@@ -119,7 +119,7 @@ public class AreaGenerator {
         TileMap map = a.getTileMap();
         
         // generate machines
-        int numMachines = rng.nextInt(5);
+        int numMachines = rng.nextInt(6) + 4;
         for(int i = 0; i < numMachines; i++){
             openTile = search.searchForOpenTileAround(
                 map,
