@@ -6,6 +6,8 @@ import gears.sidescroller.world.structures.*;
 import gears.sidescroller.world.tileMaps.*;
 import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -47,28 +49,49 @@ public class AreaGenerator {
     public Area generateRandom(){
         TileMap map = tileMapGenerator.generateTileMap(20, 20);//generateTileMap();
         
-        generateStructuresIn(map);
+        List<Structure> structs = generateStructures();
         
-        Area ret = new Area(map);
+        applyStructuresIn(structs, map); // need to modify both map...
         
-        generateItemsIn(ret);
-        generateMachinesIn(ret);
+        Area area = new Area(map);
         
-        return ret;
+        applyStructuresIn(structs, area); // ... and Area
+        generateItemsIn(area);
+        generateMachinesIn(area);
+        
+        return area;
     }
     
-    private void generateStructuresIn(TileMap here){
+    private List<Structure> generateStructures(){
+        List<Structure> structs = new ArrayList<>();
         Random rng = new Random();
         // choose number of structures
         int numStructs = rng.nextInt(3) + 1;
-        for(int i = 0; i < numStructs; i++){
-            Structure newStruct = structureGenerator.generateRandom();
+        
+        for(int i = 0; i < numStructs; ++i){
+            structs.add(structureGenerator.generateRandom());
+        }
+        
+        return structs;
+    }
+    
+    private void applyStructuresIn(List<Structure> structs, TileMap here){
+        Random rng = new Random();
+        TileMap map;
+        for(Structure newStruct : structs){
+            newStruct = structureGenerator.generateRandom();
+            map = newStruct.getTileMap();
             here.insertMatrix(
-                rng.nextInt(here.getWidthInCells() - newStruct.getWidthInCells()), 
-                rng.nextInt(here.getHeightInCells() - newStruct.getHeightInCells()), 
-                newStruct
+                rng.nextInt(here.getWidthInCells() - map.getWidthInCells()), 
+                rng.nextInt(here.getHeightInCells() - map.getHeightInCells()), 
+                map
             );
         }
+    }
+    
+    private void applyStructuresIn(List<Structure> structs, Area area){
+        // todo: need to shift the world objects so they align with the new struct coords
+        structs.forEach((struct)->struct.getWorldObjects().forEach(area::addToWorld));
     }
     
     private void generateItemsIn(Area a){

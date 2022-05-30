@@ -1,7 +1,9 @@
 package gears.sidescroller.world.structures;
 
+import gears.sidescroller.world.core.WorldObject;
+import gears.sidescroller.world.tileMaps.TileMap;
 import gears.sidescroller.world.tiles.TileGenerator;
-import java.util.Random;
+import java.util.*;
 
 /**
  * generates random passages
@@ -22,24 +24,30 @@ public class PassageGenerator implements GeneratesStructures {
         int minorLength = rng.nextInt(Math.max(maxLength - 3, 1)) + 1;
         int majorLength = minorLength + 3;
         
+        TileMap t;
         Structure s;
         if(rng.nextBoolean()){
             // longer in the y-direction
-            s = new Structure(minorLength, majorLength);
+            t = new TileMap(minorLength, majorLength);
             for(int i = 0; i < majorLength; ++i){
-                s.set(0, i, 1);
-                s.set(minorLength - 1, i, 1);
+                t.set(0, i, 1);
+                t.set(minorLength - 1, i, 1);
             }
         } else {
             // longer in the x-direction
-            s = new Structure(majorLength, minorLength);
+            t = new TileMap(majorLength, minorLength);
             for(int i = 0; i < majorLength; ++i){
-                s.set(i, 0, 1);
-                s.set(i, minorLength - 1, 1);
+                t.set(i, 0, 1);
+                t.set(i, minorLength - 1, 1);
             }
         }
-        s.setKeyToVal(0, tileGenerator.generateRandom(false));
-        s.setKeyToVal(1, tileGenerator.generateRandom(true));
+        
+        t.setKeyToVal(0, tileGenerator.generateRandom(false));
+        t.setKeyToVal(1, tileGenerator.generateRandom(true));
+        
+        Set<WorldObject> objs = new HashSet<>();
+        
+        s = new Structure(t, objs);
         
         return s;
     }

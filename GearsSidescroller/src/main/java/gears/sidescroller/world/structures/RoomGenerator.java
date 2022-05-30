@@ -1,8 +1,10 @@
 package gears.sidescroller.world.structures;
 
 import gears.sidescroller.util.Direction;
+import gears.sidescroller.world.core.WorldObject;
+import gears.sidescroller.world.tileMaps.TileMap;
 import gears.sidescroller.world.tiles.TileGenerator;
-import java.util.Random;
+import java.util.*;
 
 /**
  * generates random rooms
@@ -25,23 +27,23 @@ public class RoomGenerator implements GeneratesStructures {
     public Structure generate(Random rng) {
         int width = rng.nextInt(maxWidth) + 1;
         int height = rng.nextInt(maxHeight) + 1;
-        Structure newStruct = new Structure(
+        TileMap map = new TileMap(
             width,
             height
         );
-        newStruct.setKeyToVal(0, tileGenerator.generateRandom(false));
-        newStruct.setKeyToVal(1, tileGenerator.generateRandom(true));
+        map.setKeyToVal(0, tileGenerator.generateRandom(false));
+        map.setKeyToVal(1, tileGenerator.generateRandom(true));
         
         // build the room's walls
         // top & bottom walls
         for(int x = 0; x < width; x++){
-            newStruct.set(x, 0, 1);
-            newStruct.set(x, height - 1, 1);
+            map.set(x, 0, 1);
+            map.set(x, height - 1, 1);
         }
         // left & right walls
         for(int y = 0; y < height; y++){
-            newStruct.set(0, y, 1);
-            newStruct.set(width - 1, y, 1);
+            map.set(0, y, 1);
+            map.set(width - 1, y, 1);
         }
         
         // choose where to put the door
@@ -54,19 +56,21 @@ public class RoomGenerator implements GeneratesStructures {
         Direction putAHoleHere = dirs[rng.nextInt(dirs.length)];
         switch(putAHoleHere){
             case UP:
-                newStruct.set(width / 2, 0, 0);
+                map.set(width / 2, 0, 0);
                 break;
             case DOWN:
-                newStruct.set(width / 2, height - 1, 0);
+                map.set(width / 2, height - 1, 0);
                 break;
             case LEFT:
-                newStruct.set(0, height / 2, 0);
+                map.set(0, height / 2, 0);
                 break;
             case RIGHT:
-                newStruct.set(width - 1, height / 2, 0);
+                map.set(width - 1, height / 2, 0);
                 break;
         }
         
-        return newStruct;
+        Set<WorldObject> objs = new HashSet<>();
+        
+        return new Structure(map, objs);
     }
 }

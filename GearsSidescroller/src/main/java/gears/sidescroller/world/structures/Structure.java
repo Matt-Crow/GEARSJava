@@ -1,7 +1,9 @@
 package gears.sidescroller.world.structures;
 
-import gears.sidescroller.util.FlyweightMatrix;
-import gears.sidescroller.world.tiles.AbstractTileTemplate;
+import gears.sidescroller.world.core.WorldObject;
+import gears.sidescroller.world.tileMaps.TileMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A Structure is currently simply a Matrix which gets inserted
@@ -10,13 +12,27 @@ import gears.sidescroller.world.tiles.AbstractTileTemplate;
  * 
  * @author Matt Crow
  */
-public class Structure extends FlyweightMatrix<AbstractTileTemplate> {
+public class Structure {
+    private final TileMap tileMap;
+    private final Set<WorldObject> objects;
+    
+    public Structure(TileMap tileMap, Set<WorldObject> objects) {
+        this.tileMap = tileMap;
+        this.objects = objects;
+    }
+    
     /**
-     * Creates a new Structure of the given size.
-     * @param width the width of the Structure, measured in tiles
-     * @param height the height of the Structure, measured in tiles
+     * @return this structure's tile map. Changes to this map will be reflected
+     *  in this structure.
      */
-    public Structure(int width, int height) {
-        super(width, height);
+    public TileMap getTileMap(){
+        return tileMap;
+    }
+    
+    /**
+     * @return a shallow copy of this structure's world objects
+     */
+    public Set<WorldObject> getWorldObjects(){
+        return new HashSet<>(objects);
     }
 }
