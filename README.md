@@ -51,6 +51,10 @@ Monochrome tiles can be walked on, while edged tiles are blocking
   implement a deserializer for each new serializable class. A unit test could
   work. 
 * the gui.console package is incomplete, needing commands that accept arguments
+* rework world generation so generators share a common tileset, making the world
+  less... garrishly vibrant
+* structures demonstrating conveyor belts, lanterns, and new machines as I make
+  them
 
 ## Controls
 
@@ -63,9 +67,18 @@ Monochrome tiles can be walked on, while edged tiles are blocking
 * -/_ to zoom out
 * select items from the "inventory" menu on the bottom of the screen to use them
 
+## Gameplay Example
+
+You may come across rooms such as this while playing the game:
+![A room... why isn't that last gear rotating?](./readmeResources/gearRoom1)
+
+You can run into this gear to pick it up...
+![A little gear](./readmeResources/gearRoom2)
+
 ## Some Screenshots
 
 Here are just a few examples of the kind of worlds this program can generate:
 ![A square of conveyor belts all leading into each other](./readmeResources/gears1.png)
 ![A very long train of conveyor belts](./readmeResources/gears2.png)
 ![A very pink house](./readmeResources/gears3.png)
+![Lanterns provide a powerful - albiet flickering - light](./readmeResources/gears4.png)

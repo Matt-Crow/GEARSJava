@@ -59,16 +59,17 @@ public class FlyweightMatrix<T> extends Matrix<Integer> {
     
     public final void insertMatrix(int xIdx, int yIdx, FlyweightMatrix<T> otherMatrix){
         // first, add new keys
-        int thisCurrMax = this.keyToValue.keySet().stream().reduce(0, Math::max);
+        int nextAvailableKey = this.keyToValue.keySet().stream().reduce(0, Math::max) + 1;
         otherMatrix.forEachKeyToValue((otherMatrixKey, otherMatrixValue)->{
-            this.setKeyToVal(thisCurrMax + otherMatrixKey, otherMatrixValue);
+            this.setKeyToVal(nextAvailableKey + otherMatrixKey, otherMatrixValue);
+            //                                  starts at 0
         });
         
         // next, fit as much of the new matrix as possible into this one
         for(int dx = 0; dx < otherMatrix.getWidthInCells(); dx++){
             for(int dy = 0; dy < otherMatrix.getHeightInCells(); dy++){
                 if(isValidIdx(xIdx + dx, yIdx + dy)){
-                    this.set(xIdx + dx, yIdx + dy, otherMatrix.get(dx, dy) + thisCurrMax);
+                    this.set(xIdx + dx, yIdx + dy, otherMatrix.get(dx, dy) + nextAvailableKey);
                 }
             }
         }
