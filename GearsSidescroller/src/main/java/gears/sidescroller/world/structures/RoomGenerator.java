@@ -24,7 +24,7 @@ public class RoomGenerator implements GeneratesStructures {
     
     
     @Override
-    public Structure generate(Random rng) {
+    public Structure generate(int structX, int structY, Random rng) {
         int width = rng.nextInt(maxWidth) + 1;
         int height = rng.nextInt(maxHeight) + 1;
         TileMap map = new TileMap(
@@ -71,6 +71,6 @@ public class RoomGenerator implements GeneratesStructures {
         
         Set<WorldObject> objs = new HashSet<>();
         
-        return new Structure(map, objs);
+        return new Structure(structX, structY, map, objs);
     }
 }

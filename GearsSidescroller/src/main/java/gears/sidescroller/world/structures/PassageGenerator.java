@@ -20,7 +20,7 @@ public class PassageGenerator implements GeneratesStructures {
     }
     
     @Override
-    public Structure generate(Random rng) {
+    public Structure generate(int structX, int structY, Random rng) {
         int minorLength = rng.nextInt(Math.max(maxLength - 3, 1)) + 1;
         int majorLength = minorLength + 3;
         
@@ -47,7 +47,7 @@ public class PassageGenerator implements GeneratesStructures {
         
         Set<WorldObject> objs = new HashSet<>();
         
-        s = new Structure(t, objs);
+        s = new Structure(structX, structY, t, objs);
         
         return s;
     }

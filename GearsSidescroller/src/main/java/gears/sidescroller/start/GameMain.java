@@ -34,6 +34,7 @@ public class GameMain {
         List<GeneratesStructures> genStructs = new ArrayList<>();
         genStructs.add(new RoomGenerator(10, 10, tileGen));
         genStructs.add(new PassageGenerator(10, tileGen));
+        genStructs.add(new GearRoomGenerator(tileGen));
         StructureGenerator structGen = new StructureGenerator(rng, genStructs);
         AreaGenerator areaGen = new AreaGenerator(
                 tileMapGen, 

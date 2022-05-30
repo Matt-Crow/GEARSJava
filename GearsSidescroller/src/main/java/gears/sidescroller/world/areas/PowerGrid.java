@@ -114,7 +114,7 @@ public class PowerGrid extends Matrix<Boolean> {
     }
     
     public final void draw(Graphics g){
-        Color c = new Color(255, 255, 0, (int) (100*(1 + Math.sin(alpha)))); // transparent yellow
+        Color c = new Color(255, 255, 0, (int) (50*(1 + Math.sin(alpha)))); // transparent yellow
         alpha = (alpha + 0.1) % (2*Math.PI);
         g.setColor(c);
         this.forEachCell((isPowered, xIdx, yIdx)->{

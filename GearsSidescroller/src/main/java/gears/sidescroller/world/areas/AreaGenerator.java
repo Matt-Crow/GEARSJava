@@ -1,5 +1,6 @@
 package gears.sidescroller.world.areas;
 
+import gears.sidescroller.world.core.WorldObject;
 import gears.sidescroller.world.items.*;
 import gears.sidescroller.world.machines.MachineGenerator;
 import gears.sidescroller.world.structures.*;
@@ -49,7 +50,7 @@ public class AreaGenerator {
     public Area generateRandom(){
         TileMap map = tileMapGenerator.generateTileMap(20, 20);//generateTileMap();
         
-        List<Structure> structs = generateStructures();
+        List<Structure> structs = generateStructures(20);
         
         applyStructuresIn(structs, map); // need to modify both map...
         
@@ -62,36 +63,55 @@ public class AreaGenerator {
         return area;
     }
     
-    private List<Structure> generateStructures(){
+    private List<Structure> generateStructures(int areaSize){
         List<Structure> structs = new ArrayList<>();
         Random rng = new Random();
         // choose number of structures
-        int numStructs = rng.nextInt(3) + 1;
+        int numStructs = rng.nextInt(4) + 4;
         
         for(int i = 0; i < numStructs; ++i){
-            structs.add(structureGenerator.generateRandom());
+            /*
+            this means upper left corner of struct cannot be within 5 tiles of
+            the max x & y of the area, so larger structures may get cut off
+            */
+            structs.add(structureGenerator.generateRandom(
+                    rng.nextInt(areaSize - 5) * TILE_SIZE,
+                    rng.nextInt(areaSize - 5) * TILE_SIZE
+            ));
         }
         
         return structs;
     }
     
     private void applyStructuresIn(List<Structure> structs, TileMap here){
-        Random rng = new Random();
         TileMap map;
         for(Structure newStruct : structs){
-            newStruct = structureGenerator.generateRandom();
             map = newStruct.getTileMap();
             here.insertMatrix(
-                rng.nextInt(here.getWidthInCells() - map.getWidthInCells()), 
-                rng.nextInt(here.getHeightInCells() - map.getHeightInCells()), 
-                map
+                    newStruct.getX() / TILE_SIZE,
+                    newStruct.getY() / TILE_SIZE,
+                    map
             );
         }
     }
     
     private void applyStructuresIn(List<Structure> structs, Area area){
-        // todo: need to shift the world objects so they align with the new struct coords
-        structs.forEach((struct)->struct.getWorldObjects().forEach(area::addToWorld));
+        structs.forEach((struct)->applyStructureIn(struct, area));
+    }
+    
+    private void applyStructureIn(Structure struct, Area area){
+        // this ensures the objects don't spawn out of bounds
+        Point openTile;
+        OpenTileSearch search = new OpenTileSearch();
+        TileMap map = area.getTileMap();
+        for(WorldObject obj : struct.getWorldObjects()){ 
+            openTile = search.searchForOpenTileAround(map, obj.getXIdx(), obj.getYIdx());
+            if(openTile != null){
+                obj.setXIdx((int) openTile.getX());
+                obj.setYIdx((int) openTile.getY());
+                area.addToWorld(obj);
+            }
+        }
     }
     
     private void generateItemsIn(Area a){

@@ -13,12 +13,32 @@ import java.util.Set;
  * @author Matt Crow
  */
 public class Structure {
+    private final int x;
+    private final int y;
     private final TileMap tileMap;
     private final Set<WorldObject> objects;
     
-    public Structure(TileMap tileMap, Set<WorldObject> objects) {
+    public Structure(int x, int y, TileMap tileMap, Set<WorldObject> objects) {
+        this.x = x;
+        this.y = y;
         this.tileMap = tileMap;
         this.objects = objects;
+    }
+    
+    /**
+     * @return the x-coordinate of this Structure within an Area, measured in
+     *  pixel-space
+     */
+    public int getX(){
+        return x;
+    }
+    
+    /**
+     * @return the y-coordinate of this Structure within an Area, measured in
+     *  pixel-space
+     */
+    public int getY(){
+        return y;
     }
     
     /**

@@ -25,9 +25,15 @@ public class StructureGenerator {
         this.generators = generators;
     }
     
-    public Structure generateRandom(){
+    /**
+     * 
+     * @param x the x-coordinate of the upper left corner of the new structure
+     * @param y the y-coordinate of the upper left corner of the new structure
+     * @return a new structure
+     */
+    public Structure generateRandom(int x, int y){
         int n = rng.nextInt(generators.size());
-        Structure s =  generators.get(n).generate(rng);
+        Structure s =  generators.get(n).generate(x, y, rng);
         return s;
     }
 }
