@@ -1,0 +1,17 @@
+gears.io
+gears.sidescroller.gui
+gears.sidescroller.gui.console
+gears.sidescroller.gui.console.commands
+gears.sidescroller.gui.level
+gears.sidescroller.loader
+gears.sidescroller.start
+gears.sidescroller.util
+gears.sidescroller.world.areas
+gears.sidescroller.world.core
+gears.sidescroller.world.entities
+gears.sidescroller.world.items
+gears.sidescroller.world.levels
+gears.sidescroller.world.machines
+gears.sidescroller.world.structures
+gears.sidescroller.world.tileMaps
+gears.sidescroller.world.tiles

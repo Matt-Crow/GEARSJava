@@ -4,7 +4,7 @@ import gears.sidescroller.gui.console.ConsoleFrame;
 
 /**
  *
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public class Exit implements Command {
     private final ConsoleFrame frame;

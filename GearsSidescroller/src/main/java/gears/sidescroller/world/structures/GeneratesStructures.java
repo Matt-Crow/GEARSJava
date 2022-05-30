@@ -7,7 +7,7 @@ import java.util.Random;
  * Thanks to dependency injection, you can inject your custom instances of this
  * interface into the constructor of StructureGenerator so it can produce them.
  * 
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public interface GeneratesStructures {
     

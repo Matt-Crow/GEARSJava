@@ -14,7 +14,7 @@ import java.util.*;
 /**
  * generates structures that can teach the player how gears and power work
  * 
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public class GearRoomGenerator implements GeneratesStructures {
     private final TileGenerator tileGen;

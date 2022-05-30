@@ -4,7 +4,7 @@ package gears.sidescroller.loader;
  * this exception is thrown by LevelLoaders when they cannot load or save a
  * Level
  * 
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public class LevelLoadingException extends RuntimeException {
     

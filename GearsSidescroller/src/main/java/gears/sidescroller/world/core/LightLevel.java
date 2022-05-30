@@ -6,7 +6,7 @@ package gears.sidescroller.world.core;
  * a light value of 0 is complete darkness,
  * while a light value of 255 is the maximum brightness
  * 
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public class LightLevel {
     private final byte value; // unsigned byte

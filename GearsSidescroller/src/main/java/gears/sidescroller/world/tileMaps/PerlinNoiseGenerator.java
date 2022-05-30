@@ -5,7 +5,7 @@ package gears.sidescroller.world.tileMaps;
  * this works as a function for the AreaGenerator, but is too claustrophobic to
  * use as a tile map
  * 
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public class PerlinNoiseGenerator {
     private final int max;

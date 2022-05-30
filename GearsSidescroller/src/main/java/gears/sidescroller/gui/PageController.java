@@ -12,7 +12,7 @@ import gears.sidescroller.world.levels.*;
  * this class is responsible for switching between the different pages in the
  * application
  * 
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public class PageController {
     private final GameFrame window;

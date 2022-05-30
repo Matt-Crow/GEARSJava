@@ -7,7 +7,7 @@ import javax.json.JsonObject;
 
 /**
  *
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public class TileMapJson implements JsonResourceType<TileMap> {
 

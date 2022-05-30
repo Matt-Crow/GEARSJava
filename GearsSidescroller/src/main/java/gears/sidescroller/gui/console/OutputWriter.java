@@ -2,7 +2,7 @@ package gears.sidescroller.gui.console;
 
 /**
  *
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public interface OutputWriter {
     

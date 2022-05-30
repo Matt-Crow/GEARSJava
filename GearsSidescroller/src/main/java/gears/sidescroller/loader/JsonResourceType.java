@@ -4,7 +4,7 @@ import javax.json.JsonObject;
 
 /**
  *
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  * @param <T>
  */
 public interface JsonResourceType<T extends JsonSerializable> {    

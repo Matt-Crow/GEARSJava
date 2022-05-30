@@ -4,7 +4,7 @@ import java.util.Set;
 
 /**
  *
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public interface Interpreter {
     /**

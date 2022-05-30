@@ -8,7 +8,7 @@ import javax.swing.*;
 
 /**
  *
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public class ConsoleComponent extends JComponent implements ActionListener, OutputWriter {
     private final JTextArea outputDisplay;

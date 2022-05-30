@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 /**
  *
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public class CommandParser {
     private final Interpreter interpreter;

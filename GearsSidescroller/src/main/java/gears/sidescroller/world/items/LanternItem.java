@@ -11,7 +11,7 @@ import javax.json.JsonObjectBuilder;
 
 /**
  * a LanternItem can be picked up and provides light
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public class LanternItem extends AbstractItem implements Illuminating {
     private final LightLevel lightLevel;

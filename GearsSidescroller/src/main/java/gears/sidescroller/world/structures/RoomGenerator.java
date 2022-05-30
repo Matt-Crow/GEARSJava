@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * generates random rooms
  * 
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public class RoomGenerator implements GeneratesStructures {
     private final int maxWidth;

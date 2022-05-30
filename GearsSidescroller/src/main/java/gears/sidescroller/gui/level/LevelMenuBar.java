@@ -6,7 +6,7 @@ import javax.swing.*;
 
 /**
  *
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public class LevelMenuBar extends JMenuBar { 
     private final LevelPage inPage;

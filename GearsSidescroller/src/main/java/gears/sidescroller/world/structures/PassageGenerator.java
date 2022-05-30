@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * generates random passages
  * 
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public class PassageGenerator implements GeneratesStructures {
     private final int maxLength;

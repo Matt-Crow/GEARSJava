@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Implementation-Title: GearsSidescroller
-Implementation-Version: 0.9
 Main-Class: gears.sidescroller.start.GameMain
+Implementation-Title: GearsGame
+Implementation-Version: 0.9
 

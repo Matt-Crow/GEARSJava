@@ -10,7 +10,7 @@ import java.util.Collection;
  * Note that this is not required to save the player's progress within a level,
  * just the level data itself
  * 
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public interface LevelLoader {
     

@@ -8,7 +8,7 @@ import javax.json.*;
 
 /**
  *
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public class FileSystemLevelLoader implements LevelLoader {
     

@@ -2,7 +2,7 @@ package gears.sidescroller.gui.console.commands;
 
 /**
  *
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public interface Command {
     public String getName();

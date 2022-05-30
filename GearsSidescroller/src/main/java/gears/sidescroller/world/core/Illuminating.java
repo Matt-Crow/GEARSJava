@@ -2,7 +2,7 @@ package gears.sidescroller.world.core;
 
 /**
  * denotes that an object can produce light
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public interface Illuminating {
     

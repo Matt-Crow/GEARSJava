@@ -11,7 +11,7 @@ import java.util.Collection;
 /**
  * The LightGrid is used to apply dynamic lighting to an Area
  * 
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public class LightGrid extends Matrix<Byte>{
     private final LightLevel ambientLightLevel;

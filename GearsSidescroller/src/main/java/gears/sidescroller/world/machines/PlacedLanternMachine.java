@@ -7,7 +7,7 @@ import gears.sidescroller.world.items.LanternItem;
 
 /**
  *
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public class PlacedLanternMachine extends LanternMachine implements Interactable {
     private final LanternItem asItem;

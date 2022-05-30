@@ -6,7 +6,7 @@ import gears.sidescroller.gui.console.OutputWriter;
 
 /**
  *
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public class Help implements Command {
     private final Interpreter interpreter;

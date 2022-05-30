@@ -5,7 +5,7 @@ import gears.sidescroller.world.levels.Level;
 
 /**
  *
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public class Where implements Command {
     private final Level level;

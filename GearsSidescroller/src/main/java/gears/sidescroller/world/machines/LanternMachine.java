@@ -10,7 +10,7 @@ import javax.json.JsonObjectBuilder;
 
 /**
  *
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public class LanternMachine extends AbstractMachine implements Illuminating {
     private final LightLevel lightLevel;

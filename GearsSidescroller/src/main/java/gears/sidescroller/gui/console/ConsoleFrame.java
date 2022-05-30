@@ -5,7 +5,7 @@ import javax.swing.*;
 
 /**
  *
- * @author Matt Crow <mattcrow19@gmail.com>
+ * @author Matt Crow 
  */
 public class ConsoleFrame extends JFrame {
     public ConsoleFrame(ConsoleComponent console){
