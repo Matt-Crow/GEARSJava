@@ -1,10 +1,16 @@
 package gears.sidescroller.start;
 
-import gears.sidescroller.gui.GameFrame;
-import gears.sidescroller.gui.PageController;
-import gears.sidescroller.loader.FileSystemLevelLoader;
-import gears.sidescroller.loader.LevelLoader;
+import gears.sidescroller.gui.*;
+import gears.sidescroller.loader.*;
+import gears.sidescroller.world.areas.AreaGenerator;
 import gears.sidescroller.world.entities.Player;
+import gears.sidescroller.world.items.ItemGenerator;
+import gears.sidescroller.world.levels.LevelGenerator;
+import gears.sidescroller.world.machines.MachineGenerator;
+import gears.sidescroller.world.structures.*;
+import gears.sidescroller.world.tileMaps.TileMapGenerator;
+import gears.sidescroller.world.tiles.TileGenerator;
+import java.util.*;
 
 /**
  *
@@ -17,6 +23,26 @@ public class GameMain {
         Player player = new Player();
         LevelLoader levelLoader = new FileSystemLevelLoader();
         
-        PageController ctrl = new PageController(window, player, levelLoader);
+        Random rng = new Random();
+        TileMapGenerator tileMapGen = new TileMapGenerator(
+                rng.nextInt(9) + 1,
+                rng.nextInt(9) + 1,
+                rng.nextInt(9) + 1,
+                rng.nextInt(9) + 1
+        );
+        TileGenerator tileGen = new TileGenerator();
+        List<GeneratesStructures> genStructs = new ArrayList<>();
+        genStructs.add(new RoomGenerator(10, 10, tileGen));
+        genStructs.add(new PassageGenerator(10, tileGen));
+        StructureGenerator structGen = new StructureGenerator(rng, genStructs);
+        AreaGenerator areaGen = new AreaGenerator(
+                tileMapGen, 
+                structGen, 
+                new ItemGenerator(), 
+                new MachineGenerator()
+        );
+        LevelGenerator levelGen = new LevelGenerator(areaGen);
+        
+        PageController ctrl = new PageController(window, player, levelLoader, levelGen);
     }
 }

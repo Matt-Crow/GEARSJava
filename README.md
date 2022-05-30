@@ -31,6 +31,16 @@ java -jar GearsSidescroller/build/libs/GearsSidescroller-0.9.jar
 
 when run from the repository root.
 
+## Gameplay
+
+Once you've launched the project, go to ```file -> play a random level``` to
+generate a random level. There is not currently any way to win or lose, you can 
+just wander around to see what sort of world the game has generated. Since these
+levels are randomly generated, you may be bordered on all sides by blocking 
+tiles, so if pressing the WASD keys does nothing, just play a different random
+level. You are controlling the grey square in the middle of the screen. 
+Monochrome tiles can be walked on, while edged tiles are blocking
+
 ## Matt's To Do List
 
 * everything in the package info for world

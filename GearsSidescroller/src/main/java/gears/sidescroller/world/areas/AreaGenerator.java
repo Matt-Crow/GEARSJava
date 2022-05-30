@@ -1,13 +1,9 @@
 package gears.sidescroller.world.areas;
 
-import gears.sidescroller.world.items.AbstractItem;
-import gears.sidescroller.world.items.ItemGenerator;
+import gears.sidescroller.world.items.*;
 import gears.sidescroller.world.machines.MachineGenerator;
-import gears.sidescroller.world.structures.Structure;
-import gears.sidescroller.world.structures.StructureGenerator;
-import gears.sidescroller.world.tileMaps.OpenTileSearch;
-import gears.sidescroller.world.tileMaps.TileMap;
-import gears.sidescroller.world.tileMaps.TileMapGenerator;
+import gears.sidescroller.world.structures.*;
+import gears.sidescroller.world.tileMaps.*;
 import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
 import java.awt.Point;
 import java.util.Random;
@@ -40,18 +36,6 @@ public class AreaGenerator {
         this.structureGenerator = structureGenerator;
         this.itemGenerator = itemGenerator;
         this.machineGenerator = machineGenerator;
-    }
-    
-    /**
-     * Creates an AreaGenerator with the default generators.
-     */
-    public AreaGenerator(){
-        this(new TileMapGenerator(
-            new Random().nextInt(9) + 1, // don't like this, but only way
-            new Random().nextInt(9) + 1, // to fit in constructor with "this(...)"
-            new Random().nextInt(9) + 1,
-            new Random().nextInt(9) + 1
-        ), new StructureGenerator(10, 10), new ItemGenerator(), new MachineGenerator());
     }
     
     /**

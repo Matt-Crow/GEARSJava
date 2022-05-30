@@ -20,13 +20,6 @@ public class LevelGenerator {
         this.areaGenerator = areaGenerator;
     }
     
-    /**
-     * Creates a new LevelGenerator 
-     * with its own built-in AreaGenerator.
-     */
-    public LevelGenerator(){
-        this(new AreaGenerator());
-    }
     
     /**
      * Generates a new Level, producing Areas for it

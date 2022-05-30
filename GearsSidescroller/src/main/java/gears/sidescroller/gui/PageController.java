@@ -4,8 +4,7 @@ import gears.sidescroller.gui.level.LevelPage;
 import gears.sidescroller.loader.LevelLoader;
 import gears.sidescroller.start.TempTestLevel;
 import gears.sidescroller.world.entities.Player;
-import gears.sidescroller.world.levels.Level;
-import gears.sidescroller.world.levels.LevelGenerator;
+import gears.sidescroller.world.levels.*;
 
 
 
@@ -19,12 +18,13 @@ public class PageController {
     private final GameFrame window;
     private Player player;
     private final LevelLoader levelLoader;
+    private final LevelGenerator levelGenerator;    
     
-    
-    public PageController(GameFrame window, Player player, LevelLoader levelLoader){
+    public PageController(GameFrame window, Player player, LevelLoader levelLoader, LevelGenerator levelGenerator){
         this.window = window;
         this.player = player;
         this.levelLoader = levelLoader;
+        this.levelGenerator = levelGenerator;
         switchToPage(new HomePage(this));
     }
     
@@ -42,7 +42,7 @@ public class PageController {
     }
     
     private Level createRandomLevel(){
-        return new LevelGenerator().generateRandom(3);
+        return levelGenerator.generateRandom(3);
     }
     
     public void playTestLevel(){
