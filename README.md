@@ -70,15 +70,19 @@ Monochrome tiles can be walked on, while edged tiles are blocking
 ## Gameplay Example
 
 You may come across rooms such as this while playing the game:
+
 ![A room... why isn't that last gear rotating?](./readmeResources/gearRoom1.png)
 
 You can run into this gear to pick it up...
+
 ![A little gear](./readmeResources/gearRoom2.png)
 
 ...then move to where you'd like to place it...
+
 ![This looks like a good spot](./readmeResources/gearRoom3.png)
 
 ...then select the gear from your inventory to place it, powering the last gear!
+
 ![All gears are now spinning!](./readmeResources/gearRoom4.png)
 
 ## Some Screenshots
