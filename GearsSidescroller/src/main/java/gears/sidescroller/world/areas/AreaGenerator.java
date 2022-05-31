@@ -6,6 +6,8 @@ import gears.sidescroller.world.machines.MachineGenerator;
 import gears.sidescroller.world.structures.*;
 import gears.sidescroller.world.tileMaps.*;
 import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
+import gears.sidescroller.world.tiles.TileSet;
+import gears.sidescroller.world.tiles.TileSetGenerator;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +21,14 @@ import java.util.Random;
  * @author Matt Crow
  */
 public class AreaGenerator {
+    private final TileSetGenerator tileSetGenerator;
     private final TileMapGenerator tileMapGenerator;
     private final StructureGenerator structureGenerator;
     private final ItemGenerator itemGenerator;
     private final MachineGenerator machineGenerator;
     
     /**
+     * @param tileSetGenerator produces a unique TileSet for each Area
      * @param tileMapGenerator the TileMapGenerator which will provide TileMaps
      * for the Areas this produces.
      * @param structureGenerator the StructureGenerator which will provide Structures
@@ -34,7 +38,8 @@ public class AreaGenerator {
      * @param machineGenerator the MachineGenerator which will provide 
      * AbstractMachines for the Areas this produces.
      */
-    public AreaGenerator(TileMapGenerator tileMapGenerator, StructureGenerator structureGenerator, ItemGenerator itemGenerator, MachineGenerator machineGenerator){
+    public AreaGenerator(TileSetGenerator tileSetGenerator, TileMapGenerator tileMapGenerator, StructureGenerator structureGenerator, ItemGenerator itemGenerator, MachineGenerator machineGenerator){
+        this.tileSetGenerator = tileSetGenerator;
         this.tileMapGenerator = tileMapGenerator;
         this.structureGenerator = structureGenerator;
         this.itemGenerator = itemGenerator;
@@ -48,9 +53,11 @@ public class AreaGenerator {
      * @return a new Area. 
      */
     public Area generateRandom(){
-        TileMap map = tileMapGenerator.generateTileMap(20, 20);//generateTileMap();
+        // this ensures each Area has its own unique TileSet
+        TileSet tiles = tileSetGenerator.generateRandom(3);
+        TileMap map = tileMapGenerator.generateTileMap(tiles, 20, 20);
         
-        List<Structure> structs = generateStructures(20);
+        List<Structure> structs = generateStructures(tiles, 20);
         
         applyStructuresIn(structs, map); // need to modify both map...
         
@@ -63,7 +70,7 @@ public class AreaGenerator {
         return area;
     }
     
-    private List<Structure> generateStructures(int areaSize){
+    private List<Structure> generateStructures(TileSet tiles, int areaSize){
         List<Structure> structs = new ArrayList<>();
         Random rng = new Random();
         // choose number of structures
@@ -76,7 +83,8 @@ public class AreaGenerator {
             */
             structs.add(structureGenerator.generateRandom(
                     rng.nextInt(areaSize - 5) * TILE_SIZE,
-                    rng.nextInt(areaSize - 5) * TILE_SIZE
+                    rng.nextInt(areaSize - 5) * TILE_SIZE,
+                    tiles
             ));
         }
         

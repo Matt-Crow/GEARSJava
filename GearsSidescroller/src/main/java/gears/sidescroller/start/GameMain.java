@@ -9,7 +9,7 @@ import gears.sidescroller.world.levels.LevelGenerator;
 import gears.sidescroller.world.machines.MachineGenerator;
 import gears.sidescroller.world.structures.*;
 import gears.sidescroller.world.tileMaps.TileMapGenerator;
-import gears.sidescroller.world.tiles.TileGenerator;
+import gears.sidescroller.world.tiles.*;
 import java.util.*;
 
 /**
@@ -24,21 +24,29 @@ public class GameMain {
         LevelLoader levelLoader = new FileSystemLevelLoader();
         
         Random rng = new Random();
+        
+        // tile services
+        TileGenerator tileGen = new TileGenerator();
+        TileSetGenerator tileSetGen = new TileSetGenerator(tileGen);
         TileMapGenerator tileMapGen = new TileMapGenerator(
+                rng,
                 rng.nextInt(9) + 1,
                 rng.nextInt(9) + 1,
                 rng.nextInt(9) + 1,
                 rng.nextInt(9) + 1
         );
-        TileGenerator tileGen = new TileGenerator();
+        
+        // structure services
         List<GeneratesStructures> genStructs = new ArrayList<>();
-        genStructs.add(new RoomGenerator(10, 10, tileGen));
-        genStructs.add(new PassageGenerator(10, tileGen));
-        genStructs.add(new GearRoomGenerator(tileGen));
+        genStructs.add(new RoomGenerator(10, 10));
+        genStructs.add(new PassageGenerator(10));
+        genStructs.add(new GearRoomGenerator());
         StructureGenerator structGen = new StructureGenerator(rng, genStructs);
+        
         AreaGenerator areaGen = new AreaGenerator(
+                tileSetGen,
                 tileMapGen, 
-                structGen, 
+                structGen,
                 new ItemGenerator(), 
                 new MachineGenerator()
         );

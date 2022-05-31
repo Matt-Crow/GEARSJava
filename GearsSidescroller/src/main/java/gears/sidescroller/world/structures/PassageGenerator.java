@@ -2,7 +2,7 @@ package gears.sidescroller.world.structures;
 
 import gears.sidescroller.world.core.WorldObject;
 import gears.sidescroller.world.tileMaps.TileMap;
-import gears.sidescroller.world.tiles.TileGenerator;
+import gears.sidescroller.world.tiles.TileSet;
 import java.util.*;
 
 /**
@@ -12,15 +12,13 @@ import java.util.*;
  */
 public class PassageGenerator implements GeneratesStructures {
     private final int maxLength;
-    private final TileGenerator tileGenerator;
     
-    public PassageGenerator(int maxLength, TileGenerator tileGenerator){
+    public PassageGenerator(int maxLength){
         this.maxLength = maxLength;
-        this.tileGenerator = tileGenerator;
     }
     
     @Override
-    public Structure generate(int structX, int structY, Random rng) {
+    public Structure generate(Random rng, int x, int y, TileSet tiles) {
         int minorLength = rng.nextInt(Math.max(maxLength - 3, 1)) + 1;
         int majorLength = minorLength + 3;
         
@@ -42,12 +40,12 @@ public class PassageGenerator implements GeneratesStructures {
             }
         }
         
-        t.setKeyToVal(0, tileGenerator.generateRandom(false));
-        t.setKeyToVal(1, tileGenerator.generateRandom(true));
+        t.setKeyToVal(0, tiles.chooseRandomIntangibleTile(rng));
+        t.setKeyToVal(1, tiles.chooseRandomTangibleTile(rng));
         
         Set<WorldObject> objs = new HashSet<>();
         
-        s = new Structure(structX, structY, t, objs);
+        s = new Structure(x, y, t, objs);
         
         return s;
     }

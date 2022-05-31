@@ -7,7 +7,7 @@ import gears.sidescroller.world.machines.GearMachine;
 import gears.sidescroller.world.machines.PowerPlant;
 import gears.sidescroller.world.tileMaps.TileMap;
 import static gears.sidescroller.world.tiles.AbstractTileTemplate.TILE_SIZE;
-import gears.sidescroller.world.tiles.TileGenerator;
+import gears.sidescroller.world.tiles.TileSet;
 import java.awt.Color;
 import java.util.*;
 
@@ -16,23 +16,17 @@ import java.util.*;
  * 
  * @author Matt Crow 
  */
-public class GearRoomGenerator implements GeneratesStructures {
-    private final TileGenerator tileGen;
-    
-    public GearRoomGenerator(TileGenerator tileGen){
-        this.tileGen = tileGen;
-    }
-    
+public class GearRoomGenerator implements GeneratesStructures { 
     @Override
-    public Structure generate(int x, int y, Random rng) {
+    public Structure generate(Random rng, int x, int y, TileSet tiles) {
         int size = 7;
         int halfAcrossRoom = TILE_SIZE * (size / 2);
         int centerX = x + halfAcrossRoom;
         int centerY = y + halfAcrossRoom;
         
         TileMap map = new TileMap(size, size);
-        map.addToTileSet(0, tileGen.generateRandom(false));
-        map.addToTileSet(1, tileGen.generateRandom(true));
+        map.addToTileSet(0, tiles.chooseRandomIntangibleTile(rng));
+        map.addToTileSet(1, tiles.chooseRandomTangibleTile(rng));
         map.setAllTo(0);
         for(int i = 0; i < size; ++i){
             if(i != size / 2){

@@ -3,7 +3,7 @@ package gears.sidescroller.world.structures;
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.world.core.WorldObject;
 import gears.sidescroller.world.tileMaps.TileMap;
-import gears.sidescroller.world.tiles.TileGenerator;
+import gears.sidescroller.world.tiles.TileSet;
 import java.util.*;
 
 /**
@@ -14,25 +14,23 @@ import java.util.*;
 public class RoomGenerator implements GeneratesStructures {
     private final int maxWidth;
     private final int maxHeight;
-    private final TileGenerator tileGenerator;
     
-    public RoomGenerator(int maxWidth, int maxHeight, TileGenerator tileGenerator){
+    public RoomGenerator(int maxWidth, int maxHeight){
         this.maxWidth = maxWidth;
         this.maxHeight = maxHeight;
-        this.tileGenerator = tileGenerator;
     }
     
     
     @Override
-    public Structure generate(int structX, int structY, Random rng) {
+    public Structure generate(Random rng, int structX, int structY, TileSet tiles) {
         int width = rng.nextInt(maxWidth) + 1;
         int height = rng.nextInt(maxHeight) + 1;
         TileMap map = new TileMap(
             width,
             height
         );
-        map.setKeyToVal(0, tileGenerator.generateRandom(false));
-        map.setKeyToVal(1, tileGenerator.generateRandom(true));
+        map.setKeyToVal(0, tiles.chooseRandomIntangibleTile(rng));
+        map.setKeyToVal(1, tiles.chooseRandomTangibleTile(rng));
         
         // build the room's walls
         // top & bottom walls

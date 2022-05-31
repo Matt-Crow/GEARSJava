@@ -21,6 +21,19 @@ public class BasicColorTile extends AbstractTileTemplate{
         outlineColor = outline;
         bodyColor = body;
     }
+    
+    @Override
+    public String toString(){
+        return String.format("BasicColorTile %s %s %s", 
+                colorString(outlineColor),
+                colorString(bodyColor),
+                (getIsTangible()) ? "tangible" : "intangible"
+        );
+    }
+    
+    private static String colorString(Color color){
+        return String.format("Color(%d, %d, %d, %d)", color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+    }
 
     @Override
     public AbstractTileTemplate drawAt(Graphics g, int x, int y) {

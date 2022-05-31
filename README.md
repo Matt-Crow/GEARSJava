@@ -51,8 +51,6 @@ Monochrome tiles can be walked on, while edged tiles are blocking
   implement a deserializer for each new serializable class. A unit test could
   work. 
 * the gui.console package is incomplete, needing commands that accept arguments
-* rework world generation so generators share a common tileset, making the world
-  less... garrishly vibrant
 * structures demonstrating conveyor belts, lanterns, and new machines as I make
   them
 

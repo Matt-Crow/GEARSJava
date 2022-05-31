@@ -1,5 +1,6 @@
 package gears.sidescroller.world.structures;
 
+import gears.sidescroller.world.tiles.TileSet;
 import java.util.List;
 import java.util.Random;
 
@@ -29,11 +30,13 @@ public class StructureGenerator {
      * 
      * @param x the x-coordinate of the upper left corner of the new structure
      * @param y the y-coordinate of the upper left corner of the new structure
+     * @param tiles the tiles to generate structures using
+     * 
      * @return a new structure
      */
-    public Structure generateRandom(int x, int y){
+    public Structure generateRandom(int x, int y, TileSet tiles){
         int n = rng.nextInt(generators.size());
-        Structure s =  generators.get(n).generate(x, y, rng);
+        Structure s =  generators.get(n).generate(rng, x, y, tiles);
         return s;
     }
 }
