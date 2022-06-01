@@ -1,6 +1,5 @@
 package gears.sidescroller.gui.level;
 
-import gears.sidescroller.gui.level.LevelPage;
 import gears.sidescroller.world.entities.AbstractEntity;
 import gears.sidescroller.util.Direction;
 import java.awt.BorderLayout;
@@ -13,6 +12,7 @@ import javax.swing.JPanel;
  *
  * @author Matt
  */
+@SuppressWarnings("serial")
 public class EntityControls extends JPanel {
     private final AbstractEntity controlledEntity;
     

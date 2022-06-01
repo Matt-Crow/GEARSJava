@@ -7,6 +7,7 @@ import javax.swing.*;
  *
  * @author Matt Crow 
  */
+@SuppressWarnings("serial")
 public class ConsoleFrame extends JFrame {
     public ConsoleFrame(ConsoleComponent console){
         setTitle("console");

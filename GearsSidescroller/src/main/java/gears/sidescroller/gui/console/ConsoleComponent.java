@@ -10,6 +10,7 @@ import javax.swing.*;
  *
  * @author Matt Crow 
  */
+@SuppressWarnings("serial")
 public class ConsoleComponent extends JComponent implements ActionListener, OutputWriter {
     private final JTextArea outputDisplay;
     private final JScrollPane scroll;

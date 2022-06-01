@@ -13,6 +13,7 @@ import javax.swing.SwingConstants;
  * 
  * @author Matt Crow
  */
+@SuppressWarnings("serial")
 public class HomePage extends Page{
     public HomePage(PageController controller) {
         super(controller);

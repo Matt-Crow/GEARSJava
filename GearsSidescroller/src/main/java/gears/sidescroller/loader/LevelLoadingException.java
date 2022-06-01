@@ -7,6 +7,7 @@ package gears.sidescroller.loader;
  * @author Matt Crow 
  */
 public class LevelLoadingException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
     
     public LevelLoadingException(){
         super();

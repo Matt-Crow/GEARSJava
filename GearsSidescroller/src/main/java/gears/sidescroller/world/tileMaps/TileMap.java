@@ -144,7 +144,7 @@ public class TileMap extends FlyweightMatrix<AbstractTileTemplate> implements Js
      * @return this, for chaining purposes
      */
     public final TileMap spawnEntityCenter(MobileWorldObject e){
-        return spawnEntityFromPoint(e, (int) (getWidthInCells() / 2), (int)(getHeightInCells() / 2));
+        return spawnEntityFromPoint(e, getWidthInCells() / 2, getHeightInCells() / 2);
     }
     
     /**
@@ -281,8 +281,8 @@ public class TileMap extends FlyweightMatrix<AbstractTileTemplate> implements Js
         possibly be colliding with.
         */
         
-        int yIdx = (int)(e.getYAsInt() / AbstractTileTemplate.TILE_SIZE);
-        int xIdx = (int)(e.getXAsInt() / AbstractTileTemplate.TILE_SIZE);
+        int yIdx = e.getYAsInt() / AbstractTileTemplate.TILE_SIZE;
+        int xIdx = e.getXAsInt() / AbstractTileTemplate.TILE_SIZE;
         
         boolean collUpperLeft  = handleCollisions(e, xIdx  , yIdx  );
         boolean collUpperRight = handleCollisions(e, xIdx+1, yIdx  );

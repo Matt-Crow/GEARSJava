@@ -8,6 +8,7 @@ import javax.swing.JPanel;
  * 
  * @author Matt Crow
  */
+@SuppressWarnings("serial")
 public class Page extends JPanel{
     private final PageController controller;
     

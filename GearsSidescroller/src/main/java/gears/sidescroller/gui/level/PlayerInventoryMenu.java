@@ -9,6 +9,7 @@ import javax.swing.JMenu;
  *
  * @author Matt
  */
+@SuppressWarnings("serial")
 public class PlayerInventoryMenu extends JMenu implements InventoryListener {
     private final Player forPlayer;
     

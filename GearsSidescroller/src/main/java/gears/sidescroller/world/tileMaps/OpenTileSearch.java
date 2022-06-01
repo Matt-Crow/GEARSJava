@@ -85,8 +85,8 @@ public class OpenTileSearch {
         int currYIdx = initialYIdx;
         for(int searchRadius = 0; ret == null && (posRadValid || negRadValid); searchRadius++){
             // check positive radius direction
-            currXIdx = (int) (initialXIdx + lineDirection.getXMod() * searchRadius);
-            currYIdx = (int) (initialYIdx + lineDirection.getYMod() * searchRadius);
+            currXIdx = initialXIdx + lineDirection.getXMod() * searchRadius;
+            currYIdx = initialYIdx + lineDirection.getYMod() * searchRadius;
             posRadValid = map.isValidIdx(currXIdx, currYIdx);
             if(posRadValid){
                 // check if the positive tile is open
@@ -97,8 +97,8 @@ public class OpenTileSearch {
             
             // check negative radius direction
             if(ret == null){
-                currXIdx = (int) (initialXIdx - lineDirection.getXMod() * searchRadius);
-                currYIdx = (int) (initialYIdx - lineDirection.getYMod() * searchRadius);
+                currXIdx = initialXIdx - lineDirection.getXMod() * searchRadius;
+                currYIdx = initialYIdx - lineDirection.getYMod() * searchRadius;
                 negRadValid = map.isValidIdx(currXIdx, currYIdx);
                 if(negRadValid && map.isTileOpen(currXIdx, currYIdx)){
                     // check if the negative tile is open

@@ -8,6 +8,7 @@ import javax.swing.*;
  *
  * @author Matt Crow 
  */
+@SuppressWarnings("serial")
 public class LevelMenuBar extends JMenuBar { 
     private final LevelPage inPage;
     private final LevelLoader loader;

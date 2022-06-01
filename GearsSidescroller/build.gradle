@@ -18,6 +18,12 @@ if (!hasProperty('mainClass')) {
     ext.mainClass = project.mainClassName
 }
 
+gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:all"
+    }
+}
+
 jar {
     duplicatesStrategy = DuplicatesStrategy.WARN
 

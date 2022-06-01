@@ -10,7 +10,7 @@ import javax.json.JsonObject;
  *
  * @author Matt Crow 
  */
-public class AreaJson implements JsonResourceType {
+public class AreaJson implements JsonResourceType<Area> {
 
     @Override
     public Area deserialize(JsonObject json) {

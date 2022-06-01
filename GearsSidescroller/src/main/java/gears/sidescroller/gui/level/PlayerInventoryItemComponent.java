@@ -2,13 +2,13 @@ package gears.sidescroller.gui.level;
 
 import gears.sidescroller.world.entities.Player;
 import gears.sidescroller.world.items.AbstractItem;
-import java.awt.Color;
 import javax.swing.JMenuItem;
 
 /**
  *
  * @author Matt
  */
+@SuppressWarnings("serial")
 class PlayerInventoryItemComponent extends JMenuItem {
     private final Player forPlayer;
     private final AbstractItem forItem;

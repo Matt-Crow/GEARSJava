@@ -17,6 +17,7 @@ import javax.swing.*;
  * 
  * @author Matt Crow
  */
+@SuppressWarnings("serial")
 public class LevelPage extends Page{
     private final Level currentLevel;
     private final Timer timer;

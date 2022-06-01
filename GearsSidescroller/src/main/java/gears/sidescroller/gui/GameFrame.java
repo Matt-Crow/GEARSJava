@@ -11,6 +11,7 @@ import javax.swing.*;
  * 
  * @author Matt Crow
  */
+@SuppressWarnings("serial")
 public class GameFrame extends JFrame{
     private final JPanel content;
     private Page currentPage;
