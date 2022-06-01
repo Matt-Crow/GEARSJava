@@ -3,12 +3,8 @@ package gears.sidescroller.world.core;
 import gears.sidescroller.loader.JsonResourceType;
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.world.entities.Player;
-import gears.sidescroller.world.items.GearItem;
-import gears.sidescroller.world.items.LanternItem;
-import gears.sidescroller.world.machines.ConveyorBeltSegment;
-import gears.sidescroller.world.machines.GearMachine;
-import gears.sidescroller.world.machines.LanternMachine;
-import gears.sidescroller.world.machines.PowerPlant;
+import gears.sidescroller.world.items.*;
+import gears.sidescroller.world.machines.*;
 import java.awt.Color;
 import javax.json.*;
 
@@ -37,6 +33,10 @@ public class ObjectInWorldJson implements JsonResourceType<WorldObject> {
             }
             case "ConveyorBeltSegment": {
                 obj = deserializeConveyorBeltSegment(json);
+                break;
+            }
+            case "Door": {
+                obj = deserializeDoor(json);
                 break;
             }
             case "GearMachine": {
@@ -103,6 +103,10 @@ public class ObjectInWorldJson implements JsonResourceType<WorldObject> {
                 json.getBoolean("isSelfPowering"), 
                 new LightLevel(json.getInt("lightLevel"))
         );
+    }
+    
+    private WorldObject deserializeDoor(JsonObject json) {
+        return new Door(json.getInt("x"), json.getInt("y"));
     }
 
     private WorldObject deserializePowerPlant(JsonObject json) {

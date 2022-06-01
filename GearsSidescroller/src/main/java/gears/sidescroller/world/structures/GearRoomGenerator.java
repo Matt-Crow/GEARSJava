@@ -3,6 +3,7 @@ package gears.sidescroller.world.structures;
 import gears.sidescroller.util.Direction;
 import gears.sidescroller.world.core.WorldObject;
 import gears.sidescroller.world.items.GearItem;
+import gears.sidescroller.world.machines.Door;
 import gears.sidescroller.world.machines.GearMachine;
 import gears.sidescroller.world.machines.PowerPlant;
 import gears.sidescroller.world.tileMaps.TileMap;
@@ -48,8 +49,8 @@ public class GearRoomGenerator implements GeneratesStructures {
         );
         objs.add(power);
         
-        // and a gear on the other...
-        objs.add(new GearMachine(
+        // and a door on the other...
+        objs.add(new Door(
                 centerX + halfAcrossRoom * dir.getXMod(),
                 centerY + halfAcrossRoom * dir.getYMod()
         ));

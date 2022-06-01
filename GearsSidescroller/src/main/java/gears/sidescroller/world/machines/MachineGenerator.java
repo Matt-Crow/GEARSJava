@@ -27,7 +27,7 @@ public class MachineGenerator {
     public final LinkedList<AbstractMachine> createRandomMachineAt(Area inThisArea, int xIdx, int yIdx){
         LinkedList<AbstractMachine> ret = new LinkedList<>();
         Random rng = new Random();
-        switch(rng.nextInt(4)){
+        switch(rng.nextInt(5)){
             case 0:
                 ret.add(new PowerPlant(xIdx * TILE_SIZE, yIdx * TILE_SIZE));
                 break;
@@ -38,7 +38,10 @@ public class MachineGenerator {
                 ret.addAll(createConveyorBelt(inThisArea, xIdx, yIdx));
                 break;
             case 3:
-                ret.add(new LanternMachine(xIdx * TILE_SIZE, yIdx * TILE_SIZE, rng.nextBoolean(), new LightLevel(rng.nextInt(256))));
+                ret.add(new LanternMachine(xIdx * TILE_SIZE, yIdx * TILE_SIZE, rng.nextBoolean(), new LightLevel(128 + rng.nextInt(128))));
+                break;
+            case 4:
+                ret.add(new Door(xIdx * TILE_SIZE, yIdx * TILE_SIZE));
                 break;
         }
         
