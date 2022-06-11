@@ -1,7 +1,6 @@
 package gears.sidescroller.gui.console.commands;
 
 import gears.sidescroller.gui.console.Interpreter;
-import gears.sidescroller.gui.console.InterpreterImpl;
 import gears.sidescroller.gui.console.OutputWriter;
 
 /**

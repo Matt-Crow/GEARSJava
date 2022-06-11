@@ -5,3 +5,5 @@
 !**/build/libs
 !**/build/docs
 /build/
+**/bin/main/images/
+**.vscode
